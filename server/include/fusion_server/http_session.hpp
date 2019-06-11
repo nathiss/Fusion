@@ -25,7 +25,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    * This method starts the loop of async reads. It is indended to be called
    * only once. If it is called more than once the behaviour is undefined.
    */
-  void Run() noexcept ;
+  void Run() noexcept;
 
   /**
    * This method closes the connection immediately. Any async operation will be
