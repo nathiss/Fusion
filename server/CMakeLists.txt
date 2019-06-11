@@ -9,11 +9,13 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(Headers
+  include/fusion_server/listener.hpp
   include/fusion_server/http_session.hpp
   include/fusion_server/websocket_session.hpp
 )
 
 set(Sources
+  src/listener.cpp
   src/http_session.cpp
   src/websocket_session.cpp
 )
