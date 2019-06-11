@@ -26,7 +26,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * Since Boost::Beast allows only one writing at a time, the packages is
    * always queued and if no writing takes place it is delegated.
    * The method is thread-safe.
-   * 
+   *
    * @param[in] package
    *   The package to be send to the client. The shared_ptr is used to ensure
    *   that the package will be freed only if it has been sent to all the
@@ -37,7 +37,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This method upgrades the connection to the WebSocket Protocol and performs
    * the async handshake.
-   * 
+   *
    * @param[in] request
    *   The Upgrade request.
    */
@@ -48,7 +48,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * This method returns the oldest package sent by the client. If no package
    * has yet arrived, the nullptr is returned.
    * The method is thread-safe.
-   * 
+   *
    * @return
    *   The oldest package sent by the client is returned. If no package has yet
    *   arrived, the nullptr is returned.
@@ -64,7 +64,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This method returns a value that indicates whether or not the socket is
    * connected to a client.
-   * 
+   *
    * @return
    *   A value that indicates whether or not the socket is
    * connected to a client is returned.
@@ -73,30 +73,30 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
 
  private:
   /**
-   * This method is a callback to async handshaking with the client.
-   * 
+   * This method is the callback to async handshaking with the client.
+   *
    * @param[in] ec
    *   This is the Boost error code.
    */
   void HandleHandshake(const boost::system::error_code& ec) noexcept;
-  
+
   /**
-   * This method is a callback to async reading from the client.
-   * 
+   * This method is the callback to async reading from the client.
+   *
    * @param[in] ec
    *   This is the Boost error code.
-   * 
+   *
    * @param[in] bytes_transmitted
    *   This is the amount of transmitted bytes.
    */
   void HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
   /**
-   * This method is a callback to async writing to the client.
-   * 
+   * This method is the callback to async writing to the client.
+   *
    * @param[in] ec
    *   This is the Boost error code.
-   * 
+   *
    * @param[in] bytes_transmitted
    *   This is the amount of transmitted bytes.
    */

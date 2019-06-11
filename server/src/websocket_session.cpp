@@ -55,7 +55,7 @@ struct WebSocketSession::Impl {
   std::mutex outgoing_queue_mtx_;
 
   /**
-   * This indicates whether or not the handshake has been completed. 
+   * This indicates whether or not the handshake has been completed.
    */
   std::atomic<bool> handshake_complete{false};
 };
@@ -182,10 +182,10 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size
 
   auto str = boost::beast::buffers_to_string(impl_->buffer_.data());
   auto shared_str = std::make_shared<const std::string>(std::move(str));
-  
+
   std::lock_guard l{impl_->incomming_queue_mtx_};
   impl_->incomming_queue_.push(shared_str);
-/* 
+/*
   impl_->websocket_.async_read(
     impl_->buffer_,
     boost::asio::bind_executor(

@@ -36,7 +36,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   /**
    * This method returns a value that indicates whether or not the socket is
    * connected to a client.
-   * 
+   *
    * @return
    *   A value that indicates whether or not the socket is
    * connected to a client is returned.
@@ -46,27 +46,27 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  private:
 
   /**
-   * This method is a callback to async reading from the client. After parsing
+   * This method is the callback to async reading from the client. After parsing
    * the request it performs async responding.
-   * 
+   *
    * @param[in] ec
    *   This is the Boost error code.
-   * 
+   *
    * @param[in] bytes_transmitted
    *   This is the amount of transmitted bytes.
    */
   void HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
   /**
-   * This method is a callback to async writing to the client. After checking if
-   * an error occured it performs async reading from the client.
-   * 
+   * This method is the callback to async writing to the client. After checking
+   * if an error occured it performs async reading from the client.
+   *
    * @param[in] ec
    *   This is the Boost error code.
-   * 
+   *
    * @param[in] bytes_transmitted
    *   This is the amount of transmitted bytes.
-   * 
+   *
    * @param[in] close
    *   This indicates whether or not we should close the connection.
    *   The response indicated the "Connection: close" semantic.
