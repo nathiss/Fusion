@@ -10,10 +10,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(Headers
   include/fusion_server/isession.hpp
+  include/fusion_server/http_session.hpp
   include/fusion_server/websocket_session.hpp
 )
 
 set(Sources
+  src/http_session.cpp
   src/websocket_session.cpp
 )
 
