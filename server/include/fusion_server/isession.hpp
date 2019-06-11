@@ -8,12 +8,12 @@ namespace fusion_server {
 /**
  * This is the interface for the connection between a client and the server.
  */
-class IConnection {
+class ISession {
  public:
   /**
    * This is the default destructor.
    */
-  virtual ~IConnection() noexcept = default;
+  virtual ~ISession() noexcept = default;
 
   /**
    * This is the method for delegating the write operation to the client.

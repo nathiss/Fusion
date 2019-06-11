@@ -4,30 +4,30 @@
 
 #include <boost/asio.hpp>
 
-#include "Iconnection.hpp"
+#include <fusion_server/isession.hpp>
 
 namespace fusion_server {
 
 /**
- * This class represents the connection between a client and the server.
+ * This class represents the session between a client and the server.
  */
-class Connection : public IConnection,
-public std::enable_shared_from_this<Connection> {
+class WebSocketSession : public ISession,
+public std::enable_shared_from_this<WebSocketSession> {
  public:
-  Connection(const Connection&) = delete;
-  Connection(Connection&&) = delete;
-  Connection& operator=(const Connection&) = delete;
-  Connection& operator=(Connection&&) = delete;
+  WebSocketSession(const WebSocketSession&) = delete;
+  WebSocketSession(WebSocketSession&&) = delete;
+  WebSocketSession& operator=(const WebSocketSession&) = delete;
+  WebSocketSession& operator=(WebSocketSession&&) = delete;
 
   /**
    * This is the destructor.
    */
-  virtual ~Connection() noexcept override;
+  virtual ~WebSocketSession() noexcept override;
 
   /**
    * This constructor takes the overship of the socket connected to a client.
    */
-  Connection(boost::asio::ip::tcp::socket socket) noexcept;
+  WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   virtual void Write(std::shared_ptr<const std::string> package) noexcept override;
 
