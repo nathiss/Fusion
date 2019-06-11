@@ -9,7 +9,7 @@
 namespace fusion_server {
 
 /**
- * This class represents the session between a client and the server.
+ * This class represents the WebSocket session between a client and the server.
  */
 class WebSocketSession : public ISession,
 public std::enable_shared_from_this<WebSocketSession> {
@@ -20,14 +20,14 @@ public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession& operator=(WebSocketSession&&) = delete;
 
   /**
-   * This is the destructor.
-   */
-  virtual ~WebSocketSession() noexcept override;
-
-  /**
    * This constructor takes the overship of the socket connected to a client.
    */
   WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
+
+  /**
+   * This is the destructor.
+   */
+  virtual ~WebSocketSession() noexcept override;
 
   virtual void Write(std::shared_ptr<const std::string> package) noexcept override;
 
