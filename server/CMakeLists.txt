@@ -9,11 +9,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(Headers
-
+  include/fusion_server/connection.hpp
 )
 
 set(Sources
-
+  src/connection.cpp
 )
 
 add_subdirectory(googletest)
@@ -21,5 +21,5 @@ add_subdirectory(test)
 
 enable_testing()
 
-#target_include_directories(${This} PUBLIC include)
 add_library(${This} STATIC ${Sources} ${Headers})
+target_include_directories(${This} PUBLIC include)
