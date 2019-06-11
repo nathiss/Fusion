@@ -4,15 +4,12 @@
 
 #include <boost/asio.hpp>
 
-#include <fusion_server/isession.hpp>
-
 namespace fusion_server {
 
 /**
  * This class represents the HTTP session between a client and the server.
  */
-class HTTPSession : public ISession,
-public std::enable_shared_from_this<HTTPSession> {
+class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  public:
   HTTPSession(const HTTPSession&) = delete;
   HTTPSession(HTTPSession&&) = delete;
@@ -20,35 +17,31 @@ public std::enable_shared_from_this<HTTPSession> {
   HTTPSession& operator=(HTTPSession&&) = delete;
 
   /**
-   * This is the destructor.
-   */
-  virtual ~HTTPSession() noexcept override;
-
-  /**
    * This constructor takes the overship of the socket connected to a client.
    */
   HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
-   * Since HTTP protocol is half-duplex, it's not possible to send a package to
-   * a client independently. This method does nothing.
+   * This method starts the loop of async reads. It is indended to be called
+   * only once. If it is called more than once the behaviour is undefined.
    */
-  virtual void Write(std::shared_ptr<const std::string> package) noexcept override;
-
-  virtual void Run() noexcept override;
+  void Run() noexcept ;
 
   /**
-   * No package from a client is queued. All requests are immediately responsed.
-   * This method does nothing.
+   * This method closes the connection immediately. Any async operation will be
+   * cancelled.
+   */
+  void Close() noexcept;
+
+  /**
+   * This method returns a value that indicates whether or not the socket is
+   * connected to a client.
    * 
    * @return
-   *   Always nullptr is returned.
+   *   A value that indicates whether or not the socket is
+   * connected to a client is returned.
    */
-  virtual std::shared_ptr<const std::string> Pop() noexcept override;
-
-  virtual void Close() noexcept override;
-
-  virtual explicit operator bool() const noexcept override;
+  explicit operator bool() const noexcept;
 
  private:
 

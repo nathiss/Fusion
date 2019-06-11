@@ -14,20 +14,15 @@ namespace fusion_server {
 struct WebSocketSession::Impl {
   // Methods
   Impl(boost::asio::ip::tcp::socket socket)
-      : socket_{std::move(socket)}, websocket_{socket_},
+      : websocket_{std::move(socket)},
         strand_{websocket_.get_executor()} {}
 
   // Atributes
 
   /**
-   * This is the socket connected to the client.
-   */
-  boost::asio::ip::tcp::socket socket_;
-
-  /**
    * This is the WebSocket wrapper around the socket connected to a client.
    */
-  boost::beast::websocket::stream<decltype(socket_)&> websocket_;
+  boost::beast::websocket::stream<boost::asio::ip::tcp::socket> websocket_;
 
   /**
    * This is the buffer for the incomming packages.
@@ -69,12 +64,9 @@ WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
     : impl_{new Impl{std::move(socket)}} {
 }
 
-WebSocketSession::~WebSocketSession() noexcept {}
-
 void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcept {
   std::lock_guard l{impl_->outgoing_queue_mtx_};
   impl_->outgoing_queue_.push(package);
-  std::cout << "Pushed the package" << std::endl;
 
   if (impl_->outgoing_queue_.size() > 1) {
     // Means we're already writing.
@@ -98,13 +90,13 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
         )
       )
   );
-  std::cout << "Queued the task to write." << std::endl;
 }
 
-void WebSocketSession::Run() noexcept {
+template<typename Request>
+void WebSocketSession::Run(Request&& request) noexcept {
   // Accept the handshake.
-  std::cout << "Entered the Run()" << std::endl;
   impl_->websocket_.async_accept(
+    std::forward<Request>(request),
     boost::asio::bind_executor(
       impl_->strand_,
       std::bind(
@@ -114,7 +106,6 @@ void WebSocketSession::Run() noexcept {
       )
     )
   );
-  std::cout << "Queued the handshake" << std::endl;
 }
 
 std::shared_ptr<const std::string> WebSocketSession::Pop() noexcept {
@@ -131,7 +122,6 @@ void WebSocketSession::Close() noexcept {
     impl_->websocket_.close(boost::beast::websocket::close_code::none);
     // Now callers should not performs writing to the WebSocket and should
     // perform reading as long as a read returns websocket::closed.
-    impl_->socket_.close();
   }
   catch (const boost::system::system_error&) {
     // TODO: send warning.
@@ -149,7 +139,6 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
   if (ec) {
     // TODO: report the error code
   }
-  std::cout << "Handshake complete" << std::endl;
 
   if (std::lock_guard l{impl_->outgoing_queue_mtx_}; !impl_->outgoing_queue_.empty()) {
     impl_->websocket_.async_write(
@@ -192,7 +181,6 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size
   }
 
   auto str = boost::beast::buffers_to_string(impl_->buffer_.data());
-  std::cout << "Read: " << str << std::endl;
   auto shared_str = std::make_shared<const std::string>(std::move(str));
   
   std::lock_guard l{impl_->incomming_queue_mtx_};
@@ -220,7 +208,6 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec, std::siz
   if (ec) {
     // TODO: report the error code
   }
-  std::cout << "Writiing complete" << std::endl;
 
   std::lock_guard l{impl_->outgoing_queue_mtx_};
   impl_->outgoing_queue_.pop();

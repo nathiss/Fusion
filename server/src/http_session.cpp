@@ -41,12 +41,6 @@ HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
     : impl_{new Impl{std::move(socket)}} {
 }
 
-HTTPSession::~HTTPSession() noexcept {
-}
-
-void HTTPSession::Write(std::shared_ptr<const std::string>) noexcept {
-}
-
 void HTTPSession::Run() noexcept {
   boost::beast::http::async_read(
     impl_->socket_,
@@ -59,10 +53,6 @@ void HTTPSession::Run() noexcept {
       std::placeholders::_2
     )
   );
-}
-
-std::shared_ptr<const std::string> HTTPSession::Pop() noexcept {
-  return nullptr;
 }
 
 void HTTPSession::Close() noexcept {
