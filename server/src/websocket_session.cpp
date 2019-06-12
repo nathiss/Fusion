@@ -96,7 +96,7 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
 template <typename Body, typename Allocator>
 void WebSocketSession::Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept {
   impl_->websocket_.async_accept(
-    std::forward<Request>(request),
+    std::move(request),
     boost::asio::bind_executor(
       impl_->strand_,
       std::bind(
@@ -176,7 +176,8 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
   );
 }
 
-void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
+void WebSocketSession::HandleRead(const boost::system::error_code& ec,
+  [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
   // TODO: find out what's that doing.
   boost::ignore_unused(impl_->buffer_);
 
@@ -213,7 +214,8 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size
   );
 }
 
-void WebSocketSession::HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
+void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
+  [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
   if (ec == boost::beast::websocket::error::closed) {
     // The WebSocketSession was closed. We don't need to report that.
     return;

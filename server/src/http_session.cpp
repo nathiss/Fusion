@@ -72,7 +72,8 @@ HTTPSession::operator bool() const noexcept {
   return impl_->socket_.is_open();
 }
 
-void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
+void HTTPSession::HandleRead(const boost::system::error_code& ec,
+  [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
   if (ec == boost::beast::http::error::end_of_stream) {
     // The client closed the connection.
     impl_->socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
@@ -113,7 +114,8 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
   );
 }
 
-void HTTPSession::HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted, bool close) noexcept {
+void HTTPSession::HandleWrite(const boost::system::error_code& ec,
+  [[ maybe_unused ]] std::size_t bytes_transmitted, bool close) noexcept {
   if (ec) {
     std::cerr << "HTTPSession::HandleWrite: " << ec.message() << std::endl;
     return;

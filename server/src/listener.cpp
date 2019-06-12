@@ -101,8 +101,8 @@ void Listener::Run() noexcept {
 
 void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
   if (ec) {
-    // TODO: handle error
     std::cerr << "Listener::HandleAccept: " << ec.message() << std::endl;
+    // TODO: find out if any error can cause the listener to stop working.
   }
   else {
     std::make_shared<HTTPSession>(std::move(impl_->socket_))->Run();
