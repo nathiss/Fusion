@@ -22,25 +22,25 @@ struct Listener::Impl {
 
     acceptor_.open(endpoint_.protocol(), ec);
     if (ec) {
-      // TODO: handle error
+      std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
       return;
     }
 
     acceptor_.set_option(boost::asio::socket_base::reuse_address(true));
     if (ec) {
-      // TODO: handle error
+      std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
       return;
     }
 
     acceptor_.bind(endpoint_, ec);
     if (ec) {
-      // TODO: handle error
+      std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
       return;
     }
 
     acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
     if (ec) {
-      // TODO: handle error
+      std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
       return;
     }
   }
