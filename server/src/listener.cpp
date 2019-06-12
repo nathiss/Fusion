@@ -1,7 +1,7 @@
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <utility>
-#include <iostream>
 
 #include <boost/asio.hpp>
 
@@ -15,12 +15,12 @@ struct Listener::Impl {
   Impl(boost::asio::io_context& ioc) noexcept
       : ioc_{ioc}, acceptor_{ioc}, socket_{ioc} {}
   /**
-   * This method open the acceptor & binds it to the endpoint.
+   * This method opens the acceptor & binds it to the endpoint.
    */
   void OpenAcceptor() noexcept {
     boost::system::error_code ec;
-    acceptor_.open(endpoint_.protocol(), ec);
 
+    acceptor_.open(endpoint_.protocol(), ec);
     if (ec) {
       // TODO: handle error
       return;
@@ -58,7 +58,7 @@ struct Listener::Impl {
   boost::asio::ip::tcp::endpoint endpoint_;
 
   /**
-   * This acceptor is accepting new connections.
+   * This is the acceptor for accepting new connections.
    */
   boost::asio::ip::tcp::acceptor acceptor_;
 
@@ -69,7 +69,7 @@ struct Listener::Impl {
 };
 
 Listener::Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint16_t port_numer) noexcept
-    : impl_{new Impl{ioc}}  {
+    : impl_{new Impl{ioc}} {
   impl_->endpoint_ = {boost::asio::ip::make_address(ip_address), port_numer};
   impl_->OpenAcceptor();
 }
@@ -86,8 +86,7 @@ Listener::Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept
   impl_->OpenAcceptor();
 }
 
-Listener::~Listener() noexcept {
-}
+Listener::~Listener() noexcept = default;
 
 void Listener::Run() noexcept {
   impl_->acceptor_.async_accept(
@@ -103,7 +102,7 @@ void Listener::Run() noexcept {
 void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
   if (ec) {
     // TODO: handle error
-    std::cerr << ec.message() << std::endl;
+    std::cerr << "Listener::HandleAccept: " << ec.message() << std::endl;
   }
   else {
     std::make_shared<HTTPSession>(std::move(impl_->socket_))->Run();

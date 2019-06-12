@@ -27,14 +27,15 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   ~HTTPSession() noexcept;
 
   /**
-   * This method starts the loop of async reads. It is indended to be called
-   * only once. If it is called more than once the behaviour is undefined.
+   * This method starts the loop of asynchronous reads. It is indended to be
+   * called only once. If it is called more than once the behaviour is
+   * undefined.
    */
   void Run() noexcept;
 
   /**
-   * This method closes the connection immediately. Any async operation will be
-   * cancelled.
+   * This method closes the connection immediately. Any asynchronous operation
+   * will be cancelled.
    */
   void Close() noexcept;
 
@@ -51,8 +52,8 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  private:
 
   /**
-   * This method is the callback to async reading from the client. After parsing
-   * the request it performs async responding.
+   * This method is the callback to asynchronous reading from the client.
+   * After parsing the request it performs asynchronous responding.
    *
    * @param[in] ec
    *   This is the Boost error code.
@@ -63,8 +64,9 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   void HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
   /**
-   * This method is the callback to async writing to the client. After checking
-   * if an error occured it performs async reading from the client.
+   * This method is the callback to asynchronous writing to the client.
+   * After checking if an error occured it performs asynchronous reading from
+   * the client.
    *
    * @param[in] ec
    *   This is the Boost error code.

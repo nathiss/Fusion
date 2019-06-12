@@ -9,7 +9,8 @@
 namespace fusion_server {
 
 /**
- * This class represends the local endpoint used to accept new connections.
+ * This class represends the local endpoint used to accept new connections
+ * from the clients.
  */
 class Listener : public std::enable_shared_from_this<Listener> {
  public:
@@ -21,7 +22,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
 
   /**
    * This constructor may be used for accepting connections on a specific
-   * interace.
+   * local interace.
    *
    * @param[in] ioc
    *   The context for providing core I/O functionality.
@@ -64,13 +65,14 @@ class Listener : public std::enable_shared_from_this<Listener> {
   ~Listener() noexcept;
 
   /**
-   * This method performs the accepting loop on the specified endpoint.
+   * This method starts the asynchronous accepting loop on the specified
+   * endpoint.
    */
   void Run() noexcept;
 
  private:
   /**
-   * This is the callback for async accepting of the new connections.
+   * This is the callback to asynchronous accept of a new connection.
    */
   void HandleAccept(const boost::system::error_code&) noexcept;
 

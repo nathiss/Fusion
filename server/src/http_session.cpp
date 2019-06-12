@@ -11,8 +11,7 @@ namespace fusion_server {
 struct HTTPSession::Impl {
   // Methods
   Impl(boost::asio::ip::tcp::socket socket) noexcept
-      : socket_{std::move(socket)},
-        strand_{socket_.get_executor()} {}
+      : socket_{std::move(socket)}, strand_{socket_.get_executor()} {}
 
   // Atributes
 
@@ -22,7 +21,7 @@ struct HTTPSession::Impl {
   boost::asio::ip::tcp::socket socket_;
 
   /**
-   * This is the strand for this instance of WebSocketSession class.
+   * This is the strand for this instance of the HTTPSession class.
    */
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
 
@@ -41,8 +40,7 @@ HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
     : impl_{new Impl{std::move(socket)}} {
 }
 
-HTTPSession::~HTTPSession() noexcept {
-}
+HTTPSession::~HTTPSession() noexcept = default;
 
 void HTTPSession::Run() noexcept {
   boost::beast::http::async_read(
@@ -62,8 +60,8 @@ void HTTPSession::Close() noexcept {
   try {
     impl_->socket_.close();
   }
-  catch (const boost::system::system_error&) {
-    // TODO: send warning.
+  catch (const boost::system::system_error& e) {
+    std::cerr << "HTTPSession::Close: " << e.what() << std::endl;
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Thrown on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
@@ -77,14 +75,12 @@ HTTPSession::operator bool() const noexcept {
 void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
   if (ec == boost::beast::http::error::end_of_stream) {
     // The client closed the connection.
-    std::cerr << "HTTPSession::HandleRead: " << ec.message() << std::endl;
     impl_->socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     return;
   }
 
   if (ec) {
     std::cerr << "HTTPSession::HandleRead: " << ec.message() << std::endl;
-    // TODO: handle error.
     return;
   }
 
@@ -106,7 +102,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
 
   boost::beast::http::async_write(
     impl_->socket_,
-    response,
+    std::move(response),
     std::bind(
       &HTTPSession::HandleWrite,
       shared_from_this(),
@@ -119,11 +115,12 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
 
 void HTTPSession::HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted, bool close) noexcept {
   if (ec) {
-    // TODO: handle error.
     std::cerr << "HTTPSession::HandleWrite: " << ec.message() << std::endl;
+    return;
   }
 
   if (close) {
+    // The client closed its connection. We do the same.
     impl_->socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     return;
   }

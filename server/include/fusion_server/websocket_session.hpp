@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <boost/asio.hpp>
+#include <boost/beast.hpp>
 
 namespace fusion_server {
 
@@ -22,42 +23,52 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
-   * This is the method for delegating the write operation to the client.
+   * This is the default destructor.
+   */
+  ~WebSocketSession() noexcept;
+
+  /**
+   * This method delegates the write operation to the client.
    * Since Boost::Beast allows only one writing at a time, the packages is
-   * always queued and if no writing takes place it is delegated.
-   * The method is thread-safe.
+   * always queued and if no writing is taking place the asynchronous write
+   * operation is called.
    *
    * @param[in] package
    *   The package to be send to the client. The shared_ptr is used to ensure
    *   that the package will be freed only if it has been sent to all the
    *   specific clients.
+   *
+   * @note
+   *   This method is thread-safe.
    */
   void Write(std::shared_ptr<const std::string> package) noexcept;
 
   /**
    * This method upgrades the connection to the WebSocket Protocol and performs
-   * the async handshake.
+   * the asynchronous handshake.
    *
    * @param[in] request
-   *   The Upgrade request.
+   *   A HTTP Upgrade request.
    */
-  template <typename Request>
-  void Run(Request&& request) noexcept;
+  template <typename Body, typename Allocator>
+  void Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept;
 
   /**
    * This method returns the oldest package sent by the client. If no package
    * has yet arrived, the nullptr is returned.
-   * The method is thread-safe.
    *
    * @return
    *   The oldest package sent by the client is returned. If no package has yet
    *   arrived, the nullptr is returned.
+   *
+   * @note
+   *   This method is thread-safe.
    */
   std::shared_ptr<const std::string> Pop() noexcept;
 
   /**
-   * This method closes the connection immediately. Any async operation will be
-   * cancelled.
+   * This method closes the connection immediately. Any asynchronous operation
+   * will be cancelled.
    */
   void Close() noexcept;
 
@@ -66,14 +77,14 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * connected to a client.
    *
    * @return
-   *   A value that indicates whether or not the socket is
-   * connected to a client is returned.
+   *   A value that indicates whether or not the socket is connected to a client
+   *   is returned.
    */
   explicit operator bool() const noexcept;
 
  private:
   /**
-   * This method is the callback to async handshaking with the client.
+   * This method is the callback to asynchronous handshake with the client.
    *
    * @param[in] ec
    *   This is the Boost error code.
@@ -81,7 +92,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   void HandleHandshake(const boost::system::error_code& ec) noexcept;
 
   /**
-   * This method is the callback to async reading from the client.
+   * This method is the callback to asynchronous read from the client.
    *
    * @param[in] ec
    *   This is the Boost error code.
@@ -92,7 +103,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   void HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
   /**
-   * This method is the callback to async writing to the client.
+   * This method is the callback to asynchronous write to the client.
    *
    * @param[in] ec
    *   This is the Boost error code.

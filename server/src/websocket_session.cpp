@@ -14,8 +14,7 @@ namespace fusion_server {
 struct WebSocketSession::Impl {
   // Methods
   Impl(boost::asio::ip::tcp::socket socket)
-      : websocket_{std::move(socket)},
-        strand_{websocket_.get_executor()} {}
+      : websocket_{std::move(socket)}, strand_{websocket_.get_executor()} {}
 
   // Atributes
 
@@ -64,6 +63,8 @@ WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
     : impl_{new Impl{std::move(socket)}} {
 }
 
+WebSocketSession::~WebSocketSession() noexcept = default;
+
 void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcept {
   std::lock_guard l{impl_->outgoing_queue_mtx_};
   impl_->outgoing_queue_.push(package);
@@ -92,9 +93,8 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
   );
 }
 
-template<typename Request>
-void WebSocketSession::Run(Request&& request) noexcept {
-  // Accept the handshake.
+template <typename Body, typename Allocator>
+void WebSocketSession::Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept {
   impl_->websocket_.async_accept(
     std::forward<Request>(request),
     boost::asio::bind_executor(
@@ -110,8 +110,10 @@ void WebSocketSession::Run(Request&& request) noexcept {
 
 std::shared_ptr<const std::string> WebSocketSession::Pop() noexcept {
   std::lock_guard l{impl_->incomming_queue_mtx_};
-  if (impl_->incomming_queue_.empty())
+  if (impl_->incomming_queue_.empty()) {
     return nullptr;
+  }
+
   auto front = impl_->incomming_queue_.front();
   impl_->incomming_queue_.pop();
   return front;
@@ -121,10 +123,12 @@ void WebSocketSession::Close() noexcept {
   try{
     impl_->websocket_.close(boost::beast::websocket::close_code::none);
     // Now callers should not performs writing to the WebSocket and should
-    // perform reading as long as a read returns websocket::closed.
+    // perform reading as long as a read returns boost::beast::websocket::closed
+    // error.
   }
-  catch (const boost::system::system_error&) {
-    // TODO: send warning.
+  catch (const boost::system::system_error& e) {
+    std::cerr << "WebSocketSession::Close: " << e.what() << std::endl;
+    // TODO: read if the comment below applies to the WebSocket connections.
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Thrown on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
@@ -137,7 +141,10 @@ WebSocketSession::operator bool() const noexcept {
 
 void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noexcept {
   if (ec) {
-    // TODO: report the error code
+    std::cerr << "WebSocketSession::HandleHandshake: " << ec.message() << std::endl;
+    // We assume what the session cannot be fixed.
+    // TODO: Find out if that's true.
+    return;
   }
 
   if (std::lock_guard l{impl_->outgoing_queue_mtx_}; !impl_->outgoing_queue_.empty()) {
@@ -170,14 +177,18 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
 }
 
 void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
+  // TODO: find out what's that doing.
   boost::ignore_unused(impl_->buffer_);
 
   if (ec == boost::beast::websocket::error::closed) {
-    // The WebSocketSession was closed.
+    // The WebSocketSession was closed. We don't need to report that.
     return;
   }
   if (ec) {
-    // TODO: report the error code
+    std::cerr << "WebSocketSession::HandleRead: " << ec.message() << std::endl;
+    // We assume what the session cannot be fixed.
+    // TODO: Find out if that's true.
+    return;
   }
 
   auto str = boost::beast::buffers_to_string(impl_->buffer_.data());
@@ -187,7 +198,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size
   impl_->incomming_queue_mtx_.lock();
   impl_->incomming_queue_.push(shared_str);
   impl_->incomming_queue_mtx_.unlock();
-/*
+
   impl_->websocket_.async_read(
     impl_->buffer_,
     boost::asio::bind_executor(
@@ -199,16 +210,19 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec, std::size
         std::placeholders::_2
       )
     )
-  );*/
+  );
 }
 
 void WebSocketSession::HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
   if (ec == boost::beast::websocket::error::closed) {
-    // The WebSocketSession was closed.
+    // The WebSocketSession was closed. We don't need to report that.
     return;
   }
   if (ec) {
-    // TODO: report the error code
+    std::cerr << "WebSocketSession::HandleRead: " << ec.message() << std::endl;
+    // We assume what the session cannot be fixed.
+    // TODO: Find out if that's true.
+    return;
   }
 
   std::lock_guard l{impl_->outgoing_queue_mtx_};
