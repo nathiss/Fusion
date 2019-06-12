@@ -11,7 +11,7 @@ namespace fusion_server {
 /**
  * This class represends the local endpoint used to accept new connections.
  */
-class Listener : std::enable_shared_from_this<Listener> {
+class Listener : public std::enable_shared_from_this<Listener> {
  public:
   Listener(const Listener&) = delete;
   Listener(Listener&&) = delete;
@@ -32,7 +32,7 @@ class Listener : std::enable_shared_from_this<Listener> {
    * @param[in] port_numer
    *   A port numer.
    */
-  Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint32_t port_numer) noexcept;
+  Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint16_t port_numer) noexcept;
 
   /**
    * This constructor may be used for accepting connections on the given
@@ -56,7 +56,12 @@ class Listener : std::enable_shared_from_this<Listener> {
    * @param[in] port_numer
    *   A port numer.
    */
-  Listener(boost::asio::io_context& ioc, uint32_t port_number) noexcept;
+  Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept;
+
+  /**
+   * This is the default destructor.
+   */
+  ~Listener() noexcept;
 
   /**
    * This method performs the accepting loop on the specified endpoint.

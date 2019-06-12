@@ -1,6 +1,7 @@
 #include <functional>
 #include <memory>
 #include <utility>
+#include <iostream>
 
 #include <boost/asio.hpp>
 
@@ -11,6 +12,8 @@ namespace fusion_server {
 
 struct Listener::Impl {
   // Methods
+  Impl(boost::asio::io_context& ioc) noexcept
+      : ioc_{ioc}, acceptor_{ioc}, socket_{ioc} {}
   /**
    * This method open the acceptor & binds it to the endpoint.
    */
@@ -57,15 +60,15 @@ struct Listener::Impl {
   /**
    * This acceptor is accepting new connections.
    */
-  boost::asio::ip::tcp::acceptor acceptor_{ioc_};
+  boost::asio::ip::tcp::acceptor acceptor_;
 
   /**
    * This is the socket used to handle a new incomming connection.
    */
-  boost::asio::ip::tcp::socket socket_{ioc_};
+  boost::asio::ip::tcp::socket socket_;
 };
 
-Listener::Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint32_t port_numer) noexcept
+Listener::Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint16_t port_numer) noexcept
     : impl_{new Impl{ioc}}  {
   impl_->endpoint_ = {boost::asio::ip::make_address(ip_address), port_numer};
   impl_->OpenAcceptor();
@@ -77,10 +80,13 @@ Listener::Listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::endpoint 
   impl_->OpenAcceptor();
 }
 
-Listener::Listener(boost::asio::io_context& ioc, uint32_t port_number) noexcept
+Listener::Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept
     : impl_{new Impl{ioc}} {
   impl_->endpoint_ = {boost::asio::ip::tcp::v4(), port_number};
   impl_->OpenAcceptor();
+}
+
+Listener::~Listener() noexcept {
 }
 
 void Listener::Run() noexcept {
@@ -97,6 +103,7 @@ void Listener::Run() noexcept {
 void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
   if (ec) {
     // TODO: handle error
+    std::cerr << ec.message() << std::endl;
   }
   else {
     std::make_shared<HTTPSession>(std::move(impl_->socket_))->Run();

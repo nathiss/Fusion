@@ -10,7 +10,7 @@ namespace fusion_server {
 
 struct HTTPSession::Impl {
   // Methods
-  Impl(boost::asio::ip::tcp::socket socket)
+  Impl(boost::asio::ip::tcp::socket socket) noexcept
       : socket_{std::move(socket)},
         strand_{socket_.get_executor()} {}
 
@@ -39,6 +39,9 @@ struct HTTPSession::Impl {
 
 HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
     : impl_{new Impl{std::move(socket)}} {
+}
+
+HTTPSession::~HTTPSession() noexcept {
 }
 
 void HTTPSession::Run() noexcept {
@@ -74,12 +77,15 @@ HTTPSession::operator bool() const noexcept {
 void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept {
   if (ec == boost::beast::http::error::end_of_stream) {
     // The client closed the connection.
+    std::cerr << "HTTPSession::HandleRead: " << ec.message() << std::endl;
     impl_->socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     return;
   }
 
   if (ec) {
+    std::cerr << "HTTPSession::HandleRead: " << ec.message() << std::endl;
     // TODO: handle error.
+    return;
   }
 
   if (boost::beast::websocket::is_upgrade(impl_->request_)) {
@@ -93,7 +99,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
     res.set(http::field::server, "server_name"); // TODO: set the real server name
     res.set(http::field::content_type, "text/plain");
     res.keep_alive(req_.keep_alive());
-    res.body() = "FeelsBadMan";
+    res.body() = "FeelsBadMan\r\n";
     res.prepare_payload();
     return res;
   }();
@@ -114,6 +120,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
 void HTTPSession::HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted, bool close) noexcept {
   if (ec) {
     // TODO: handle error.
+    std::cerr << "HTTPSession::HandleWrite: " << ec.message() << std::endl;
   }
 
   if (close) {

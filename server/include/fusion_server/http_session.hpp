@@ -22,6 +22,11 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
+   * This is the default destructor.
+   */
+  ~HTTPSession() noexcept;
+
+  /**
    * This method starts the loop of async reads. It is indended to be called
    * only once. If it is called more than once the behaviour is undefined.
    */
