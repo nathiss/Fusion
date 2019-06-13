@@ -9,6 +9,7 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
+#include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
 
 namespace fusion_server {
@@ -16,9 +17,12 @@ namespace fusion_server {
 WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
     : websocket_{std::move(socket)}, strand_{websocket_.get_executor()},
       handshake_complete{false} {
+  Server::GetInstance().Register(this);
 }
 
-WebSocketSession::~WebSocketSession() noexcept = default;
+WebSocketSession::~WebSocketSession() noexcept {
+  Server::GetInstance().Unregister(this);
+};
 
 void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};

@@ -24,12 +24,16 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession& operator=(WebSocketSession&&) = delete;
 
   /**
-   * This constructor takes the overship of the socket connected to a client.
+   * This constructor takes the overship of the socket connected to a client and
+   * registers this session to the server.
+   *
+   * @param[in] socket
+   *   The socket connected to a client.
    */
   WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
-   * This is the default destructor.
+   * This destructor unregisters this session from the server.
    */
   ~WebSocketSession() noexcept;
 

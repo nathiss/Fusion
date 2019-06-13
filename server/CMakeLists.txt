@@ -10,12 +10,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(Headers
+  include/fusion_server/server.hpp
   include/fusion_server/listener.hpp
   include/fusion_server/http_session.hpp
   include/fusion_server/websocket_session.hpp
 )
 
 set(Sources
+  src/server.cpp
   src/listener.cpp
   src/http_session.cpp
   src/websocket_session.cpp
