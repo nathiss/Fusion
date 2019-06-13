@@ -139,9 +139,10 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   const auto str = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  incomming_queue_mtx_.lock();
-  incomming_queue_.push(std::make_shared<decltype(str)>(std::move(str)));
-  incomming_queue_mtx_.unlock();
+  {
+    std::lock_guard l{incomming_queue_mtx_};
+    incomming_queue_.push(std::make_shared<decltype(str)>(std::move(str)));
+  }
 
   websocket_.async_read(
     buffer_,

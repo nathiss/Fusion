@@ -19,9 +19,8 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 }
 
 void Server::Register(WebSocketSession* new_session) noexcept {
-  unidentified_sessions_mtx_.lock();
+  std::lock_guard l{unidentified_sessions_mtx_};
   auto [it, took_place] = unidentified_sessions_.insert(new_session);
-  unidentified_sessions_mtx_.unlock();
 
   if (!took_place) {
     std::cerr << "Server::Register: the session " << new_session
