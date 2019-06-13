@@ -1,8 +1,11 @@
 #pragma once
 
+#include <cstdlib>
+
 #include <memory>
 
 #include <boost/asio.hpp>
+#include <boost/beast.hpp>
 
 namespace fusion_server {
 
@@ -81,16 +84,24 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  private:
 
   /**
-   * This is the type of structure that contains the private
-   * properties of the instance.  It is defined in the implementation
-   * and declared here to ensure that it is scoped inside the class.
+   * This is the socket connected to the client.
    */
-  struct Impl;
+  boost::asio::ip::tcp::socket socket_;
 
   /**
-   * This contains the private properties of the instance.
+   * This is the strand for this instance of the HTTPSession class.
    */
-  std::unique_ptr<Impl> impl_;
+  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+
+  /**
+   * This is the buffer used to store the client's requests.
+   */
+  boost::beast::flat_buffer buffer_;
+
+  /**
+   * This holds the parsed client's request.
+   */
+  boost::beast::http::request<boost::beast::http::string_body> request_;
 };
 
 }  // namespace fusion_server

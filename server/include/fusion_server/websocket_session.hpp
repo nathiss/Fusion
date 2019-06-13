@@ -1,6 +1,12 @@
 #pragma once
 
+#include <cstdlib>
+
+#include <atomic>
 #include <memory>
+#include <mutex>
+#include <queue>
+#include <string>
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
@@ -82,7 +88,6 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    */
   explicit operator bool() const noexcept;
 
- private:
   /**
    * This method is the callback to asynchronous handshake with the client.
    *
@@ -113,17 +118,47 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    */
   void HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
-  /**
-   * This is the type of structure that contains the private
-   * properties of the instance.  It is defined in the implementation
-   * and declared here to ensure that it is scoped inside the class.
-   */
-  struct Impl;
+ private:
 
   /**
-   * This contains the private properties of the instance.
+   * This is the WebSocket wrapper around the socket connected to a client.
    */
-  std::unique_ptr<Impl> impl_;
+  boost::beast::websocket::stream<boost::asio::ip::tcp::socket> websocket_;
+
+  /**
+   * This is the buffer for the incomming packages.
+   */
+  boost::beast::multi_buffer buffer_;
+
+  /**
+   * This is the strand for this instance of WebSocketSession class.
+   */
+  boost::asio::strand<boost::asio::io_context::executor_type> strand_;
+
+  /**
+   * This queue holds all incomming packages, which have not yet been processed.
+   */
+  std::queue<std::shared_ptr<const std::string>> incomming_queue_;
+
+  /**
+   * This is the mutex for incoming queue.
+   */
+  std::mutex incomming_queue_mtx_;
+
+  /**
+   * This queue holds all outgoing packages, which have not yet been sent.
+   */
+  std::queue<std::shared_ptr<const std::string>> outgoing_queue_;
+
+  /**
+   * This is the mutex for outgoing queue.
+   */
+  std::mutex outgoing_queue_mtx_;
+
+  /**
+   * This indicates whether or not the handshake has been completed.
+   */
+  std::atomic<bool> handshake_complete;
 };
 
 }  // namespace fusion_server

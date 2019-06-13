@@ -1,10 +1,12 @@
 #pragma once
 
-#include <functional>
+#include <cstdint>
+
 #include <memory>
 #include <string_view>
 
 #include <boost/asio.hpp>
+#include <boost/beast.hpp>
 
 namespace fusion_server {
 
@@ -70,23 +72,37 @@ class Listener : public std::enable_shared_from_this<Listener> {
    */
   void Run() noexcept;
 
- private:
   /**
    * This is the callback to asynchronous accept of a new connection.
    */
   void HandleAccept(const boost::system::error_code&) noexcept;
 
-  /**
-   * This is the type of structure that contains the private
-   * properties of the instance.  It is defined in the implementation
-   * and declared here to ensure that it is scoped inside the class.
-   */
-  struct Impl;
+ private:
 
   /**
-   * This contains the private properties of the instance.
+   * This method opens the acceptor & binds it to the endpoint.
    */
-  std::unique_ptr<Impl> impl_;
+  void OpenAcceptor() noexcept;
+
+  /**
+   * The context for providing core I/O functionality.
+   */
+  boost::asio::io_context& ioc_;
+
+  /**
+   * This is the local endpoint on which new connections will be accepted.
+   */
+  boost::asio::ip::tcp::endpoint endpoint_;
+
+  /**
+   * This is the acceptor for accepting new connections.
+   */
+  boost::asio::ip::tcp::acceptor acceptor_;
+
+  /**
+   * This is the socket used to handle a new incomming connection.
+   */
+  boost::asio::ip::tcp::socket socket_;
 };
 
 }  // namespace fusion_server
