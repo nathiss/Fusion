@@ -161,4 +161,19 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   std::atomic<bool> handshake_complete;
 };
 
+template <typename Body, typename Allocator>
+void WebSocketSession::Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept {
+  websocket_.async_accept(
+    std::move(request),
+    boost::asio::bind_executor(
+      strand_,
+      [self = shared_from_this()](
+        const boost::system::error_code& ec
+      ) {
+        self->HandleHandshake(ec);
+      }
+    )
+  );
+}
+
 }  // namespace fusion_server

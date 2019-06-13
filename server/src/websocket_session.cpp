@@ -48,21 +48,6 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
   );
 }
 
-template <typename Body, typename Allocator>
-void WebSocketSession::Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept {
-  websocket_.async_accept(
-    std::move(request),
-    boost::asio::bind_executor(
-      strand_,
-      [self = shared_from_this()](
-        const boost::system::error_code& ec
-      ) {
-        self->HandleHandshake(ec);
-      }
-    )
-  );
-}
-
 std::shared_ptr<const std::string> WebSocketSession::Pop() noexcept {
   std::lock_guard l{incomming_queue_mtx_};
   if (incomming_queue_.empty()) {
