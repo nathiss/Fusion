@@ -98,19 +98,18 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
     res.keep_alive(req_.keep_alive());
     res.body() = "FeelsBadMan\r\n";
     res.prepare_payload();
-    return res;
+    return std::make_shared<decltype(res)>(std::move(res));
   }();
 
   boost::beast::http::async_write(
     impl_->socket_,
-    std::move(response),
-    std::bind(
-      &HTTPSession::HandleWrite,
-      shared_from_this(),
-      std::placeholders::_1,
-      std::placeholders::_2,
-      response.need_eof() // True if request semantics require an end of file.
-    )
+    *response,
+    [self = shared_from_this(), response](
+      const boost::system::error_code& ec,
+      std::size_t bytes_transmitted
+    ) {
+      self->HandleWrite(ec, bytes_transmitted, response->need_eof());
+    }
   );
 }
 

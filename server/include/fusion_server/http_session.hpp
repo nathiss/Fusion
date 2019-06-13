@@ -49,8 +49,6 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    */
   explicit operator bool() const noexcept;
 
- private:
-
   /**
    * This method is the callback to asynchronous reading from the client.
    * After parsing the request it performs asynchronous responding.
@@ -79,6 +77,8 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    *   The response indicated the "Connection: close" semantic.
    */
   void HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted, bool close) noexcept;
+
+ private:
 
   /**
    * This is the type of structure that contains the private
