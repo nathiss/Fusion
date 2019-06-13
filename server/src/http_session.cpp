@@ -8,6 +8,7 @@
 #include <boost/beast.hpp>
 
 #include <fusion_server/http_session.hpp>
+#include <fusion_server/websocket_session.hpp>
 
 namespace fusion_server {
 
@@ -61,7 +62,9 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
   }
 
   if (boost::beast::websocket::is_upgrade(request_)) {
-    // TODO: create shared websocket session.
+    std::make_shared<WebSocketSession>(std::move(socket_))->Run(
+      std::move(request_)
+    );
     return;
   }
 
