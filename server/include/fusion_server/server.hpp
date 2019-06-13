@@ -51,20 +51,26 @@ class Server {
   /**
    * This method unregisters the given session. After that method is executed,
    * all shared pointers of that session should go out of scope and the object
-   * itself should be destructed.
+   * itself should be destructed. If the given session is not registered in this
+   * server, the method dose nothing.
    *
    * @param[in] session
    *   The session to be unregistered.
    *
    * @note
    *   This method is thread-safe. If it's executed concurrently with the same
-   *   argument, the second call will do nothing
+   *   argument, the second call will do nothing.
    */
   void Unregister(WebSocketSession* session) noexcept;
 
   /**
    * This method binds the listener to the interface taken from the
    * configuration file and runs the accepting loop.
+   *
+   * @note
+   *   This method is indended to be called only once.
+   *   If it is called more than once the behaviour is undefined.
+   *
    */
   void StartAccepting() noexcept;
 
