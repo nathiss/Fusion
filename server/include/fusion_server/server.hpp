@@ -100,12 +100,6 @@ class Server {
    */
   IncommingPackageDelegate unjoined_delegate_;
 
-
-  /**
-   * This is the pointer pointing to the only instance of this class.
-   */
-  static std::unique_ptr<Server> instance_;
-
   /**
    * The context for providing core I/O functionality.
    */
@@ -121,6 +115,11 @@ class Server {
    * sessions.
    */
   std::mutex unidentified_sessions_mtx_;
+
+  /**
+   * This is the pointer pointing to the only instance of this class.
+   */
+  static std::unique_ptr<Server> instance_;
 };
 
 }  // namespace fusion_server
