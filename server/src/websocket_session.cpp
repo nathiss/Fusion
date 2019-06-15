@@ -16,8 +16,8 @@ namespace fusion_server {
 
 WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
     : websocket_{std::move(socket)}, strand_{websocket_.get_executor()},
-      handshake_complete{false} {
-  Server::GetInstance().Register(this);
+      handshake_complete_{false} {
+  delegate_ = Server::GetInstance().Register(this);
 }
 
 WebSocketSession::~WebSocketSession() noexcept {
@@ -33,7 +33,7 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
     return;
   }
 
-  if (!handshake_complete) {
+  if (!handshake_complete_) {
     // We need to wait for the handshake to complete.
     return;
   }
@@ -50,17 +50,6 @@ void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcep
         }
       )
   );
-}
-
-std::shared_ptr<const std::string> WebSocketSession::Pop() noexcept {
-  std::lock_guard l{incomming_queue_mtx_};
-  if (incomming_queue_.empty()) {
-    return nullptr;
-  }
-
-  auto front = incomming_queue_.front();
-  incomming_queue_.pop();
-  return front;
 }
 
 void WebSocketSession::Close() noexcept {
@@ -90,6 +79,7 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
     // TODO: Find out if that's true.
     return;
   }
+  handshake_complete_ = true;
 
   if (std::lock_guard l{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
     websocket_.async_write(
@@ -136,13 +126,10 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
 
-  const auto str = boost::beast::buffers_to_string(buffer_.data());
+  const auto package = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  {
-    std::lock_guard l{incomming_queue_mtx_};
-    incomming_queue_.push(std::make_shared<decltype(str)>(std::move(str)));
-  }
+  delegate_(std::make_shared<decltype(package)>(std::move(package)), this);
 
   websocket_.async_read(
     buffer_,

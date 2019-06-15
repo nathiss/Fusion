@@ -18,7 +18,8 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
   return ioc_;
 }
 
-void Server::Register(WebSocketSession* new_session) noexcept {
+auto Server::Register(WebSocketSession* new_session) noexcept
+    -> IncommingPackageDelegate& {
   std::lock_guard l{unidentified_sessions_mtx_};
   auto [it, took_place] = unidentified_sessions_.insert(new_session);
 
@@ -26,6 +27,8 @@ void Server::Register(WebSocketSession* new_session) noexcept {
     std::cerr << "Server::Register: the session " << new_session
     << " has already been registered." << std::endl;
   }
+
+  return unjoined_delegate_;
 }
 
 void Server::Unregister(WebSocketSession* session) noexcept {
@@ -37,6 +40,13 @@ void Server::Unregister(WebSocketSession* session) noexcept {
 
 void Server::StartAccepting() noexcept {
   std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
+}
+
+Server::Server() noexcept {
+  unjoined_delegate_ = [](
+    std::shared_ptr<const std::string> package, WebSocketSession* src) {
+    src->Write(package);
+  };
 }
 
 }  // namespace fusion_server

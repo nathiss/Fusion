@@ -1,7 +1,10 @@
 #pragma once
 
+#include <functional>
+#include <memory>
 #include <mutex>
 #include <set>
+#include <string>
 
 #include <boost/asio.hpp>
 
@@ -21,6 +24,12 @@ class WebSocketSession;
 class Server {
  public:
   /**
+   * This type is used to create delegates that will be called by WebSocket
+   * sessions each time, when a new package arrives.
+   */
+  using IncommingPackageDelegate = std::function< void(std::shared_ptr<const std::string>, WebSocketSession*) >;
+
+  /**
    * This function returns the only instance of this class. If the instance has
    * not yet been created, the function creates it
    *
@@ -39,14 +48,19 @@ class Server {
 
   /**
    * This method adds the given session to the set of the unidentified sessions.
+   * It returns the delegate to be called each time when a new package arrives.
    *
    * @param[in] new_session
    *   A new session to be registered.
    *
    * @note
    *   This method is thread-safe.
+   *
+   * @return
+   *   The delegate to be called each time when a new package arrives is
+   *   returned.
    */
-  void Register(WebSocketSession* new_session) noexcept;
+  IncommingPackageDelegate& Register(WebSocketSession* new_session) noexcept;
 
   /**
    * This method unregisters the given session. After that method is executed,
@@ -75,6 +89,17 @@ class Server {
   void StartAccepting() noexcept;
 
  private:
+  /**
+   * This constructor is called only once, by the GetInstance() function.
+   */
+  Server() noexcept;
+
+  /**
+   * This function object is called by WebSocket sessions from a clients, who
+   * are not yet in any game, each time when a new package arrives.
+   */
+  IncommingPackageDelegate unjoined_delegate_;
+
 
   /**
    * This is the pointer pointing to the only instance of this class.

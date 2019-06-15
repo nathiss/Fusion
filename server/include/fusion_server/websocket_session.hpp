@@ -11,6 +11,8 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
+#include <fusion_server/server.hpp>
+
 namespace fusion_server {
 
 /**
@@ -62,19 +64,6 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    */
   template <typename Body, typename Allocator>
   void Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept;
-
-  /**
-   * This method returns the oldest package sent by the client. If no package
-   * has yet arrived, the nullptr is returned.
-   *
-   * @return
-   *   The oldest package sent by the client is returned. If no package has yet
-   *   arrived, the nullptr is returned.
-   *
-   * @note
-   *   This method is thread-safe.
-   */
-  std::shared_ptr<const std::string> Pop() noexcept;
 
   /**
    * This method closes the connection immediately. Any asynchronous operation
@@ -140,16 +129,6 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   boost::asio::strand<boost::asio::io_context::executor_type> strand_;
 
   /**
-   * This queue holds all incomming packages, which have not yet been processed.
-   */
-  std::queue<std::shared_ptr<const std::string>> incomming_queue_;
-
-  /**
-   * This is the mutex for incoming queue.
-   */
-  std::mutex incomming_queue_mtx_;
-
-  /**
    * This queue holds all outgoing packages, which have not yet been sent.
    */
   std::queue<std::shared_ptr<const std::string>> outgoing_queue_;
@@ -162,7 +141,12 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This indicates whether or not the handshake has been completed.
    */
-  std::atomic<bool> handshake_complete;
+  std::atomic<bool> handshake_complete_;
+
+  /**
+   * This delegate is called each time when a new package arrives.
+   */
+  Server::IncommingPackageDelegate delegate_;
 };
 
 template <typename Body, typename Allocator>
