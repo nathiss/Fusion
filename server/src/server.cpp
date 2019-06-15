@@ -43,8 +43,15 @@ void Server::StartAccepting() noexcept {
 }
 
 Server::Server() noexcept {
-  unjoined_delegate_ = [](
+  unjoined_delegate_ = [this](
     std::shared_ptr<const std::string> package, WebSocketSession* src) {
+    auto parsed = package_parser_.Parse(*package);
+    if (!parsed) {
+      PackageParser::JSON j;
+      j["error_message"] = "Package does not contain a valid JSON.";
+      src->Write(std::make_shared<const std::string>(j.dump()));
+      src->Close();
+    }
     src->Write(package);
   };
 }

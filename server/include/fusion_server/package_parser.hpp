@@ -26,7 +26,7 @@ class PackageParser {
    * @return
    *  The parsed package or no value, if the package cannot be properly parsed.
    */
-  std::optional<JSON> Parse(std::shared_ptr<const std::string> package) noexcept;
+  std::optional<JSON> Parse(const std::string& package) noexcept;
 };
 
 }  // namespace fusion_server

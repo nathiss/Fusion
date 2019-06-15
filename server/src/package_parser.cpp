@@ -2,10 +2,10 @@
 
 namespace fusion_server {
 
-auto PackageParser::Parse(std::shared_ptr<const std::string> package) noexcept
+auto PackageParser::Parse(const std::string& package) noexcept
     -> std::optional<JSON> {
   try {
-    return JSON::parse(*package);
+    return JSON::parse(package);
   }
   catch(...) {
     return {};

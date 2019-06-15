@@ -9,6 +9,7 @@
 #include <boost/asio.hpp>
 
 #include <fusion_server/listener.hpp>
+#include <fusion_server/package_parser.hpp>
 
 namespace fusion_server {
 
@@ -99,6 +100,11 @@ class Server {
    * are not yet in any game, each time when a new package arrives.
    */
   IncommingPackageDelegate unjoined_delegate_;
+
+  /**
+   * This is used to parse packages from the clients.
+   */
+  PackageParser package_parser_;
 
   /**
    * The context for providing core I/O functionality.

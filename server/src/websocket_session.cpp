@@ -119,6 +119,11 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     // The WebSocketSession was closed. We don't need to report that.
     return;
   }
+  if (ec == boost::asio::error::operation_aborted) {
+    // The operation has been canceled due to some server's inner operation
+    // (e.g. WebSocketSession::Close() has been called).
+    return;
+  }
   if (ec) {
     std::cerr << "WebSocketSession::HandleRead: " << ec.message() << std::endl;
     // We assume what the session cannot be fixed.
@@ -151,8 +156,13 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
     // The WebSocketSession was closed. We don't need to report that.
     return;
   }
+  if (ec == boost::asio::error::operation_aborted) {
+    // The operation has been canceled due to some server's inner operation
+    // (e.g. WebSocketSession::Close() has been called).
+    return;
+  }
   if (ec) {
-    std::cerr << "WebSocketSession::HandleRead: " << ec.message() << std::endl;
+    std::cerr << "WebSocketSession::HandleWrite: " << ec.message() << std::endl;
     // We assume what the session cannot be fixed.
     // TODO: Find out if that's true.
     return;
