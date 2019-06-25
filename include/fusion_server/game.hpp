@@ -28,8 +28,6 @@ class Role;
 /**
  * This class represents a game. It creates a common context for at least two
  * clients.
- *
- * TODO: add mutexes for the first and the second team.
  */
 class Game {
  public:
