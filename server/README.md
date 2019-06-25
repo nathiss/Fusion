@@ -21,7 +21,7 @@ This section describes packages send by a client.
 #### JOIN package
 
 This package is a join request to the server. A Client can be only in one game
-at a time. If this packge is sent and the client has already joined to a game,
+at a time. If this packge was sent and the client has already joined to a game,
 the server will close the connection imediately.
 
 ```json
