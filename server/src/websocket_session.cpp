@@ -16,7 +16,7 @@ namespace fusion_server {
 
 WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
     : websocket_{std::move(socket)}, strand_{websocket_.get_executor()},
-      handshake_complete_{false} {
+      handshake_complete_{false}, in_closing_procedure_{false} {
   delegate_ = Server::GetInstance().Register(this);
 }
 
@@ -109,8 +109,8 @@ void WebSocketSession::Close(Package package) noexcept {
   }
   if (outgoing_queue_.size() == 1) {
     // This means we're already writing and no packages are waiting.
-    // We queue the closing package and returns. HandleWrite method will perform
-    // sending and closing the session.
+    // We queue the closing package and return. HandleWrite method will perform
+    // sending and closing.
     outgoing_queue_.push_back(package);
     return;
   }

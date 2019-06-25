@@ -68,8 +68,8 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   void Run(boost::beast::http::request<Body, boost::beast::http::basic_fields<Allocator>> request) noexcept;
 
   /**
-   * This method closes the connection immediately. Any asynchronous operation
-   * will be cancelled. After its called no writing should be performed.
+   * This method allows the current writing to complete (if any) and then closes
+   * the connection. After its called no writing should be performed.
    *
    * @note
    *   This method is thread safe. It is indended to be called only once.
@@ -78,9 +78,8 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   void Close() noexcept;
 
   /**
-   * This method performs the asynchronous writing to the client and, when its
-   * completed, closes the connection. After its called no writing should be
-   * performed.
+   * This method performs a writing to the client and, when its completed,
+   * closes the connection. After its called no writing should be performed.
    *
    * @param[in] package
    *   The package to be send to the client.
