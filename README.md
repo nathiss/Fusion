@@ -1,4 +1,4 @@
-# FusionServer
+# Fusion
 
 This is the source code of the server for the **Fusion** game.
 
