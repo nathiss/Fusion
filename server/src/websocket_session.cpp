@@ -26,7 +26,14 @@ WebSocketSession::~WebSocketSession() noexcept {
 
 void WebSocketSession::Write(Package package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
-  outgoing_queue_.push(package);
+
+  if (in_closing_procedure_) {
+    // We're not allowed to queued any package, when the closing procedure has
+    // started.
+    return;
+  }
+
+  outgoing_queue_.push_back(package);
 
   if (outgoing_queue_.size() > 1) {
     // Means we're already writing.
@@ -53,19 +60,71 @@ void WebSocketSession::Write(Package package) noexcept {
 }
 
 void WebSocketSession::Close() noexcept {
-  try{
-    websocket_.close(boost::beast::websocket::close_code::none);
+  if (!in_closing_procedure_) {
+    std::lock_guard l{outgoing_queue_mtx_};
+    in_closing_procedure_ = true;
+    if (outgoing_queue_.size() > 1) {
+      // This means there are queued additional packages. We return and allow
+      // HandleWrite to call this method after the writing has been completed.
+      outgoing_queue_.erase(outgoing_queue_.begin() + 1, outgoing_queue_.end());
+      return;
+    }
+    if (outgoing_queue_.size() == 1) {
+      // This means there are no additional packages. We just returnand allow
+      // HandleWrite to call this method after the writing has been completed.
+      return;
+    }
+  }
+
+  // If we're here it means either there are no packages queued or we are
+  // already in closing procedure.
+
+  boost::system::error_code ec;
+  websocket_.close(boost::beast::websocket::close_code::none, ec);
     // Now callers should not performs writing to the WebSocket and should
     // perform reading as long as a read returns boost::beast::websocket::closed
     // error.
-  }
-  catch (const boost::system::system_error& e) {
-    std::cerr << "WebSocketSession::Close: " << e.what() << std::endl;
+
+  if (ec) {
+    std::cerr << "WebSocketSession::Close: " << ec.message() << std::endl;
     // TODO: read if the comment below applies to the WebSocket connections.
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Thrown on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
   }
+}
+
+void WebSocketSession::Close(Package package) noexcept {
+  // We lock the mutex first, to ensure that no additional package will be
+  // queued, after the closing procedure has started.
+  std::lock_guard l{outgoing_queue_mtx_};
+  in_closing_procedure_ = true;
+
+  if (outgoing_queue_.size() > 1) {
+    // This means we're already writing and other packages are waiting.
+    // We remove all additional packages and queue the closing package.
+    outgoing_queue_.erase(outgoing_queue_.begin() + 1, outgoing_queue_.end());
+    outgoing_queue_.push_back(package);
+    return;
+  }
+  if (outgoing_queue_.size() == 1) {
+    // This means we're already writing and no packages are waiting.
+    // We queue the closing package and returns. HandleWrite method will perform
+    // sending and closing the session.
+    outgoing_queue_.push_back(package);
+    return;
+  }
+
+  // If we're here it means no writing is performed right now.
+  boost::system::error_code ec;
+  websocket_.write(boost::asio::buffer(*package), ec);
+  if (ec) {
+    std::cerr << "WebSocketSession::Close: " << ec.message() << std::endl;
+    // Since we want to close the session and an error occured we just return
+    // to destroy the object.
+    return;
+  }
+  Close();
 }
 
 WebSocketSession::operator bool() const noexcept {
@@ -169,7 +228,24 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
   }
 
   std::lock_guard l{outgoing_queue_mtx_};
-  outgoing_queue_.pop();
+  outgoing_queue_.pop_front();
+
+  if (in_closing_procedure_) {
+    // We're in closing procedure. The next package is the last one to be sent.
+    // After writing we close the session.
+    if (!outgoing_queue_.empty()) {
+      boost::system::error_code ec;
+      websocket_.write(boost::asio::buffer(*outgoing_queue_.front()), ec);
+      if (ec) {
+        std::cerr << "WebSocketSession::HandleWrite: " << ec.message() << std::endl;
+        // Since we want to close the session and an error occured we just
+        // return to destroy the object.
+        return;
+      }
+    }
+    Close();
+    return;
+  }
 
   if (!outgoing_queue_.empty()) {
     websocket_.async_write(

@@ -69,9 +69,27 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
 
   /**
    * This method closes the connection immediately. Any asynchronous operation
-   * will be cancelled.
+   * will be cancelled. After its called no writing should be performed.
+   *
+   * @note
+   *   This method is thread safe. It is indended to be called only once.
+   *   If it is called more than once the behaviour is undefined.
    */
   void Close() noexcept;
+
+  /**
+   * This method performs the asynchronous writing to the client and, when its
+   * completed, closes the connection. After its called no writing should be
+   * performed.
+   *
+   * @param[in] package
+   *   The package to be send to the client.
+   *
+   * @note
+   *   This method is thread safe. It is indended to be called only once.
+   *   If it is called more than once the behaviour is undefined.
+   */
+  void Close(Package package) noexcept;
 
   /**
    * This method returns a value that indicates whether or not the socket is
@@ -133,7 +151,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This queue holds all outgoing packages, which have not yet been sent.
    */
-  std::queue<Package> outgoing_queue_;
+  std::deque<Package> outgoing_queue_;
 
   /**
    * This is the mutex for outgoing queue.
@@ -144,6 +162,12 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * This indicates whether or not the handshake has been completed.
    */
   std::atomic<bool> handshake_complete_;
+
+  /**
+   * This indicates wheter or not the closing procedure has started.
+   * If it's true, no writing to the
+   */
+  std::atomic<bool> in_closing_procedure_;
 
   /**
    * This delegate is called each time when a new package arrives.
