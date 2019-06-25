@@ -10,6 +10,7 @@
 
 #include <fusion_server/listener.hpp>
 #include <fusion_server/package_parser.hpp>
+#include <fusion_server/system_abstractions.hpp>
 
 namespace fusion_server {
 
@@ -24,12 +25,6 @@ class WebSocketSession;
  */
 class Server {
  public:
-  /**
-   * This type is used to create delegates that will be called by WebSocket
-   * sessions each time, when a new package arrives.
-   */
-  using IncommingPackageDelegate = std::function< void(std::shared_ptr<const std::string>, WebSocketSession*) >;
-
   /**
    * This function returns the only instance of this class. If the instance has
    * not yet been created, the function creates it
@@ -61,7 +56,7 @@ class Server {
    *   The delegate to be called each time when a new package arrives is
    *   returned.
    */
-  IncommingPackageDelegate& Register(WebSocketSession* new_session) noexcept;
+  system_abstractions::IncommingPackageDelegate& Register(WebSocketSession* new_session) noexcept;
 
   /**
    * This method unregisters the given session. After that method is executed,
@@ -99,7 +94,7 @@ class Server {
    * This function object is called by WebSocket sessions from a clients, who
    * are not yet in any game, each time when a new package arrives.
    */
-  IncommingPackageDelegate unjoined_delegate_;
+  system_abstractions::IncommingPackageDelegate unjoined_delegate_;
 
   /**
    * This is used to parse packages from the clients.

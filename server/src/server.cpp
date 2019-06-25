@@ -19,7 +19,7 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 }
 
 auto Server::Register(WebSocketSession* new_session) noexcept
-    -> IncommingPackageDelegate& {
+    -> system_abstractions::IncommingPackageDelegate& {
   std::lock_guard l{unidentified_sessions_mtx_};
   auto [it, took_place] = unidentified_sessions_.insert(new_session);
 

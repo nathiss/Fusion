@@ -11,6 +11,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(Headers
   include/nlohmann/json.hpp
+  include/fusion_server/system_abstractions.hpp
   include/fusion_server/package_parser.hpp
   include/fusion_server/server.hpp
   include/fusion_server/listener.hpp

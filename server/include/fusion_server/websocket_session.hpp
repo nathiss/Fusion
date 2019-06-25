@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
-#include <fusion_server/server.hpp>
+#include <fusion_server/system_abstractions.hpp>
 
 namespace fusion_server {
 
@@ -146,7 +146,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This delegate is called each time when a new package arrives.
    */
-  Server::IncommingPackageDelegate delegate_;
+  system_abstractions::IncommingPackageDelegate delegate_;
 };
 
 template <typename Body, typename Allocator>
