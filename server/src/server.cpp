@@ -44,7 +44,7 @@ void Server::StartAccepting() noexcept {
 
 Server::Server() noexcept {
   unjoined_delegate_ = [this](
-    std::shared_ptr<const std::string> package, WebSocketSession* src) {
+    Package package, WebSocketSession* src) {
     auto parsed = package_parser_.Parse(*package);
     if (!parsed) {
       PackageParser::JSON j;

@@ -24,7 +24,7 @@ WebSocketSession::~WebSocketSession() noexcept {
   Server::GetInstance().Unregister(this);
 };
 
-void WebSocketSession::Write(std::shared_ptr<const std::string> package) noexcept {
+void WebSocketSession::Write(Package package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
   outgoing_queue_.push(package);
 
