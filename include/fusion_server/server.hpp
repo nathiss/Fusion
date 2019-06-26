@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <set>
@@ -8,6 +9,7 @@
 
 #include <boost/asio.hpp>
 
+#include <fusion_server/game.hpp>
 #include <fusion_server/listener.hpp>
 #include <fusion_server/package_parser.hpp>
 #include <fusion_server/system_abstractions.hpp>
@@ -110,6 +112,11 @@ class Server {
    * This container holds all unidentifies WebSocket sessions.
    */
   std::set<WebSocketSession*> unidentified_sessions_;
+
+  /**
+   * This map associates all games in the server with their names.
+   */
+  std::map<std::string, Game> games_;
 
   /**
    * This mutex is used to synchronise the access to the set of the unidentified

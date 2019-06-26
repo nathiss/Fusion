@@ -193,7 +193,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   const auto package = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  delegate_(std::make_shared<decltype(package)>(std::move(package)), this);
+  delegate_(system_abstractions::make_Package(std::move(package)), this);
 
   websocket_.async_read(
     buffer_,

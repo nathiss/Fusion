@@ -48,11 +48,51 @@ Server::Server() noexcept {
     auto parsed = package_parser_.Parse(*package);
     if (!parsed) {
       PackageParser::JSON j;
-      j["error_message"] = "Package does not contain a valid JSON.";
-      src->Write(std::make_shared<const std::string>(j.dump()));
-      src->Close();
+      j["error_message"] = "Package does not contain a valid request.";
+      j["closed"] = true;
+      src->Close(system_abstractions::make_Package(j.dump()));
+      return;
     }
-    src->Write(package);
+    auto request = std::move(parsed.value());
+    PackageParser::JSON response;
+    // TODO: move it elsewhere
+    if (request.find("game") != request.end() &&
+        request.find("nick") != request.end() &&
+        request.find("id")   != request.end() &&
+        request.size() == 3) {
+      auto& game = games_[request["game"]];
+      auto [joined, delegate] = game.Join(src);
+      if (!joined) {
+        response["id"] = request["id"];
+        response["result"] = "full";
+        src->Write(system_abstractions::make_Package(response.dump()));
+        return;
+      }
+
+      src->delegate_ = delegate;
+      unidentified_sessions_.erase(src);
+      response["id"] = request["id"];
+      response["result"] = "joined";
+      response["rays"] = decltype(response)::array();
+      response["players"] = decltype(response)::array();
+      response["players"][0] = {
+        {"player_id", 0},
+        {"nick", request["nick"]}, // TODO: add check if the nick exists
+        {"role", "none"},
+        {"color", {255.0, 255.0, 255.0}},
+        {"health", 100.0},
+        {"position", {7.6, 67.2}},
+        {"angle", 34.6},
+      };
+      src->Write(system_abstractions::make_Package(response.dump()));
+      return;
+
+    } else { // It's not join request or it's ill-formed.
+      response["error_message"] = "The package has not been recognised.";
+      response["closed"] = true;
+      src->Close(system_abstractions::make_Package(response.dump()));
+      return;
+    }
   };
 }
 

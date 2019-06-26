@@ -21,9 +21,9 @@ namespace fusion_server {
 class WebSocketSession;
 
 /**
- * This is the forward declaration of the Role class.
+ * This type represents the roles of the players.
  */
-class Role;
+struct Role {};
 
 /**
  * This class represents a game. It creates a common context for at least two
@@ -50,6 +50,10 @@ class Game {
      */
     kRandom,
   };
+
+  Game(const Game&) noexcept = delete;
+
+  Game& operator=(const Game&) noexcept = delete;
 
   /**
    * This constructor creates the asynchronous reading delegate.
@@ -80,6 +84,7 @@ class Game {
    *   returns a pair of true and a callback to the client's asynchronous
    *   reading.
    */
+  [[ nodiscard ]]
   std::pair<bool, system_abstractions::IncommingPackageDelegate&>
   Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
 
@@ -138,7 +143,7 @@ class Game {
    * This mutex is used to synchronise all oprations done on the collection
    * containing the first team.
    */
-  std::mutex first_team_mtx_;
+  mutable std::mutex first_team_mtx_;
 
   /**
    * This set contains the pairs of WebSocket sessions and their roles in the
@@ -150,7 +155,7 @@ class Game {
    * This mutex is used to synchronise all oprations done on the collection
    * containing the  team.
    */
-  std::mutex second_team_mtx_;
+  mutable std::mutex second_team_mtx_;
 
   /**
    * This callable object is used as a callback to the asynchronous reading of

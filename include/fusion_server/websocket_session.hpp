@@ -130,6 +130,11 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    */
   void HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted) noexcept;
 
+  /**
+   * This delegate is called each time when a new package arrives.
+   */
+  system_abstractions::IncommingPackageDelegate delegate_;
+
  private:
 
   /**
@@ -167,11 +172,6 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * If it's true, no writing to the
    */
   std::atomic<bool> in_closing_procedure_;
-
-  /**
-   * This delegate is called each time when a new package arrives.
-   */
-  system_abstractions::IncommingPackageDelegate delegate_;
 };
 
 template <typename Body, typename Allocator>

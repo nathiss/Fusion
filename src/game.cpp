@@ -6,8 +6,8 @@ using fusion_server::system_abstractions::Package;
 namespace fusion_server {
 
 Game::Game() noexcept {
-  delegete_ = [](Package package, WebSocketSession* session){
-
+  delegete_ = [this](Package package, WebSocketSession* session){
+    this->BroadcastPackage(package);
   };
 }
 
