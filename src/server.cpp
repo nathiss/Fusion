@@ -72,33 +72,40 @@ Server::Server() noexcept {
       auto& game = games_[request["game"]];
       auto [joined, delegate] = game.Join(src);
       if (!joined) {
-        response["id"] = request["id"];
-        response["result"] = "full";
+        response = {
+          {"id", request["id"]},
+          {"result", "full"}
+        };
         src->Write(system_abstractions::make_Package(response.dump()));
         return;
       }
 
       src->delegate_ = delegate;
       unidentified_sessions_.erase(src);
-      response["id"] = request["id"];
-      response["result"] = "joined";
-      response["rays"] = decltype(response)::array();
-      response["players"] = decltype(response)::array();
-      response["players"][0] = {
-        {"player_id", 0},
-        {"nick", request["nick"]}, // TODO: add check if the nick exists
-        {"role", "none"},
-        {"color", {255.0, 255.0, 255.0}},
-        {"health", 100.0},
-        {"position", {7.6, 67.2}},
-        {"angle", 34.6},
+      response = {
+        {"id", request["id"]},
+        {"result", "joined"},
+        {"rays", decltype(response)::array()},
+        {"players", decltype(response)::array(
+          {
+            {"player_id", 0},
+            {"nick", request["nick"]}, // TODO: add check if the nick exists
+            {"role", "none"},
+            {"color", {255.0, 255.0, 255.0}},
+            {"health", 100.0},
+            {"position", {7.6, 67.2}},
+            {"angle", 34.6},
+          }
+        )},
       };
       src->Write(system_abstractions::make_Package(response.dump()));
       return;
 
     } else { // It's not join request or it's ill-formed.
-      response["error_message"] = "The package has not been recognised.";
-      response["closed"] = true;
+      response = {
+        {"error_message", "The package has not been recognised."},
+        {"closed", true}
+      };
       src->Close(system_abstractions::make_Package(response.dump()));
       return;
     }
