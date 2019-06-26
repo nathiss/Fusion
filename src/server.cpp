@@ -52,18 +52,18 @@ Server::Server() noexcept {
   unjoined_delegate_ = [this](
     Package package, WebSocketSession* src) {
 #ifdef DEBUG
-    std::cout << "[Server " << this << "] New package from " << src << std::endl;
+    std::cout << "[Server " << this << "] A new package from " << src << std::endl;
 #endif
     auto parsed = package_parser_.Parse(*package);
     if (!parsed) {
-      PackageParser::JSON j;
-      j["error_message"] = "Package does not contain a valid request.";
-      j["closed"] = true;
-      src->Close(system_abstractions::make_Package(j.dump()));
+      PackageParser::JSON response = {
+        {"error_message", "Package does not contain a valid request."},
+        {"closed", true}
+      };
+      src->Close(system_abstractions::make_Package(response.dump()));
       return;
     }
     auto request = std::move(parsed.value());
-    PackageParser::JSON response;
     // TODO: move it elsewhere
     if (request.find("game") != request.end() &&
         request.find("nick") != request.end() &&
@@ -72,7 +72,7 @@ Server::Server() noexcept {
       auto& game = games_[request["game"]];
       auto [joined, delegate] = game.Join(src);
       if (!joined) {
-        response = {
+        PackageParser::JSON response = {
           {"id", request["id"]},
           {"result", "full"}
         };
@@ -82,7 +82,7 @@ Server::Server() noexcept {
 
       src->delegate_ = delegate;
       unidentified_sessions_.erase(src);
-      response = {
+      PackageParser::JSON response = {
         {"id", request["id"]},
         {"result", "joined"},
         {"rays", decltype(response)::array()},
@@ -102,7 +102,7 @@ Server::Server() noexcept {
       return;
 
     } else { // It's not join request or it's ill-formed.
-      response = {
+      PackageParser::JSON response = {
         {"error_message", "The package has not been recognised."},
         {"closed", true}
       };
