@@ -87,7 +87,7 @@ void WebSocketSession::Close() noexcept {
 
   if (ec) {
     std::cerr << "WebSocketSession::Close: " << ec.message() << std::endl;
-    // TODO: read if the comment below applies to the WebSocket connections.
+    // TODO: Find out if the comment below applies to the WebSocket connections.
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Thrown on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
