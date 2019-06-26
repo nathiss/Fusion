@@ -5,3 +5,5 @@ build/
 *.swo
 .vscode/
 googletest/
+.idea/
+cmake-build-debug/
