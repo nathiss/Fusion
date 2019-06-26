@@ -33,6 +33,9 @@ void HTTPSession::Run() noexcept {
 }
 
 void HTTPSession::Close() noexcept {
+#ifdef DEBUG
+  std::cout << "[HTTPSession: " << this << "] Closing" << std::endl;
+#endif
   try {
     socket_.close();
   }
@@ -50,6 +53,9 @@ HTTPSession::operator bool() const noexcept {
 
 void HTTPSession::HandleRead(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
+#ifdef DEBUG
+  std::cout << "[HTTPSession: " << this << "] Read " << bytes_transmitted << " bytes." << std::endl;
+#endif
   if (ec == boost::beast::http::error::end_of_stream) {
     // The client closed the connection.
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
@@ -62,6 +68,9 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
   }
 
   if (boost::beast::websocket::is_upgrade(request_)) {
+#ifdef DEBUG
+    std::cout << "[HTTPSession: " << this << "] Received an upgrade request." << std::endl;
+#endif
     std::make_shared<WebSocketSession>(std::move(socket_))->Run(
       std::move(request_)
     );
@@ -93,6 +102,9 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
 
 void HTTPSession::HandleWrite(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted, bool close) noexcept {
+#ifdef DEBUG
+  std::cout << "[HTTPSession: " << this << "] Written " << bytes_transmitted << " bytes." << std::endl;
+#endif
   if (ec) {
     std::cerr << "HTTPSession::HandleWrite: " << ec.message() << std::endl;
     return;

@@ -22,6 +22,9 @@ auto Server::Register(WebSocketSession* new_session) noexcept
     -> system_abstractions::IncommingPackageDelegate& {
   std::lock_guard l{unidentified_sessions_mtx_};
   auto [it, took_place] = unidentified_sessions_.insert(new_session);
+#ifdef DEBUG
+  std::cout << "[Server: " << this << "] New session registered: " << new_session << std::endl;
+#endif
 
   if (!took_place) {
     std::cerr << "Server::Register: the session " << new_session
@@ -33,6 +36,9 @@ auto Server::Register(WebSocketSession* new_session) noexcept
 
 void Server::Unregister(WebSocketSession* session) noexcept {
   if (std::lock_guard l{unidentified_sessions_mtx_}; unidentified_sessions_.count(session) > 0) {
+#ifdef DEBUG
+  std::cout << "[Server: " << this << "] Removing session: " << session << std::endl;
+#endif
     unidentified_sessions_.erase(session);
   }
 
@@ -45,6 +51,9 @@ void Server::StartAccepting() noexcept {
 Server::Server() noexcept {
   unjoined_delegate_ = [this](
     Package package, WebSocketSession* src) {
+#ifdef DEBUG
+    std::cout << "[Server " << this << "] New package from " << src << std::endl;
+#endif
     auto parsed = package_parser_.Parse(*package);
     if (!parsed) {
       PackageParser::JSON j;

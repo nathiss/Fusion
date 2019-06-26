@@ -13,6 +13,9 @@ Game::Game() noexcept {
 
 std::pair<bool, system_abstractions::IncommingPackageDelegate&>
 Game::Join(WebSocketSession *session, Team team) noexcept {
+#ifdef DEBUG
+  std::cout << "[Game: " << this << "] Joining: " << session << std::endl;
+#endif
   if (IsInGame(session)) {
     return {true, delegete_}; // This should never happen.
   }
@@ -54,6 +57,10 @@ Game::Join(WebSocketSession *session, Team team) noexcept {
 }
 
 bool Game::Leave(WebSocketSession* session) noexcept {
+  // TODO: change WebSocketSession::delegate_ & register it in the server
+#ifdef DEBUG
+  std::cout << "[Game: " << this << "] Leaving: " << session << std::endl;
+#endif
   {
     std::lock_guard l{first_team_mtx_};
     for (const auto& pair : first_team_)
@@ -76,6 +83,9 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 }
 
 void Game::BroadcastPackage(Package package) noexcept {
+#ifdef DEBUG
+  std::cout << "[Game: " << this << "] Broadcasting: " << *package << std::endl;
+#endif
   {
     std::lock_guard l{first_team_mtx_};
     for (auto& pair : first_team_)

@@ -47,6 +47,9 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
     // TODO: find out if any error can cause the listener to stop working.
   }
   else {
+#ifdef DEBUG
+    std::cout << "[Listener: " << this << "] New connection from " << socket_.remote_endpoint() << std::endl;
+#endif
     std::make_shared<HTTPSession>(std::move(socket_))->Run();
   }
 

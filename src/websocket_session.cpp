@@ -139,6 +139,9 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
     return;
   }
   handshake_complete_ = true;
+#ifdef DEBUG
+  std::cout << "[WebSocketSession: " << this << "] Handshake completed" << std::endl;
+#endif
 
   if (std::lock_guard l{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
     websocket_.async_write(
@@ -171,6 +174,9 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
 
 void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
+#ifdef DEBUG
+  std::cout << "[WebSocketSession " << this << "] Read " << bytes_transmitted << " bytes" << std::endl;
+#endif
   // TODO: find out what's that doing.
   boost::ignore_unused(buffer_);
 
@@ -211,13 +217,11 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
 
 void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
+#ifdef DEBUG
+  std::cout << "[WebSocketSession " << this << "] Written " << bytes_transmitted << " bytes" << std::endl;
+#endif
   if (ec == boost::beast::websocket::error::closed) {
     // The WebSocketSession was closed. We don't need to report that.
-    return;
-  }
-  if (ec == boost::asio::error::operation_aborted) {
-    // The operation has been canceled due to some server's inner operation
-    // (e.g. WebSocketSession::Close() has been called).
     return;
   }
   if (ec) {
