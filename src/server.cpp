@@ -57,6 +57,9 @@ void Server::Unregister(WebSocketSession* session) noexcept {
   auto& game = games_[game_name.value()];
   game.Leave(session);
   if (game.GetPlayersCount() == 0) {
+#ifdef DEBUG
+    std::cout << "[Server: " << this << "] Game " << &game << " has no more playes. Removing." << std::endl;
+#endif
     games_.erase(game_name.value());
   }
 }
