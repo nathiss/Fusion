@@ -29,12 +29,17 @@ set(Sources
   src/http_session.cpp
   src/websocket_session.cpp
   src/game.cpp
+  src/main.cpp
 )
 
-add_subdirectory(googletest)
-add_subdirectory(test)
+#add_subdirectory(googletest)
+#add_subdirectory(test)
+#enable_testing()
 
-enable_testing()
+add_executable(${This} ${Sources} ${Headers})
 
-add_library(${This} STATIC ${Sources} ${Headers})
 target_include_directories(${This} PUBLIC include)
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+target_link_libraries(${This} Threads::Threads)
