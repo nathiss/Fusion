@@ -66,6 +66,7 @@ void Server::Unregister(WebSocketSession* session) noexcept {
 }
 
 void Server::StartAccepting() noexcept {
+  // TODO: read the local endpoint from a config file.
   std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
 }
 
