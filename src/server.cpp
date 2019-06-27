@@ -51,6 +51,7 @@ void Server::Unregister(WebSocketSession* session) noexcept {
 #endif
     std::lock_guard l{unidentified_sessions_mtx_};
     unidentified_sessions_.erase(session);
+    return;
   }
 
   std::lock_guard l{games_mtx_};
