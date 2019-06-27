@@ -33,6 +33,9 @@ Listener::Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept
 Listener::~Listener() noexcept = default;
 
 void Listener::Run() noexcept {
+#ifdef DEBUG
+  std::cout << "Starting asynchronous accepting." << std::endl;
+#endif
   acceptor_.async_accept(
     socket_,
     [self = shared_from_this()](const boost::system::error_code& ec) {
@@ -66,27 +69,31 @@ void Listener::OpenAcceptor() noexcept {
 
   acceptor_.open(endpoint_.protocol(), ec);
   if (ec) {
-    std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
+    std::cerr << "Listener::OpenAcceptor" << ec.message() << std::endl;
     return;
   }
 
-  acceptor_.set_option(boost::asio::socket_base::reuse_address(true));
+  acceptor_.set_option(boost::asio::socket_base::reuse_address(true), ec);
   if (ec) {
-    std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
+    std::cerr << "Listener::OpenAcceptor" << ec.message() << std::endl;
     return;
   }
 
   acceptor_.bind(endpoint_, ec);
   if (ec) {
-    std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
+    std::cerr << "Listener::OpenAcceptor" << ec.message() << std::endl;
     return;
   }
 
   acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
   if (ec) {
-    std::cerr << "Listener::Impl::OpenAcceptor" << ec.message() << std::endl;
+    std::cerr << "Listener::OpenAcceptor" << ec.message() << std::endl;
     return;
   }
+
+#ifdef DEBUG
+  std::cout << "Listening on " << endpoint_ << std::endl;
+#endif
 }
 
 }  // namespace fusio_server
