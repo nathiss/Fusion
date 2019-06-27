@@ -114,15 +114,34 @@ class Server {
   std::set<WebSocketSession*> unidentified_sessions_;
 
   /**
+   * This mutex is used to synchronise the access to the set of the unidentified
+   * sessions.
+   */
+  std::mutex unidentified_sessions_mtx_;
+
+  /**
    * This map associates all games in the server with their names.
    */
   std::map<std::string, Game> games_;
 
   /**
-   * This mutex is used to synchronise the access to the set of the unidentified
-   * sessions.
+   * This mutex is used to synchronise the access to the set of the games
+   * collection.
    */
-  std::mutex unidentified_sessions_mtx_;
+  std::mutex games_mtx_;
+
+  /**
+   * This map associates all sessions in the server and games to which they have
+   * joined. If a sessions has not been joined to any game (it's unidentified)
+   * the "value" part is in its invalid state.
+   */
+  std::map<WebSocketSession*, std::optional<std::string>> sessions_correlation_;
+
+  /**
+   * This mutex is used to synchronise the access to the map of the sessions
+   * and their games.
+   */
+  std::mutex sessions_correlation_mtx_;
 
   /**
    * This is the pointer pointing to the only instance of this class.

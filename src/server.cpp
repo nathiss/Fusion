@@ -31,17 +31,34 @@ auto Server::Register(WebSocketSession* new_session) noexcept
     << " has already been registered." << std::endl;
   }
 
+  {
+    std::lock_guard l{sessions_correlation_mtx_};
+    sessions_correlation_[new_session] = {};
+  }
+
   return unjoined_delegate_;
 }
 
 void Server::Unregister(WebSocketSession* session) noexcept {
-  if (std::lock_guard l{unidentified_sessions_mtx_}; unidentified_sessions_.count(session) > 0) {
+  sessions_correlation_mtx_.lock();
+  auto& game_name = sessions_correlation_[session];
+  sessions_correlation_.erase(session);
+  sessions_correlation_mtx_.unlock();
+
+  if (!game_name) {
 #ifdef DEBUG
   std::cout << "[Server: " << this << "] Removing session: " << session << std::endl;
 #endif
+    std::lock_guard l{unidentified_sessions_mtx_};
     unidentified_sessions_.erase(session);
   }
 
+  std::lock_guard l{games_mtx_};
+  auto& game = games_[game_name.value()];
+  game.Leave(session);
+  if (game.GetPlayersCount() == 0) {
+    games_.erase(game_name.value());
+  }
 }
 
 void Server::StartAccepting() noexcept {
@@ -69,8 +86,14 @@ Server::Server() noexcept {
         request.find("nick") != request.end() &&
         request.find("id")   != request.end() &&
         request.size() == 3) {
-      auto& game = games_[request["game"]];
-      auto [joined, delegate] = game.Join(src);
+      bool joined{false};
+      {
+        std::lock_guard l{games_mtx_};
+        auto& game = games_[request["game"]];
+        joined = game.Join(src);
+        if (joined) // TODO: do it really have to be here?
+          src->delegate_ = game.GetDelegate();
+      }
       if (!joined) {
         PackageParser::JSON response = {
           {"id", request["id"]},
@@ -80,8 +103,12 @@ Server::Server() noexcept {
         return;
       }
 
-      src->delegate_ = delegate;
       unidentified_sessions_.erase(src);
+      {
+        std::lock_guard l{sessions_correlation_mtx_};
+        sessions_correlation_[src] = request["game"];
+      }
+
       PackageParser::JSON response = {
         {"id", request["id"]},
         {"result", "joined"},

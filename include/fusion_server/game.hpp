@@ -62,9 +62,8 @@ class Game {
 
   /**
    * This method joins the client to this game and adds its session to the
-   * proper team. It returns a pair of boolean value, that indicates whether or
-   * not the joining was successful and a callback to the client's asynchronous
-   * reading.
+   * proper team. It returns a indication whether or not the joining was
+   * successful.
    *
    * @param[in] session
    *   This is the WebSocket session connected to a client.
@@ -75,18 +74,14 @@ class Game {
    *   team.
    *
    * @return
-   *   A pair of boolean value, that indicates whether or not the joining was
-   *   successful and a callback to the client's asynchronous reading is
-   *   returned.
+   *   A indication whether or not the joining was successful is returned.
    *
    * @note
    *   If a client has already joined to this game, the method does nothing and
    *   returns a pair of true and a callback to the client's asynchronous
    *   reading.
    */
-  [[ nodiscard ]]
-  std::pair<bool, system_abstractions::IncommingPackageDelegate&>
-  Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
+  [[ nodiscard ]] bool Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
 
   /**
    * This method removes the given session from this game.
@@ -112,6 +107,24 @@ class Game {
    *   The package to be broadcasted.
    */
   void BroadcastPackage(Package package) noexcept;
+
+  /**
+   * This method returns a reference to the incomming packages delegate used by
+   * the clients' sessions.
+   *
+   * @return
+   *  A reference to the incomming packages delegate used by
+   *  the clients' sessions is returned.
+   */
+  system_abstractions::IncommingPackageDelegate& GetDelegate() noexcept;
+
+  /**
+   * This method returns the amount of players in this game.
+   *
+   * @return
+   *   The amount of players in this game is returned.
+   */
+  std::size_t GetPlayersCount() const noexcept;
 
   /**
    * This constant contains the number of players that can be assigned to
