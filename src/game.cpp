@@ -7,6 +7,7 @@ namespace fusion_server {
 
 Game::Game() noexcept {
   delegete_ = [this](Package package, WebSocketSession* session){
+    // TODO: if it's a leave package, then change reqiester the session in the server
     this->BroadcastPackage(package);
   };
 }
@@ -56,7 +57,6 @@ bool Game::Join(WebSocketSession *session, Team team) noexcept {
 }
 
 bool Game::Leave(WebSocketSession* session) noexcept {
-  // TODO: change WebSocketSession::delegate_ & register it in the server
 #ifdef DEBUG
   std::cout << "[Game: " << this << "] Leaving: " << session << std::endl;
 #endif
