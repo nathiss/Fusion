@@ -44,7 +44,7 @@ int main() {
   std::vector<std::thread> workers;
   workers.reserve(std::thread::hardware_concurrency() - 1);
 
-  for (std::size_t i = 0; i < std::thread::hardware_concurrency(); i++)
+  for (std::size_t i = 0; i < std::thread::hardware_concurrency() - 1; i++)
     workers.emplace_back([&ioc]{ ioc.run(); });
 
   ioc.run();
