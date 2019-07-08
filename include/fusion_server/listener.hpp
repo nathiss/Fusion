@@ -88,12 +88,6 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * The context for providing core I/O functionality.
    */
   boost::asio::io_context& ioc_;
-
-  /**
-   * This is the local endpoint on which new connections will be accepted.
-   */
-  boost::asio::ip::tcp::endpoint endpoint_;
-
   /**
    * This is the acceptor for accepting new connections.
    */
@@ -103,6 +97,12 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * This is the socket used to handle a new incomming connection.
    */
   boost::asio::ip::tcp::socket socket_;
+
+  /**
+   * This is the local endpoint on which new connections will be accepted.
+   */
+  boost::asio::ip::tcp::endpoint endpoint_;
+
 };
 
 }  // namespace fusion_server
