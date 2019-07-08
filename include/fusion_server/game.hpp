@@ -7,8 +7,10 @@
 #include <set>
 #include <string>
 #include <utility>
+#include <variant>
 
 #include <fusion_server/package_parser.hpp>
+#include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
 using fusion_server::system_abstractions::Package;
@@ -19,11 +21,6 @@ namespace fusion_server {
  * This is the forward declaration of the WebSocketSession class.
  */
 class WebSocketSession;
-
-/**
- * This type represents the roles of the players.
- */
-struct Role {};
 
 /**
  * This class represents a game. It creates a common context for at least two
@@ -150,7 +147,7 @@ class Game {
    * This set contains the pairs of WebSocket sessions and their roles in the
    * game of the first team.
    */
-  std::set<std::pair<WebSocketSession*, std::unique_ptr<Role>>> first_team_;
+  std::set<std::pair<WebSocketSession*, std::unique_ptr<Player>>> first_team_;
 
   /**
    * This mutex is used to synchronise all oprations done on the collection
@@ -162,13 +159,25 @@ class Game {
    * This set contains the pairs of WebSocket sessions and their roles in the
    * game of the second team.
    */
-  std::set<std::pair<WebSocketSession*, std::unique_ptr<Role>>> second_team_;
+  std::set<std::pair<WebSocketSession*, std::unique_ptr<Player>>> second_team_;
 
   /**
    * This mutex is used to synchronise all oprations done on the collection
-   * containing the  team.
+   * containing the second team.
    */
   mutable std::mutex second_team_mtx_;
+
+  /**
+   * This map contains all rays in the game. The key is the ray's parent which
+   * is either a player or another ray.
+   */
+  std::map <std::variant<Ray*, Player*>, Ray> rays_;
+
+  /**
+   * This mutex is used to synchronise all oprations done on the map
+   * containing the rays.
+   */
+  mutable std::mutex rays_mtx_;
 
   /**
    * This callable object is used as a callback to the asynchronous reading of
