@@ -173,9 +173,9 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
   return state;
 }
 
-// TODO: This whole method below is an absurd. It requires a refactorisation.
-// Adding a middle-ware is the first step to make it sane. Checking if a package
-// is valid is a nightmare, indeed.
+// TODO: This whole method below is an absurd. It requires a bit of refactorisation.
+// Adding a middle-ware is the first step to make it sane (checking if a package
+// is valid is a nightmare, indeed).
 void
 Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept {
   const auto make_invalid = [](std::string_view type = {}){
