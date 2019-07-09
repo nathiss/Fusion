@@ -93,6 +93,25 @@ class Server {
   Server() noexcept;
 
   /**
+   * This method returns a pair of a value that indicates whether or not the
+   * connection should be closed after sending the response and a response
+   * for the given request from a client.
+   *
+   * @param[in] session
+   *   The WebSocket session connected to the client.
+   *
+   * @param[in] request
+   *   This is a client's request.
+   *
+   * @return
+   *   A pair of a value that indicates whether or not the connection should be
+   *   closed after sending the response and a response for the given request
+   *   from a client is returned.
+   */
+  std::pair<bool, PackageParser::JSON>
+  MakeResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept;
+
+  /**
    * This function object is called by WebSocket sessions from a clients, who
    * are not yet in any game, each time when a new package arrives.
    */

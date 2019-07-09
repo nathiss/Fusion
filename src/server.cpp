@@ -1,4 +1,7 @@
+#ifdef DEBUG
 #include <iostream>
+#endif
+#include <string_view>
 
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
@@ -85,63 +88,91 @@ Server::Server() noexcept {
       src->Close(system_abstractions::make_Package(response.dump()));
       return;
     }
-    auto request = std::move(parsed.value());
-    // TODO: move it elsewhere
-    if (request.find("game") != request.end() &&
-        request.find("nick") != request.end() &&
-        request.find("id")   != request.end() &&
-        request.size() == 3) {
-      bool joined{false};
-      {
-        std::lock_guard l{games_mtx_};
-        auto& game = games_[request["game"]];
-        joined = game.Join(src);
-        if (joined) // TODO: do it really have to be here?
-          src->delegate_ = game.GetDelegate();
-      }
-      if (!joined) {
-        PackageParser::JSON response = {
-          {"id", request["id"]},
-          {"result", "full"}
-        };
-        src->Write(system_abstractions::make_Package(response.dump()));
-        return;
-      }
 
-      unidentified_sessions_.erase(src);
-      {
-        std::lock_guard l{sessions_correlation_mtx_};
-        sessions_correlation_[src] = request["game"];
-      }
-
-      PackageParser::JSON response = {
-        {"id", request["id"]},
-        {"result", "joined"},
-        {"rays", decltype(response)::array()},
-        {"players", decltype(response)::array(
-          {
-            {"player_id", 0},
-            {"nick", request["nick"]}, // TODO: add check if the nick exists
-            {"role", "none"},
-            {"color", {255.0, 255.0, 255.0}},
-            {"health", 100.0},
-            {"position", {7.6, 67.2}},
-            {"angle", 34.6},
-          }
-        )},
-      };
-      src->Write(system_abstractions::make_Package(response.dump()));
-      return;
-
-    } else { // It's not join request or it's ill-formed.
-      PackageParser::JSON response = {
-        {"error_message", "The package has not been recognised."},
-        {"closed", true}
-      };
+    auto [should_close, response] = MakeResponse(src, std::move(parsed.value()));
+    if (should_close)
       src->Close(system_abstractions::make_Package(response.dump()));
-      return;
-    }
+    else
+      src->Write(system_abstractions::make_Package(response.dump()));
   };
+}
+
+std::pair<bool, PackageParser::JSON>
+Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept {
+  const auto make_invalid = [](std::string_view type = {}){
+    std::string message = "One of the client's packages was ill-formed.";
+    if (type != std::string_view{})
+      message += "[";
+      message += type;
+      message += "]";
+    return PackageParser::JSON {
+      {"type", "error"},
+      {"message", std::move(message)},
+      {"closed", true}};
+  };
+
+  const auto make_unidentified = [](std::string_view type = {}){
+    return PackageParser::JSON {
+      {"type", "warning"},
+      {"messaege", "Received an unidentified package."},
+      {"closed", false}
+    };
+  };
+
+  // analysing
+  if (!request.contains("type"))
+    return std::make_pair(true, make_invalid());
+
+  if (request["type"] == "join") {
+    if (!(request.contains("id") && request.contains("game") &&
+        request.contains("nick") && request.size() == 3)) {
+      return std::make_pair(true, make_invalid("join"));
+    }
+
+    bool joined{false};
+    {
+      std::lock_guard l{games_mtx_};
+      auto& game = games_[request["game"]];
+      joined = game.Join(src);
+      if (joined) // TODO: do it really have to be here?
+        src->delegate_ = game.GetDelegate();
+    }
+    if (!joined) {  // The game is full.
+      PackageParser::JSON response = {{"id", request["id"]}, {"result", "full"}};
+      return std::make_pair(false, std::move(response));
+    }
+
+    {
+      std::lock_guard l{unidentified_sessions_mtx_};
+      unidentified_sessions_.erase(src);
+    }
+    {
+      std::lock_guard l{sessions_correlation_mtx_};
+      sessions_correlation_[src] = request["game"];
+    }
+
+    PackageParser::JSON response = {
+      {"id", request["id"]},
+      {"result", "joined"},
+      {"rays", decltype(response)::array()},
+      {"players", decltype(response)::array(
+        {
+          {"player_id", 0},
+          {"nick", request["nick"]}, // TODO: add check if the nick exists
+          {"role", "none"},
+          {"color", {255.0, 255.0, 255.0}},
+          {"health", 100.0},
+          {"position", {7.6, 67.2}},
+          {"angle", 34.6},
+        }
+      )},
+    };
+
+    return std::make_pair(false, std::move(response));
+  }  // "join"
+
+  // If we're here it means we've received an unidentified package.
+  return std::make_pair(false, make_unidentified());
 }
 
 }  // namespace fusion_server

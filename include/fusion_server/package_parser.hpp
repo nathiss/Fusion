@@ -11,7 +11,7 @@ namespace fusion_server {
 class PackageParser {
  public:
   /**
-   * This type is a shortcut.
+   * This is a type of a parsed package.
    */
   using JSON = nlohmann::json;
 
@@ -26,7 +26,7 @@ class PackageParser {
    * @return
    *  The parsed package or no value, if the package cannot be properly parsed.
    */
-  std::optional<JSON> Parse(const std::string& package) noexcept;
+  std::optional<JSON> Parse(const std::string& package) const noexcept;
 };
 
 }  // namespace fusion_server

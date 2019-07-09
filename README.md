@@ -27,6 +27,7 @@ the server will close the connection imediately.
 ```json
 {
   "id": 0,
+  "type": "join",
   "game": "<the game's name>",
   "nick": "<player's nick>"
 }
@@ -87,6 +88,7 @@ each time when the player either moved, rotated or fired.
 ```json
 {
   "id": 0,
+  "type": "update",
   "position": [7.6, 87.2],
   "angle": 67.2 // <0.0; 360.0)
 }
@@ -119,7 +121,7 @@ the server will find the connection to be broken and will close it immediately.
 
 ```json
 {
-  "leave": true
+  "type": "leave"
 }
 ```
 
@@ -146,6 +148,7 @@ rays didn't change, the array will be empty, but will not be omitted.
 
 ```json
 {
+  "type": "update",
   "players": [
     {
       "player_id": 1,

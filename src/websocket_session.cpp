@@ -1,6 +1,8 @@
 #include <cstdlib>
 
+#ifdef DEBUG
 #include <iostream>
+#endif
 #include <memory>
 #include <mutex>
 #include <string>
