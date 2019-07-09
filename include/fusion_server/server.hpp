@@ -133,7 +133,7 @@ class Server {
   /**
    * This map associates all sessions in the server and games to which they have
    * joined. If a sessions has not been joined to any game (it's unidentified)
-   * the "value" part is in its invalid state.
+   * the value is in its invalid state.
    */
   std::map<WebSocketSession*, std::optional<std::string>> sessions_correlation_;
 

@@ -29,9 +29,7 @@ auto Server::Register(WebSocketSession* new_session) noexcept
   if (!took_place) {
     std::cerr << "Server::Register: the session " << new_session
     << " has already been registered." << std::endl;
-  }
-
-  {
+  } else {
     std::lock_guard l{sessions_correlation_mtx_};
     sessions_correlation_[new_session] = {};
   }
