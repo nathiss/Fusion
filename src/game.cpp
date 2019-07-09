@@ -27,7 +27,7 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       if (first_team_.size() >= kMaxPlayersPerTeam)
         return {};
       first_team_.insert({session, std::make_unique<Player>()});
-      return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
+      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
     }
 
     case Team::kSecond: {
@@ -36,7 +36,7 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
         return {};
       // TODO: change this to a sane one
       second_team_.insert({session, std::make_unique<Player>()});
-      return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
+      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
     }
 
     case Team::kRandom: {
@@ -46,12 +46,12 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
         if (second_team_.size() >= kMaxPlayersPerTeam)
           return {};
         second_team_.insert({session, std::make_unique<Player>()});
-        return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
+        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
       } else { // Either the second is bigger or they have the same size.
         if (first_team_.size() >= kMaxPlayersPerTeam)
           return {};
         first_team_.insert({session, std::make_unique<Player>()});
-        return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
+        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
       }
     }
   }  // switch

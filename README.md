@@ -117,9 +117,6 @@ This package is used to leave the current game. This request to the server is
 always successful, therefore the server won't repond to it. The `leave` field
 can have any value.
 
-**Note**: If the player hasn't joined to any game and will send this package,
-the server will find the connection to be broken and will close it immediately.
-
 ```json
 {
   "type": "leave"

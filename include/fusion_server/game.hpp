@@ -50,16 +50,10 @@ class Game {
   };
 
   /**
-   * This type is a pair of incomming package delegate and the current game
-   * state encoded as a JSON object.
+   * This is the return type of the Join method.
    */
-  using successful_join_result_t =
-  std::pair<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON>;
-
-  /**
-   * This type is the return type of the Join method.
-   */
-  using join_result_t = std::optional<successful_join_result_t>;
+  using join_result_t =
+  std::optional<std::pair<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON>>;
 
   Game(const Game&) noexcept = delete;
 
