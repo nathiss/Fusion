@@ -59,6 +59,7 @@ for.
   "players": [
     {
       "player_id": 0,
+      "team_id": 0,
       "nick": "<player's nick>",
       "role": "<player's role>",
       "color": [255, 255, 255],

@@ -5,6 +5,8 @@
 #include <optional>
 #include <string>
 
+#include <fusion_server/package_parser.hpp>
+
 namespace fusion_server {
 
 /**
@@ -32,14 +34,11 @@ struct Color {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  std::string ToJson() const noexcept {
-    std::string ret{"["};
-    ret += std::to_string(r);
-    ret += ", ";
-    ret += std::to_string(g);
-    ret += ", ";
-    ret += std::to_string(b);
-    ret += "]";
+  PackageParser::JSON ToJson() const noexcept {
+    PackageParser::JSON ret = PackageParser::JSON::array();
+    ret.push_back(r);
+    ret.push_back(g);
+    ret.push_back(b);
     return ret;
   }
 };
@@ -64,12 +63,10 @@ struct Point {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  std::string ToJson() const noexcept {
-    std::string ret{"["};
-    ret += std::to_string(x);
-    ret += ", ";
-    ret += std::to_string(y);
-    ret += "]";
+  PackageParser::JSON ToJson() const noexcept {
+    PackageParser::JSON ret = PackageParser::JSON::array();
+    ret.push_back(x);
+    ret.push_back(y);
     return ret;
   }
 };
@@ -115,13 +112,12 @@ class Ray {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  std::string ToJson() const noexcept {
-    std::string ret{"{"};
-    ret += "\"id\": " + std::to_string(id_) + ",";
-    ret += "\"source\": " + src_.ToJson() + ",";
-    ret += "\"destination\": " + dst_.ToJson() + ",";
-    ret += "\"color\": " + color_.ToJson();
-    ret += "}";
+  PackageParser::JSON ToJson() const noexcept {
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["id"] = id_;
+    ret["source"] = src_.ToJson();
+    ret["destination"] = dst_.ToJson();
+    ret["color"] = color_.ToJson();
     return ret;
   }
 };
@@ -135,6 +131,11 @@ class Player {
    * This is the unique id of this ray.
    */
   std::size_t id_{};
+
+  /**
+   * This is the player's team id.
+   */
+  std::size_t team_id_{};
 
   /**
    * This stores the player's nick.
@@ -172,15 +173,15 @@ class Player {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  std::string ToJson() const noexcept {
-    std::string ret{"{"};
-    ret += "\"id\": " + std::to_string(id_) + ",";
-    ret += "\"nick\": " + nick_ + ",";
-    ret += "\"health\": " + std::to_string(health_) + ",";
-    ret += "\"color\": " + color_.ToJson() + ", ";
-    ret += "\"position\": " + position_.ToJson() + ", ";
-    ret += "\"angle\": " + std::to_string(angle_);
-    ret += "}";
+  PackageParser::JSON ToJson() const noexcept {
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["id"] = id_;
+    ret["team_id"] = team_id_;
+    ret["nick"] = nick_;
+    ret["health"] = health_;
+    ret["color"] = color_.ToJson();
+    ret["position"] = position_.ToJson();
+    ret["angle"] = angle_;
     return ret;
   }
 };

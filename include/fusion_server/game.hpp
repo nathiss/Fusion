@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <string>
 #include <utility>
@@ -48,6 +49,18 @@ class Game {
     kRandom,
   };
 
+  /**
+   * This type is a pair of incomming package delegate and the current game
+   * state encoded as a JSON object.
+   */
+  using successful_join_result_t =
+  std::pair<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON>;
+
+  /**
+   * This type is the return type of the Join method.
+   */
+  using join_result_t = std::optional<successful_join_result_t>;
+
   Game(const Game&) noexcept = delete;
 
   Game& operator=(const Game&) noexcept = delete;
@@ -59,8 +72,10 @@ class Game {
 
   /**
    * This method joins the client to this game and adds its session to the
-   * proper team. It returns a indication whether or not the joining was
-   * successful.
+   * proper team. If the joining was successful it returns a pair of a new
+   * incomming package delegate and a JSON object containing information about
+   * the current state of the game, otherwise the returned object is in its
+   * invalid state.
    *
    * @param[in] session
    *   This is the WebSocket session connected to a client.
@@ -71,14 +86,16 @@ class Game {
    *   team.
    *
    * @return
-   *   A indication whether or not the joining was successful is returned.
+   *   If the joining was successful pair of a new incomming package delegate
+   *   and a JSON object containing information about the current state of the
+   *   game is returned, otherwise the returned object is in its invalid state.
    *
    * @note
    *   If a client has already joined to this game, the method does nothing and
-   *   returns a pair of true and a callback to the client's asynchronous
-   *   reading.
+   *   returns an invalid state object.
    */
-  [[ nodiscard ]] bool Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
+  [[ nodiscard ]] join_result_t
+  Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
 
   /**
    * This method removes the given session from this game.
@@ -104,16 +121,6 @@ class Game {
    *   The package to be broadcasted.
    */
   void BroadcastPackage(Package package) noexcept;
-
-  /**
-   * This method returns a reference to the incomming packages delegate used by
-   * the clients' sessions.
-   *
-   * @return
-   *  A reference to the incomming packages delegate used by
-   *  the clients' sessions is returned.
-   */
-  system_abstractions::IncommingPackageDelegate& GetDelegate() noexcept;
 
   /**
    * This method returns the amount of players in this game.
@@ -142,6 +149,15 @@ class Game {
    *   has already joined to this game is returned.
    */
   bool IsInGame(WebSocketSession *session) const noexcept;
+
+  /**
+   * This method returns a JSON object containg an encoded current state of this
+   * game.
+   *
+   * @return
+   *   A JSON object containg an encoded current state of this game is returned.
+   */
+  PackageParser::JSON GetCurrentState() const noexcept;
 
   /**
    * This set contains the pairs of WebSocket sessions and their roles in the

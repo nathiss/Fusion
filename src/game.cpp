@@ -12,30 +12,31 @@ Game::Game() noexcept {
   };
 }
 
-bool Game::Join(WebSocketSession *session, Team team) noexcept {
+auto Game::Join(WebSocketSession *session, Team team) noexcept
+    -> join_result_t {
 #ifdef DEBUG
   std::cout << "[Game: " << this << "] Joining: " << session << std::endl;
 #endif
   if (IsInGame(session)) {
-    return true; // This should never happen.
+    return {}; // This should never happen.
   }
 
   switch (team) {
     case Team::kFirst: {
       std::lock_guard l{first_team_mtx_};
       if (first_team_.size() >= kMaxPlayersPerTeam)
-        return false;
+        return {};
       first_team_.insert({session, std::make_unique<Player>()});
-      return true;
+      return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
     }
 
     case Team::kSecond: {
       std::lock_guard l{second_team_mtx_};
       if (second_team_.size() >= kMaxPlayersPerTeam)
-        return false;
+        return {};
       // TODO: change this to a sane one
       second_team_.insert({session, std::make_unique<Player>()});
-      return true;
+      return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
     }
 
     case Team::kRandom: {
@@ -43,14 +44,14 @@ bool Game::Join(WebSocketSession *session, Team team) noexcept {
       std::lock_guard l2{second_team_mtx_};
       if (first_team_.size() > second_team_.size()) {
         if (second_team_.size() >= kMaxPlayersPerTeam)
-          return false;
+          return {};
         second_team_.insert({session, std::make_unique<Player>()});
-        return true;
+        return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
       } else { // Either the second is bigger or they have the same size.
         if (first_team_.size() >= kMaxPlayersPerTeam)
-          return false;
+          return {};
         first_team_.insert({session, std::make_unique<Player>()});
-        return true;
+        return std::make_optional<successful_join_result_t>(delegete_, GetCurrentState());
       }
     }
   }  // switch
@@ -98,10 +99,6 @@ void Game::BroadcastPackage(Package package) noexcept {
   }
 }
 
-system_abstractions::IncommingPackageDelegate& Game::GetDelegate() noexcept {
-  return delegete_;
-}
-
 std::size_t Game::GetPlayersCount() const noexcept {
   std::size_t ret{0};
   {
@@ -131,6 +128,33 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
   }
 
   return false;
+}
+
+PackageParser::JSON Game::GetCurrentState() const noexcept {
+  PackageParser::JSON state{
+    {"players", decltype(state)::array()},
+    {"rays", decltype(state)::array()},
+  };
+
+  {
+    std::lock_guard l{rays_mtx_};
+    for (auto& [_, ray] : rays_)
+      state["rays"].push_back(ray.ToJson());
+  }
+
+  {
+    std::lock_guard l{first_team_mtx_};
+    for (auto& [_, player_ptr] : first_team_)
+      state["players"].push_back(player_ptr->ToJson());
+  }
+
+  {
+    std::lock_guard l{second_team_mtx_};
+    for (auto& [_, player_ptr] : second_team_)
+      state["players"].push_back(player_ptr->ToJson());
+  }
+
+  return state;
 }
 
 }  // namespace fusion_server

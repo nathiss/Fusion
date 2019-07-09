@@ -2,6 +2,7 @@
 #include <iostream>
 #endif
 #include <string_view>
+#include <utility>
 
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
@@ -111,7 +112,9 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       {"closed", true}};
   };
 
-  const auto make_unidentified = [](std::string_view type = {}){
+  const auto make_unidentified = [](
+    [[ maybe_unused ]] std::string_view type = {}
+  ) {
     return PackageParser::JSON {
       {"type", "warning"},
       {"messaege", "Received an unidentified package."},
@@ -125,22 +128,22 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
 
   if (request["type"] == "join") {
     if (!(request.contains("id") && request.contains("game") &&
-        request.contains("nick") && request.size() == 3)) {
+        request.contains("nick") && request.size() == 4)) {
       return std::make_pair(true, make_invalid("join"));
     }
 
-    bool joined{false};
+    Game::join_result_t join_result;
     {
       std::lock_guard l{games_mtx_};
       auto& game = games_[request["game"]];
-      joined = game.Join(src);
-      if (joined) // TODO: do it really have to be here?
-        src->delegate_ = game.GetDelegate();
+      join_result = game.Join(src);
     }
-    if (!joined) {  // The game is full.
+    if (!join_result) {  // The game is full.
       PackageParser::JSON response = {{"id", request["id"]}, {"result", "full"}};
       return std::make_pair(false, std::move(response));
     }
+    // If we're here it means the join was successful.
+    src->delegate_ = join_result.value().first;
 
     {
       std::lock_guard l{unidentified_sessions_mtx_};
@@ -154,18 +157,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     PackageParser::JSON response = {
       {"id", request["id"]},
       {"result", "joined"},
-      {"rays", decltype(response)::array()},
-      {"players", decltype(response)::array(
-        {
-          {"player_id", 0},
-          {"nick", request["nick"]}, // TODO: add check if the nick exists
-          {"role", "none"},
-          {"color", {255.0, 255.0, 255.0}},
-          {"health", 100.0},
-          {"position", {7.6, 67.2}},
-          {"angle", 34.6},
-        }
-      )},
+      std::move(join_result.value().second),  // the game's current state
     };
 
     return std::make_pair(false, std::move(response));
