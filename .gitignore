@@ -4,7 +4,6 @@ build/
 *.o
 *.swo
 .vscode/
-googletest/
 .idea/
 cmake-build-debug/
 workspace.code-workspace

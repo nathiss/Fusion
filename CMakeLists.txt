@@ -37,7 +37,12 @@ set(Sources
 #add_subdirectory(test)
 #enable_testing()
 
+find_package(Boost 1.67 COMPONENTS REQUIRED)
+include_directories(${Boost_INCLUDE_DIR})
+
 add_executable(${This} ${Sources} ${Headers})
+
+target_link_libraries(${This} PUBLIC ${Boost_LIBRARIES})
 
 target_include_directories(${This} PUBLIC include)
 
