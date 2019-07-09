@@ -39,7 +39,8 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
     }
 
-    case Team::kRandom: {
+    case Team::kRandom:
+    default: {
       std::lock_guard l1{first_team_mtx_};
       std::lock_guard l2{second_team_mtx_};
       if (first_team_.size() > second_team_.size()) {
@@ -143,13 +144,15 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
   }
 
   {
-    std::lock_guard l{first_team_mtx_};
+    // We don't need to lock the mutex, because it's already locked by the
+    // callee.
     for (auto& [_, player_ptr] : first_team_)
       state["players"].push_back(player_ptr->ToJson());
   }
 
   {
-    std::lock_guard l{second_team_mtx_};
+    // We don't need to lock the mutex, because it's already locked by the
+    // callee.
     for (auto& [_, player_ptr] : second_team_)
       state["players"].push_back(player_ptr->ToJson());
   }

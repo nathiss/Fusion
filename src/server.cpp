@@ -154,11 +154,14 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       sessions_correlation_[src] = request["game"];
     }
 
-    PackageParser::JSON response = {
-      {"id", request["id"]},
-      {"result", "joined"},
-      std::move(join_result.value().second),  // the game's current state
-    };
+    auto response = [&request, &join_result]{
+      PackageParser::JSON ret = PackageParser::JSON::object();
+      ret["id"] = request["id"];
+      ret["result"] = "joined";
+      ret["players"] = std::move(join_result.value().second["players"]);
+      ret["rays"] = std::move(join_result.value().second["rays"]);
+      return ret;
+    }();
 
     return std::make_pair(false, std::move(response));
   }  // "join"
