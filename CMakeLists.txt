@@ -20,6 +20,7 @@ set(Headers
   include/fusion_server/http_session.hpp
   include/fusion_server/websocket_session.hpp
   include/fusion_server/game.hpp
+  include/fusion_server/player.hpp
 )
 
 set(Sources
