@@ -38,10 +38,12 @@ auto Server::Register(WebSocketSession* new_session) noexcept
 }
 
 void Server::Unregister(WebSocketSession* session) noexcept {
-  sessions_correlation_mtx_.lock();
-  auto& game_name = sessions_correlation_[session];
-  sessions_correlation_.erase(session);
-  sessions_correlation_mtx_.unlock();
+  decltype(sessions_correlation_)::value_type::second_type game_name{};
+  {
+    std::lock_guard l{sessions_correlation_mtx_};
+    game_name = sessions_correlation_[session];
+    sessions_correlation_.erase(session);
+  }
 
   if (!game_name) {
 #ifdef DEBUG
