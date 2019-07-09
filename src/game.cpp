@@ -26,17 +26,18 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       std::lock_guard l{first_team_mtx_};
       if (first_team_.size() >= kMaxPlayersPerTeam)
         return {};
-      first_team_.insert({session, std::make_unique<Player>()});
-      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
+      auto player_id = next_player_id_++;
+      first_team_.insert({session, std::make_unique<Player>(player_id)});
+      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
     }
 
     case Team::kSecond: {
       std::lock_guard l{second_team_mtx_};
       if (second_team_.size() >= kMaxPlayersPerTeam)
         return {};
-      // TODO: change this to a sane one
-      second_team_.insert({session, std::make_unique<Player>()});
-      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
+      auto player_id = next_player_id_++;
+      second_team_.insert({session, std::make_unique<Player>(player_id)});
+      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
     }
 
     case Team::kRandom:
@@ -46,13 +47,15 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       if (first_team_.size() > second_team_.size()) {
         if (second_team_.size() >= kMaxPlayersPerTeam)
           return {};
-        second_team_.insert({session, std::make_unique<Player>()});
-        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
+        auto player_id = next_player_id_++;
+        second_team_.insert({session, std::make_unique<Player>(player_id)});
+        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
       } else { // Either the second is bigger or they have the same size.
         if (first_team_.size() >= kMaxPlayersPerTeam)
           return {};
-        first_team_.insert({session, std::make_unique<Player>()});
-        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState());
+        auto player_id = next_player_id_++;
+        first_team_.insert({session, std::make_unique<Player>(player_id)});
+        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
       }
     }
   }  // switch

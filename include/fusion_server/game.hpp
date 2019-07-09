@@ -2,11 +2,13 @@
 
 #include <cstdlib>
 
+#include <atomic>
 #include <memory>
 #include <mutex>
 #include <optional>
 #include <set>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <variant>
 
@@ -53,7 +55,7 @@ class Game {
    * This is the return type of the Join method.
    */
   using join_result_t =
-  std::optional<std::pair<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON>>;
+  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON, std::size_t>>;
 
   Game(const Game&) noexcept = delete;
 
@@ -176,6 +178,11 @@ class Game {
    * containing the second team.
    */
   mutable std::mutex second_team_mtx_;
+
+  /**
+   * This is used to set the id of the next player. It holds the next free id.
+   */
+  std::atomic<std::size_t> next_player_id_;
 
   /**
    * This map contains all rays in the game. The key is the ray's parent which

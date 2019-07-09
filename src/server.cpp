@@ -2,6 +2,7 @@
 #include <iostream>
 #endif
 #include <string_view>
+#include <tuple>
 #include <utility>
 
 #include <fusion_server/server.hpp>
@@ -143,7 +144,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       return std::make_pair(false, std::move(response));
     }
     // If we're here it means the join was successful.
-    src->delegate_ = join_result.value().first;
+    src->delegate_ = std::get<0>(join_result.value());
 
     {
       std::lock_guard l{unidentified_sessions_mtx_};
@@ -158,8 +159,9 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       PackageParser::JSON ret = PackageParser::JSON::object();
       ret["id"] = request["id"];
       ret["result"] = "joined";
-      ret["players"] = std::move(join_result.value().second["players"]);
-      ret["rays"] = std::move(join_result.value().second["rays"]);
+      ret["my_id"] = std::get<2>(join_result.value());
+      ret["players"] = std::get<1>(join_result.value())["players"];
+      ret["rays"] = std::get<1>(join_result.value())["rays"];
       return ret;
     }();
 

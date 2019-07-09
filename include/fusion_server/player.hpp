@@ -128,6 +128,19 @@ class Ray {
 class Player {
  public:
   /**
+   * This is the default constructor.
+   */
+  Player() noexcept = default;
+
+  /**
+   * This constructor sets the id of this player.
+   *
+   * @param[in] id
+   *   The given id of this player.
+   */
+  explicit Player(std::size_t id) noexcept : id_{id} {}
+
+  /**
    * This is the unique id of this ray.
    */
   std::size_t id_{};
@@ -175,7 +188,7 @@ class Player {
    */
   PackageParser::JSON ToJson() const noexcept {
     PackageParser::JSON ret = PackageParser::JSON::object();
-    ret["id"] = id_;
+    ret["player_id"] = id_;
     ret["team_id"] = team_id_;
     ret["nick"] = nick_;
     ret["health"] = health_;

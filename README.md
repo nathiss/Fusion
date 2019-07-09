@@ -45,8 +45,7 @@ in the game at the current moment. It can be empty if there are no rays.
   about players will contain `player_id` field to identify them.
 * The client HAS TO save the values of `ray_id` fields, all further updates
   about rays will contain `ray_id` field to identify them.
-* The value `0` of the `player_id` has special meaning. It identifies the
-  information about the player itself.
+* The `my_id` field's value is the id of this client.
 
 **Note**: The `players` and `rays` arrays have meaning only if the joining was
 successful, otherwise there won't be included and therefore should not be looked
@@ -56,6 +55,7 @@ for.
 {
   "id": 0,
   "result": "joined|full",
+  "my_id": 1337,
   "players": [
     {
       "player_id": 0,
