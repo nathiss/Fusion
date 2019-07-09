@@ -57,6 +57,11 @@ struct Point {
    */
   int64_t y{};
 
+  Point& operator=(const PackageParser::JSON& array) noexcept {
+    x = array[0];
+    y = array[1];
+  }
+
   /**
    * This method returns a dump of this object encoded as JSON.
    *

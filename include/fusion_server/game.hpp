@@ -156,6 +156,19 @@ class Game {
   PackageParser::JSON GetCurrentState() const noexcept;
 
   /**
+   * This method prepairs a response for the given request and either sends it
+   * or broadcasts it.
+   *
+   * @param[in] session
+   *   The WebSocket session connected to the client.
+   *
+   * @param[in] request
+   *   This is a client's request.
+   */
+  void
+  DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept;
+
+  /**
    * This set contains the pairs of WebSocket sessions and their roles in the
    * game of the first team.
    */

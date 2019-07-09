@@ -88,8 +88,8 @@ each time when the player either moved, rotated or fired.
 
 ```json
 {
-  "id": 0,
   "type": "update",
+  "team_id": 0,
   "position": [7.6, 87.2],
   "angle": 67.2 // <0.0; 360.0)
 }
@@ -97,19 +97,9 @@ each time when the player either moved, rotated or fired.
 
 ##### Server's Response
 
-If the update of the player's attributes is valid, the server will set
-`successful` field to `true` and broadcast a server's update package to all
-other players in the game, otherwise the server will send a response with
-`successful` set to `false` and no broadcast will take place., therefore the
-client should not update it's attribures immediately and wait for either
-a response with mached `id` or a server's update packege.
-
-```json
-{
-  "id": 0,
-  "successful": true
-}
-```
+There is no "response" from the server, however the client should not perform
+any updates on its own sprite, until it receives an UPDATE package from the
+server, which will be broadcasted to all players.
 
 #### LEAVE package
 
@@ -122,6 +112,10 @@ can have any value.
   "type": "leave"
 }
 ```
+
+##### Server's Response
+
+**Note**: There is no server's response for this request.
 
 
 ### Server -> Client
