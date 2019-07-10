@@ -209,6 +209,19 @@ class Game {
   mutable std::mutex second_team_mtx_;
 
   /**
+   * @brief Players' team cache.
+   * This maps the WebSocket session to the team identifier in which the player
+   * currently is.
+   */
+  std::map<WebSocketSession*, Team> players_cache_;
+
+   /**
+   * This mutex is used to synchronise all oprations done on the map
+   * of WebSocket sessions and their players' team identifiers.
+   */
+  mutable std::mutex players_cache_mtx_;
+
+  /**
    * This is used to set the id of the next player. It holds the next free id.
    */
   std::atomic<std::size_t> next_player_id_;

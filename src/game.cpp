@@ -70,7 +70,14 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 #ifdef DEBUG
   std::cout << "[Game: " << this << "] Leaving: " << session << std::endl;
 #endif
-  {
+  Team team_id{Team::kRandom};
+
+  if (std::lock_guard l{players_cache_mtx_}; players_cache_.count(session) != 0) {
+    team_id = players_cache_[session];
+    players_cache_.erase(session);
+  }
+
+  if (team_id == Team::kFirst || team_id == Team::kRandom) {
     std::lock_guard l{first_team_mtx_};
     for (const auto& pair : first_team_)
       if (session == pair.first) {
@@ -79,7 +86,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
       }
   }
 
-  {
+  if (team_id == Team::kSecond || team_id == Team::kRandom) {
     std::lock_guard l{second_team_mtx_};
     for (const auto& pair : second_team_)
       if (session == pair.first) {
@@ -122,21 +129,9 @@ std::size_t Game::GetPlayersCount() const noexcept {
 }
 
 bool Game::IsInGame(WebSocketSession *session) const noexcept {
-  {
-    std::lock_guard l{first_team_mtx_};
-    for (const auto& pair : first_team_)
-      if (session == pair.first)
-        return true;
-  }
+  std::lock_guard l{players_cache_mtx_};
 
-  {
-    std::lock_guard l{second_team_mtx_};
-    for (const auto& pair : second_team_)
-      if (session == pair.first)
-        return true;
-  }
-
-  return false;
+  return players_cache_.count(session) != 0;
 }
 
 PackageParser::JSON Game::GetCurrentState() const noexcept {
