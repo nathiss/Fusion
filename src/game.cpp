@@ -1,4 +1,5 @@
 #include <fusion_server/game.hpp>
+#include <fusion_server/package_parser.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
 
@@ -7,18 +8,8 @@ using fusion_server::system_abstractions::Package;
 namespace fusion_server {
 
 Game::Game() noexcept {
-  delegete_ = [this](Package package, WebSocketSession* src){
-    auto parsed = package_parser_.Parse(*package);
-    if (!parsed) {
-      PackageParser::JSON response = {
-        {"error_message", "Package does not contain a valid request."},
-        {"closed", true}
-      };
-      src->Close(system_abstractions::make_Package(response.dump()));
-      return;
-    }
-
-    DoResponse(src, std::move(parsed.value()));
+  delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
+    DoResponse(src, package);
   };
 }
 
@@ -173,43 +164,18 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
   return state;
 }
 
-// TODO: This whole method below is an absurd. It requires a bit of refactorisation.
-// Adding a middle-ware is the first step to make it sane (checking if a package
-// is valid is a nightmare, indeed).
 void
 Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept {
-  const auto make_invalid = [](std::string_view type = {}){
-    std::string message = "One of the client's packages was ill-formed.";
-    if (type != std::string_view{})
-      message += "[";
-      message += type;
-      message += "]";
-    return PackageParser::JSON {
-      {"type", "error"},
-      {"message", std::move(message)},
-      {"closed", true}};
-  };
-
-  const auto make_unidentified = [](
-    [[ maybe_unused ]] std::string_view type = {}
-  ) {
-    return PackageParser::JSON {
-      {"type", "warning"},
-      {"messaege", "Received an unidentified package."},
-      {"closed", false}
-    };
+  const auto make_unidentified = [] {
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["type"] = "warning";
+    ret["message"] = "Received an unidentified package.";
+    ret["closed"] = false;
+    return ret;
   };
 
   // analysing
-  if (!request.contains("type"))
-    session->Close(system_abstractions::make_Package(make_invalid()));
-
   if (request["type"] == "update") {
-    if (!(request.contains("position") && request.contains("angle") &&
-        request.contains("team_id") && request.size() == 4)) {
-      session->Close(system_abstractions::make_Package(make_invalid("update")));
-    }
-
     if (request["team_id"] == 0) {
       std::lock_guard l{first_team_mtx_};
       for (const auto& [ws, player_ptr] : first_team_) {
@@ -241,10 +207,6 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
   }  // "update"
 
   if (request["type"] == "leave") {
-    if (request.size() != 1) {
-      session->Close(system_abstractions::make_Package(make_invalid()));
-    }
-
     Leave(session);
     // We need to update the other client's state.
     BroadcastPackage(system_abstractions::make_Package(

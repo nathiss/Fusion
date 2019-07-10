@@ -12,7 +12,6 @@
 #include <utility>
 #include <variant>
 
-#include <fusion_server/package_parser.hpp>
 #include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
@@ -214,11 +213,6 @@ class Game {
    * all clients in this game.
    */
   system_abstractions::IncommingPackageDelegate delegete_;
-
-  /**
-   * This is used to parse packages from the clients.
-   */
-  PackageParser package_parser_;
 };
 
 }  // namespace fusion_server

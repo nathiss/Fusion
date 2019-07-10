@@ -11,7 +11,6 @@
 
 #include <fusion_server/game.hpp>
 #include <fusion_server/listener.hpp>
-#include <fusion_server/package_parser.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
 namespace fusion_server {
@@ -93,9 +92,7 @@ class Server {
   Server() noexcept;
 
   /**
-   * This method returns a pair of a value that indicates whether or not the
-   * connection should be closed after sending the response and a response
-   * for the given request from a client.
+   * This method returns a response for the given request from a client.
    *
    * @param[in] session
    *   The WebSocket session connected to the client.
@@ -104,11 +101,9 @@ class Server {
    *   This is a client's request.
    *
    * @return
-   *   A pair of a value that indicates whether or not the connection should be
-   *   closed after sending the response and a response for the given request
-   *   from a client is returned.
+   *   A response for the given request from a client is returned.
    */
-  std::pair<bool, PackageParser::JSON>
+  PackageParser::JSON
   MakeResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept;
 
   /**
@@ -116,11 +111,6 @@ class Server {
    * are not yet in any game, each time when a new package arrives.
    */
   system_abstractions::IncommingPackageDelegate unjoined_delegate_;
-
-  /**
-   * This is used to parse packages from the clients.
-   */
-  PackageParser package_parser_;
 
   /**
    * The context for providing core I/O functionality.

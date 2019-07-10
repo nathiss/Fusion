@@ -5,6 +5,8 @@
 #include <string>
 #include <utility>
 
+#include <fusion_server/package_parser.hpp>
+
 namespace fusion_server {
 
 /**
@@ -43,7 +45,7 @@ template <typename... Args>
  * @param[in] session
  *   The session connected to the client.
  */
-using IncommingPackageDelegate = std::function< void(Package package, WebSocketSession* session) >;
+using IncommingPackageDelegate = std::function< void(const PackageParser::JSON&  package, WebSocketSession* session) >;
 
 }  // namespace system_abstractions
 

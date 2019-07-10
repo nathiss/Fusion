@@ -12,23 +12,25 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 set(Headers
-  include/fusion_server/system_abstractions.hpp
-  include/fusion_server/package_parser.hpp
-  include/fusion_server/server.hpp
-  include/fusion_server/listener.hpp
-  include/fusion_server/http_session.hpp
-  include/fusion_server/websocket_session.hpp
   include/fusion_server/game.hpp
+  include/fusion_server/http_session.hpp
+  include/fusion_server/listener.hpp
+  include/fusion_server/package_parser.hpp
+  include/fusion_server/package_verifier.hpp
   include/fusion_server/player.hpp
+  include/fusion_server/server.hpp
+  include/fusion_server/system_abstractions.hpp
+  include/fusion_server/websocket_session.hpp
 )
 
 set(Sources
-  src/server.cpp
-  src/package_parser.cpp
-  src/listener.cpp
-  src/http_session.cpp
-  src/websocket_session.cpp
   src/game.cpp
+  src/http_session.cpp
+  src/listener.cpp
+  src/package_parser.cpp
+  src/package_verifier.cpp
+  src/server.cpp
+  src/websocket_session.cpp
 )
 
 set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json

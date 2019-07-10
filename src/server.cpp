@@ -5,6 +5,7 @@
 #include <tuple>
 #include <utility>
 
+#include <fusion_server/package_parser.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
 
@@ -77,61 +78,26 @@ void Server::StartAccepting() noexcept {
 
 Server::Server() noexcept {
   unjoined_delegate_ = [this](
-    Package package, WebSocketSession* src) {
+    const PackageParser::JSON& package, WebSocketSession* src) {
 #ifdef DEBUG
     std::cout << "[Server " << this << "] A new package from " << src << std::endl;
 #endif
-    auto parsed = package_parser_.Parse(*package);
-    if (!parsed) {
-      PackageParser::JSON response = {
-        {"error_message", "Package does not contain a valid request."},
-        {"closed", true}
-      };
-      src->Close(system_abstractions::make_Package(response.dump()));
-      return;
-    }
-
-    auto [should_close, response] = MakeResponse(src, std::move(parsed.value()));
-    if (should_close)
-      src->Close(system_abstractions::make_Package(response.dump()));
-    else
-      src->Write(system_abstractions::make_Package(response.dump()));
+    auto response = MakeResponse(src, package);
+    src->Write(system_abstractions::make_Package(response.dump()));
   };
 }
 
-std::pair<bool, PackageParser::JSON>
+PackageParser::JSON
 Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept {
-  const auto make_invalid = [](std::string_view type = {}){
-    std::string message = "One of the client's packages was ill-formed.";
-    if (type != std::string_view{})
-      message += "[";
-      message += type;
-      message += "]";
-    return PackageParser::JSON {
-      {"type", "error"},
-      {"message", std::move(message)},
-      {"closed", true}};
+  const auto make_unidentified = [] {
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["type"] = "warning";
+    ret["message"] = "Received an unidentified package.";
+    ret["closed"] = false;
+    return ret;
   };
-
-  const auto make_unidentified = [](
-    [[ maybe_unused ]] std::string_view type = {}
-  ) {
-    return PackageParser::JSON {
-      {"type", "warning"},
-      {"messaege", "Received an unidentified package."},
-      {"closed", false}
-    };
-  };
-
-  // analysing
-  if (!request.contains("type"))
-    return std::make_pair(true, make_invalid());
 
   if (request["type"] == "join") {
-    if (!(request.contains("id") && request.contains("game") &&
-        request.contains("nick") && request.size() == 4)) {
-      return std::make_pair(true, make_invalid("join"));
-    }
 
     Game::join_result_t join_result;
     {
