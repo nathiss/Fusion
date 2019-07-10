@@ -11,20 +11,39 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
 
   auto json = std::move(parsed.value());
 
-  if (!json.contains("type")) {
+  if (!(json.contains("type") &&
+  json["type"].type() == decltype(json)::value_t::string
+  )) {
     return std::make_pair(false, makeTypeNotFound());
   }
 
   if (json["type"] == "join") {
-    if (!(json.contains("id") && json.contains("nick") && json.contains("game")
-    && json.size() ==  3 + 1)) {
+
+    if (!(json.contains("id") &&
+    json.contains("nick") &&
+    json.contains("game") &&
+    json.size() ==  3 + 1 &&
+    json["id"].type() == decltype(json)::value_t::number_unsigned &&
+    json["nick"].type() == decltype(json)::value_t::string &&
+    json["game"].type() == decltype(json)::value_t::string
+    )) {
       return std::make_pair(false, makeNotValidJoin());
     }
+
   }
 
   if (json["type"] == "update") {
-    if (!(json.contains("team_id") && json.contains("position") && json.contains("angle")
-    && json.size() ==  3 + 1)) {
+    if (!(json.contains("team_id") &&
+    json.contains("position") &&
+    json.contains("angle") &&
+    json.size() ==  3 + 1 &&
+    json["team_id"].type() == decltype(json)::value_t::number_unsigned &&
+    json["position"].type() == decltype(json)::value_t::array &&
+    json["position"].size() == 2 &&
+    json["position"][0].type() == decltype(json)::value_t::number_float &&
+    json["position"][1].type() == decltype(json)::value_t::number_float &&
+    json["angle"].type() == decltype(json)::value_t::number_float
+    )) {
       return std::make_pair(false, makeNotValidUpdate());
     }
   }
