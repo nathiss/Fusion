@@ -33,6 +33,8 @@ set(Sources
   src/websocket_session.cpp
 )
 
+add_subdirectory(spdlog)
+
 set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(nlohmann_json)
@@ -54,8 +56,11 @@ target_link_libraries(${This}
   PUBLIC nlohmann_json::nlohmann_json
   PRIVATE ${Boost_LIBRARIES}
   PRIVATE Threads::Threads
+  PRIVATE spdlog::spdlog
 )
 target_include_directories(${This}
   PUBLIC include
   PRIVATE ${Boost_INCLUDE_DIR}
 )
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")
