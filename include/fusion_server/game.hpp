@@ -7,6 +7,7 @@
 #include <mutex>
 #include <optional>
 #include <set>
+#include <map>
 #include <string>
 #include <tuple>
 #include <utility>

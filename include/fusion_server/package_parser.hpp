@@ -1,5 +1,8 @@
 #pragma once
 
+#include <optional>
+#include <string>
+
 #include <nlohmann/json.hpp>
 
 namespace fusion_server {
@@ -16,7 +19,7 @@ class PackageParser {
   using JSON = nlohmann::json;
 
   /**
-   * This method parses the given packge. It returns parsed package.
+   * This method parses the given package. It returns parsed package.
    * If the package cannot be parsed (e.g. it contains ill-formed JSON),
    * the result has no value.
    *
