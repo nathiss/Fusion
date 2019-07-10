@@ -43,7 +43,7 @@ add_subdirectory(test)
 
 enable_testing()
 
-find_package(Boost 1.67 COMPONENTS REQUIRED)
+find_package(Boost 1.67 EXACT COMPONENTS REQUIRED)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)

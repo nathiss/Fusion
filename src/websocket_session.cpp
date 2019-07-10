@@ -208,7 +208,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
 
-  boost::asio::post(websocket_.get_executor(), [this, &msg]{
+  boost::asio::post(websocket_.get_executor(), [this, msg = std::move(msg)]{
     delegate_(std::move(msg), this);
   });
 
