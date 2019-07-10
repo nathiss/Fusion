@@ -97,6 +97,13 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     return ret;
   };
 
+  const auto make_game_full = [](std::size_t id){
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["id"] = id;
+    ret["result"] = "full";
+    return ret;
+  };
+
   if (request["type"] == "join") {
 
     Game::join_result_t join_result;
@@ -106,8 +113,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       join_result = game.Join(src);
     }
     if (!join_result) {  // The game is full.
-      PackageParser::JSON response = {{"id", request["id"]}, {"result", "full"}};
-      return std::make_pair(false, std::move(response));
+      return std::make_pair(false, make_game_full(request["id"]));
     }
     // If we're here it means the join was successful.
     src->delegate_ = std::get<0>(join_result.value());
