@@ -101,6 +101,12 @@ void Listener::OpenAcceptor() noexcept {
               << endpoint_ << std::endl;
     return;
   }
+  if (ec == boost::asio::error::address_in_use) {
+    // This means the endpoint is already is use.
+    std::cerr << "Listener::OpenAcceptor: endpoint" << endpoint_
+              << " is already is use." << std::endl;
+    return;
+  }
   if (ec) {
     std::cerr << "Listener::OpenAcceptor: " << ec.message() << std::endl;
     return;
