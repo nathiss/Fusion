@@ -60,6 +60,11 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
               << std::endl;
     socket_.close();
   }
+
+  if (ec == boost::asio::error::no_recovery) {
+    // Unidentified no recovery error occured.
+    return;
+  }
   if (ec) {
     std::cerr << "Listener::HandleAccept: " << ec.message() << std::endl;
     // TODO: find out if any error can cause the listener to stop working.
