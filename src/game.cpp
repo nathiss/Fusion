@@ -206,7 +206,14 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
   }  // "update"
 
   if (request["type"] == "leave") {
-    Leave(session);
+    if(!Leave(session)) {
+      // This means we're analysing a package from a client who hasn't joined
+      // to this game. This should never happened.
+      std::cerr << "[Game::DoResponse]: Player " << session << " is not in this"
+      " game, but received its package." << std::endl;
+      session->Close();
+      return;
+    }
     // We need to update the other client's state.
     BroadcastPackage(system_abstractions::make_Package(
       GetCurrentState().dump()
