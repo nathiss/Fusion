@@ -7,7 +7,7 @@ set(Headers
 )
 
 set(Sources
-  src/connectionTests.cpp
+  src/main.cpp
 )
 
 add_executable(${This} ${Sources} ${Headers})

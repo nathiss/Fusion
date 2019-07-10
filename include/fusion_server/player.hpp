@@ -60,6 +60,7 @@ struct Point {
   Point& operator=(const PackageParser::JSON& array) noexcept {
     x = array[0];
     y = array[1];
+    return *this;
   }
 
   /**

@@ -228,7 +228,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
       }
     }
 
-    const auto response = [this, &request, session]{
+    const auto response = [this]{
       PackageParser::JSON ret = PackageParser::JSON::object();
       ret["type"] = "update";
       auto state = GetCurrentState();

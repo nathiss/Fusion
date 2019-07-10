@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(This FusionServer)
+set(This FusionServerLib)
 
 project(${This} VERSION 0.1 LANGUAGES C CXX)
 
@@ -12,7 +12,6 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 set(Headers
-  include/nlohmann/json.hpp
   include/fusion_server/system_abstractions.hpp
   include/fusion_server/package_parser.hpp
   include/fusion_server/server.hpp
@@ -30,22 +29,31 @@ set(Sources
   src/http_session.cpp
   src/websocket_session.cpp
   src/game.cpp
-  src/main.cpp
 )
 
-#add_subdirectory(googletest)
-#add_subdirectory(test)
-#enable_testing()
+set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
+set(JSON_BuildTests OFF CACHE INTERNAL "")
+add_subdirectory(nlohmann_json)
+
+add_subdirectory(googletest)
+add_subdirectory(executable)
+add_subdirectory(test)
+
+enable_testing()
 
 find_package(Boost 1.67 COMPONENTS REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-
-add_executable(${This} ${Sources} ${Headers})
-
-target_link_libraries(${This} PUBLIC ${Boost_LIBRARIES})
-
-target_include_directories(${This} PUBLIC include)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-target_link_libraries(${This} Threads::Threads)
+
+add_library(${This} ${Sources} ${Headers})
+
+target_link_libraries(${This}
+  PUBLIC ${Boost_LIBRARIES}
+  PUBLIC nlohmann_json::nlohmann_json
+  PRIVATE Threads::Threads
+)
+target_include_directories(${This}
+  PUBLIC ${Boost_INCLUDE_DIR}
+  PUBLIC include
+)
