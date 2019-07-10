@@ -1,4 +1,4 @@
 <map id="fusion_server::Ray" name="fusion_server::Ray">
-<area shape="rect" id="node2" href="$structfusion__server_1_1Color.html" title="fusion_server::Color" alt="" coords="5,5,144,32"/>
-<area shape="rect" id="node3" href="$structfusion__server_1_1Point.html" title="fusion_server::Point" alt="" coords="168,5,307,32"/>
+<area shape="rect" id="node2" href="$structfusion__server_1_1Color.html" title="{fusion_server::Color\n|+ r\l+ g\l+ b\l|+ ToJson()\l}" alt="" coords="5,5,144,112"/>
+<area shape="rect" id="node3" href="$structfusion__server_1_1Point.html" title="{fusion_server::Point\n|+ x\l+ y\l|+ operator=()\l+ ToJson()\l}" alt="" coords="168,5,307,112"/>
 </map>

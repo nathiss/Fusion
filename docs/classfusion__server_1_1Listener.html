@@ -66,6 +66,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classfusion__server_1_1Listener-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fusion_server::Listener Class Reference</div>  </div>
@@ -79,14 +81,14 @@ Inheritance diagram for fusion_server::Listener:</div>
 <div class="center"><img src="classfusion__server_1_1Listener__inherit__graph.png" border="0" usemap="#fusion__server_1_1Listener_inherit__map" alt="Inheritance graph"/></div>
 <map name="fusion__server_1_1Listener_inherit__map" id="fusion__server_1_1Listener_inherit__map">
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <div class="dynheader">
 Collaboration diagram for fusion_server::Listener:</div>
 <div class="dyncontent">
 <div class="center"><img src="classfusion__server_1_1Listener__coll__graph.png" border="0" usemap="#fusion__server_1_1Listener_coll__map" alt="Collaboration graph"/></div>
 <map name="fusion__server_1_1Listener_coll__map" id="fusion__server_1_1Listener_coll__map">
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -114,6 +116,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a814d6efbdbcc9482d2f0efb9ac1dfb1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab61718da34dbed6b2ea77f558b74f880"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#ab61718da34dbed6b2ea77f558b74f880">HandleAccept</a> (const boost::system::error_code &amp;) noexcept</td></tr>
 <tr class="separator:ab61718da34dbed6b2ea77f558b74f880"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:af6d25dc9dfdad359dbab4a567c566f88"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#af6d25dc9dfdad359dbab4a567c566f88">OpenAcceptor</a> () noexcept</td></tr>
+<tr class="separator:af6d25dc9dfdad359dbab4a567c566f88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a09fb1facba8c40846cffe48a3fbd4c6b"><td class="memItemLeft" align="right" valign="top">boost::asio::io_context &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#a09fb1facba8c40846cffe48a3fbd4c6b">ioc_</a></td></tr>
+<tr class="separator:a09fb1facba8c40846cffe48a3fbd4c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50bf0012f578e560fb8440880b278d40"><td class="memItemLeft" align="right" valign="top">boost::asio::ip::tcp::acceptor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#a50bf0012f578e560fb8440880b278d40">acceptor_</a></td></tr>
+<tr class="separator:a50bf0012f578e560fb8440880b278d40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b752059908ec7165a4f4776a7c9c3a4"><td class="memItemLeft" align="right" valign="top">boost::asio::ip::tcp::socket&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#a0b752059908ec7165a4f4776a7c9c3a4">socket_</a></td></tr>
+<tr class="separator:a0b752059908ec7165a4f4776a7c9c3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad73254139a30cb722156b4d5a7012fa8"><td class="memItemLeft" align="right" valign="top">boost::asio::ip::tcp::endpoint&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Listener.html#ad73254139a30cb722156b4d5a7012fa8">endpoint_</a></td></tr>
+<tr class="separator:ad73254139a30cb722156b4d5a7012fa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represends the local endpoint used to accept new connections from the clients. </p>
@@ -311,6 +329,32 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="af6d25dc9dfdad359dbab4a567c566f88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6d25dc9dfdad359dbab4a567c566f88">&#9670;&nbsp;</a></span>OpenAcceptor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void fusion_server::Listener::OpenAcceptor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method opens the acceptor &amp; binds it to the endpoint. </p>
+
+</div>
+</div>
 <a id="a814d6efbdbcc9482d2f0efb9ac1dfb1c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a814d6efbdbcc9482d2f0efb9ac1dfb1c">&#9670;&nbsp;</a></span>Run()</h2>
 
@@ -334,6 +378,99 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This method starts the asynchronous accepting loop on the specified endpoint. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a50bf0012f578e560fb8440880b278d40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50bf0012f578e560fb8440880b278d40">&#9670;&nbsp;</a></span>acceptor_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::ip::tcp::acceptor fusion_server::Listener::acceptor_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the acceptor for accepting new connections. </p>
+
+</div>
+</div>
+<a id="ad73254139a30cb722156b4d5a7012fa8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad73254139a30cb722156b4d5a7012fa8">&#9670;&nbsp;</a></span>endpoint_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::ip::tcp::endpoint fusion_server::Listener::endpoint_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the local endpoint on which new connections will be accepted. </p>
+
+</div>
+</div>
+<a id="a09fb1facba8c40846cffe48a3fbd4c6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a09fb1facba8c40846cffe48a3fbd4c6b">&#9670;&nbsp;</a></span>ioc_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::io_context&amp; fusion_server::Listener::ioc_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The context for providing core I/O functionality. </p>
+
+</div>
+</div>
+<a id="a0b752059908ec7165a4f4776a7c9c3a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b752059908ec7165a4f4776a7c9c3a4">&#9670;&nbsp;</a></span>socket_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::ip::tcp::socket fusion_server::Listener::socket_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the socket used to handle a new incomming connection. </p>
 
 </div>
 </div>

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['_7ehttpsession',['~HTTPSession',['../classfusion__server_1_1HTTPSession.html#ae1769223ec600a3f27dfedb54583ad20',1,'fusion_server::HTTPSession']]],
-  ['_7elistener',['~Listener',['../classfusion__server_1_1Listener.html#a1648748217ba3439840d2503d3bf6e86',1,'fusion_server::Listener']]],
-  ['_7ewebsocketsession',['~WebSocketSession',['../classfusion__server_1_1WebSocketSession.html#a256ea8b094151c16b3a7e6fbb68e7495',1,'fusion_server::WebSocketSession']]]
+  ['websocket_5f',['websocket_',['../classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3',1,'fusion_server::WebSocketSession']]],
+  ['websocketsession',['WebSocketSession',['../classfusion__server_1_1WebSocketSession.html',1,'fusion_server::WebSocketSession'],['../classfusion__server_1_1WebSocketSession.html#ab201d047e8d7886166be982ee35448de',1,'fusion_server::WebSocketSession::WebSocketSession()']]],
+  ['write',['Write',['../classfusion__server_1_1WebSocketSession.html#a7232313b7614d1b5ffddb15c3680605b',1,'fusion_server::WebSocketSession']]]
 ];

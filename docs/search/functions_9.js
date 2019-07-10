@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['startaccepting',['StartAccepting',['../classfusion__server_1_1Server.html#a0d5c17fed0acdb5365b0206ae9e0ba78',1,'fusion_server::Server']]]
+  ['openacceptor',['OpenAcceptor',['../classfusion__server_1_1Listener.html#af6d25dc9dfdad359dbab4a567c566f88',1,'fusion_server::Listener']]],
+  ['operator_20bool',['operator bool',['../classfusion__server_1_1HTTPSession.html#aa28746f49768ce4cf2410f2f784959ff',1,'fusion_server::HTTPSession::operator bool()'],['../classfusion__server_1_1WebSocketSession.html#a5dfd0abec96b2b7352df58fc26c98236',1,'fusion_server::WebSocketSession::operator bool()']]]
 ];

@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['packageparser',['PackageParser',['../classfusion__server_1_1PackageParser.html',1,'fusion_server']]],
-  ['packageverifier',['PackageVerifier',['../classfusion__server_1_1PackageVerifier.html',1,'fusion_server']]],
-  ['parse',['Parse',['../classfusion__server_1_1PackageParser.html#a54df450c5b154bdb2d352edc534a068d',1,'fusion_server::PackageParser']]],
-  ['player',['Player',['../classfusion__server_1_1Player.html',1,'fusion_server::Player'],['../classfusion__server_1_1Player.html#a8e92d48945ef815dc930ce1888e08b53',1,'fusion_server::Player::Player() noexcept=default'],['../classfusion__server_1_1Player.html#ab9a9990530b83845a1bb0df2f3fdf4c8',1,'fusion_server::Player::Player(std::size_t id) noexcept']]],
-  ['point',['Point',['../structfusion__server_1_1Point.html',1,'fusion_server']]],
-  ['position_5f',['position_',['../classfusion__server_1_1Player.html#afe342f41840f911c30c7d78a3a9bd6f3',1,'fusion_server::Player']]]
+  ['makenotvalidjoin',['makeNotValidJoin',['../classfusion__server_1_1PackageVerifier.html#a32c611196639b05e14e3bfe608e1c84f',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidjson',['makeNotValidJSON',['../classfusion__server_1_1PackageVerifier.html#af27f66cd89af9397ee48ad45c06fc8bd',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidleave',['makeNotValidLeave',['../classfusion__server_1_1PackageVerifier.html#a03fbb040b99b99b87e25e092db227c34',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidupdate',['makeNotValidUpdate',['../classfusion__server_1_1PackageVerifier.html#a164f64ed150d69c94d800927d61027a5',1,'fusion_server::PackageVerifier']]],
+  ['makeresponse',['MakeResponse',['../classfusion__server_1_1Server.html#ab8ba8e24dc73a3048f5b25089a7d611a',1,'fusion_server::Server']]],
+  ['maketypenotfound',['makeTypeNotFound',['../classfusion__server_1_1PackageVerifier.html#a73c002b7ce2e371fe767f92d9c1e9380',1,'fusion_server::PackageVerifier']]]
 ];

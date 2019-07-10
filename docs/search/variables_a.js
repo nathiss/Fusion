@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['r',['r',['../structfusion__server_1_1Color.html#a33a706711082ab4ff940e0850eec9611',1,'fusion_server::Color']]]
+  ['next_5fplayer_5fid_5f',['next_player_id_',['../classfusion__server_1_1Game.html#ab9a299d0e7333c0318f7480d1e393b2c',1,'fusion_server::Game']]],
+  ['nick_5f',['nick_',['../classfusion__server_1_1Player.html#add52091c27ae41c71802485a6b2b057d',1,'fusion_server::Player']]]
 ];

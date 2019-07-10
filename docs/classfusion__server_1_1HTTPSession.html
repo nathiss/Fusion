@@ -66,6 +66,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classfusion__server_1_1HTTPSession-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fusion_server::HTTPSession Class Reference</div>  </div>
@@ -79,14 +80,14 @@ Inheritance diagram for fusion_server::HTTPSession:</div>
 <div class="center"><img src="classfusion__server_1_1HTTPSession__inherit__graph.png" border="0" usemap="#fusion__server_1_1HTTPSession_inherit__map" alt="Inheritance graph"/></div>
 <map name="fusion__server_1_1HTTPSession_inherit__map" id="fusion__server_1_1HTTPSession_inherit__map">
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <div class="dynheader">
 Collaboration diagram for fusion_server::HTTPSession:</div>
 <div class="dyncontent">
 <div class="center"><img src="classfusion__server_1_1HTTPSession__coll__graph.png" border="0" usemap="#fusion__server_1_1HTTPSession_coll__map" alt="Collaboration graph"/></div>
 <map name="fusion__server_1_1HTTPSession_coll__map" id="fusion__server_1_1HTTPSession_coll__map">
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -116,6 +117,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa813ce90624987f38b45f46708078506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1926ae945a8fd047a707378d6b98590"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1HTTPSession.html#af1926ae945a8fd047a707378d6b98590">HandleWrite</a> (const boost::system::error_code &amp;ec, std::size_t bytes_transmitted, bool close) noexcept</td></tr>
 <tr class="separator:af1926ae945a8fd047a707378d6b98590"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aaf1b76b472d8549254f8b76df0ebd6f2"><td class="memItemLeft" align="right" valign="top">boost::asio::ip::tcp::socket&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1HTTPSession.html#aaf1b76b472d8549254f8b76df0ebd6f2">socket_</a></td></tr>
+<tr class="separator:aaf1b76b472d8549254f8b76df0ebd6f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf42f88cf627d7a1ad844e8d54d4f183"><td class="memItemLeft" align="right" valign="top">boost::asio::strand&lt; boost::asio::io_context::executor_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1HTTPSession.html#aaf42f88cf627d7a1ad844e8d54d4f183">strand_</a></td></tr>
+<tr class="separator:aaf42f88cf627d7a1ad844e8d54d4f183"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2cd1c37b563eadd3cab16c1f0df526b"><td class="memItemLeft" align="right" valign="top">boost::beast::flat_buffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1HTTPSession.html#ad2cd1c37b563eadd3cab16c1f0df526b">buffer_</a></td></tr>
+<tr class="separator:ad2cd1c37b563eadd3cab16c1f0df526b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57da941414226d609d3ce66e74aba2a7"><td class="memItemLeft" align="right" valign="top">boost::beast::http::request&lt; boost::beast::http::string_body &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1HTTPSession.html#a57da941414226d609d3ce66e74aba2a7">request_</a></td></tr>
+<tr class="separator:a57da941414226d609d3ce66e74aba2a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represents the HTTP session between a client and the server. </p>
@@ -345,6 +357,99 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This method starts the loop of asynchronous reads. It is indended to be called only once. If it is called more than once the behaviour is undefined. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad2cd1c37b563eadd3cab16c1f0df526b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2cd1c37b563eadd3cab16c1f0df526b">&#9670;&nbsp;</a></span>buffer_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::beast::flat_buffer fusion_server::HTTPSession::buffer_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the buffer used to store the client's requests. </p>
+
+</div>
+</div>
+<a id="a57da941414226d609d3ce66e74aba2a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57da941414226d609d3ce66e74aba2a7">&#9670;&nbsp;</a></span>request_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::beast::http::request&lt;boost::beast::http::string_body&gt; fusion_server::HTTPSession::request_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This holds the parsed client's request. </p>
+
+</div>
+</div>
+<a id="aaf1b76b472d8549254f8b76df0ebd6f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1b76b472d8549254f8b76df0ebd6f2">&#9670;&nbsp;</a></span>socket_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::ip::tcp::socket fusion_server::HTTPSession::socket_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the socket connected to the client. </p>
+
+</div>
+</div>
+<a id="aaf42f88cf627d7a1ad844e8d54d4f183"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf42f88cf627d7a1ad844e8d54d4f183">&#9670;&nbsp;</a></span>strand_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::strand&lt;boost::asio::io_context::executor_type&gt; fusion_server::HTTPSession::strand_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the strand for this instance of the <a class="el" href="classfusion__server_1_1HTTPSession.html">HTTPSession</a> class. </p>
 
 </div>
 </div>

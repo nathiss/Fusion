@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['parse',['Parse',['../classfusion__server_1_1PackageParser.html#a54df450c5b154bdb2d352edc534a068d',1,'fusion_server::PackageParser']]],
-  ['player',['Player',['../classfusion__server_1_1Player.html#a8e92d48945ef815dc930ce1888e08b53',1,'fusion_server::Player::Player() noexcept=default'],['../classfusion__server_1_1Player.html#ab9a9990530b83845a1bb0df2f3fdf4c8',1,'fusion_server::Player::Player(std::size_t id) noexcept']]]
+  ['leave',['Leave',['../classfusion__server_1_1Game.html#ad0c44ac565f28d7f525d15f36b6d43a8',1,'fusion_server::Game']]],
+  ['listener',['Listener',['../classfusion__server_1_1Listener.html#ab02b2f59fdd610800c4c674e9f4dacf3',1,'fusion_server::Listener::Listener(boost::asio::io_context &amp;ioc, std::string_view ip_address, uint16_t port_numer) noexcept'],['../classfusion__server_1_1Listener.html#a2705b9fc58edfacdbbdcb61285ebef47',1,'fusion_server::Listener::Listener(boost::asio::io_context &amp;ioc, boost::asio::ip::tcp::endpoint endpoint) noexcept'],['../classfusion__server_1_1Listener.html#a738005a641d17b947663c2246376381c',1,'fusion_server::Listener::Listener(boost::asio::io_context &amp;ioc, uint16_t port_number) noexcept']]]
 ];

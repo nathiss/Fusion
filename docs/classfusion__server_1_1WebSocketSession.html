@@ -67,6 +67,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classfusion__server_1_1WebSocketSession-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fusion_server::WebSocketSession Class Reference</div>  </div>
@@ -80,14 +81,17 @@ Inheritance diagram for fusion_server::WebSocketSession:</div>
 <div class="center"><img src="classfusion__server_1_1WebSocketSession__inherit__graph.png" border="0" usemap="#fusion__server_1_1WebSocketSession_inherit__map" alt="Inheritance graph"/></div>
 <map name="fusion__server_1_1WebSocketSession_inherit__map" id="fusion__server_1_1WebSocketSession_inherit__map">
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <div class="dynheader">
 Collaboration diagram for fusion_server::WebSocketSession:</div>
 <div class="dyncontent">
 <div class="center"><img src="classfusion__server_1_1WebSocketSession__coll__graph.png" border="0" usemap="#fusion__server_1_1WebSocketSession_coll__map" alt="Collaboration graph"/></div>
 <map name="fusion__server_1_1WebSocketSession_coll__map" id="fusion__server_1_1WebSocketSession_coll__map">
+<area shape="rect" id="node5" title="STL class. " alt="" coords="291,145,406,223"/>
+<area shape="rect" id="node7" href="classfusion__server_1_1PackageVerifier.html" title="{fusion_server::PackageVerifier\n||+ Verify()\l&#45; makeNotValidJSON()\l&#45; makeTypeNotFound()\l&#45; makeNotValidJoin()\l&#45; makeNotValidUpdate()\l&#45; makeNotValidLeave()\l}" alt="" coords="435,285,635,436"/>
+<area shape="rect" id="node8" href="classfusion__server_1_1PackageParser.html" title="{fusion_server::PackageParser\n||+ Parse()\l}" alt="" coords="437,145,634,223"/>
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -129,6 +133,25 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a5ff7ae315d10a98df793bf99d41af68a"><td class="memItemLeft" align="right" valign="top">system_abstractions::IncommingPackageDelegate&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a5ff7ae315d10a98df793bf99d41af68a">delegate_</a></td></tr>
 <tr class="separator:a5ff7ae315d10a98df793bf99d41af68a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aa533f100506622253f93d196738ef8d3"><td class="memItemLeft" align="right" valign="top">boost::beast::websocket::stream&lt; boost::asio::ip::tcp::socket &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3">websocket_</a></td></tr>
+<tr class="separator:aa533f100506622253f93d196738ef8d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59eb9dd741f6cd0e3d2801d5c1769c69"><td class="memItemLeft" align="right" valign="top">boost::beast::multi_buffer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a59eb9dd741f6cd0e3d2801d5c1769c69">buffer_</a></td></tr>
+<tr class="separator:a59eb9dd741f6cd0e3d2801d5c1769c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa96c7fc70ae7d74a97e4a19ccd471528"><td class="memItemLeft" align="right" valign="top">boost::asio::strand&lt; boost::asio::io_context::executor_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528">strand_</a></td></tr>
+<tr class="separator:aa96c7fc70ae7d74a97e4a19ccd471528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84a0f94db552650cb621b358cc87a52d"><td class="memItemLeft" align="right" valign="top">std::deque&lt; Package &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a84a0f94db552650cb621b358cc87a52d">outgoing_queue_</a></td></tr>
+<tr class="separator:a84a0f94db552650cb621b358cc87a52d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee639aad52ed0bcf377ba26aeafbb60b"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#aee639aad52ed0bcf377ba26aeafbb60b">outgoing_queue_mtx_</a></td></tr>
+<tr class="separator:aee639aad52ed0bcf377ba26aeafbb60b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a749f83ec225befb23be6b2afb6569dc4"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a749f83ec225befb23be6b2afb6569dc4">handshake_complete_</a></td></tr>
+<tr class="separator:a749f83ec225befb23be6b2afb6569dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89d9efbd0a8df7f8638f02170f883f4d"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; bool &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a89d9efbd0a8df7f8638f02170f883f4d">in_closing_procedure_</a></td></tr>
+<tr class="separator:a89d9efbd0a8df7f8638f02170f883f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e6be47039c711b7cc2db566ee870e95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfusion__server_1_1PackageVerifier.html">PackageVerifier</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1WebSocketSession.html#a8e6be47039c711b7cc2db566ee870e95">package_verifier_</a></td></tr>
+<tr class="separator:a8e6be47039c711b7cc2db566ee870e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represents the WebSocket session between a client and the server. </p>
@@ -435,6 +458,10 @@ template&lt;typename Body , typename Allocator &gt; </div>
   </dd>
 </dl>
 
+<p class="reference">References <a class="el" href="classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528">strand_</a>, and <a class="el" href="classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3">websocket_</a>.</p>
+<div class="fragment"><div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                                                                                                              {</div><div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;  <a class="code" href="classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3">websocket_</a>.async_accept(</div><div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    std::move(request),</div><div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    boost::asio::bind_executor(</div><div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;      <a class="code" href="classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528">strand_</a>,</div><div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;      [<span class="keyword">self</span> = shared_from_this()](</div><div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keyword">const</span> boost::system::error_code&amp; ec</div><div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;      ) {</div><div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keyword">self</span>-&gt;HandleHandshake(ec);</div><div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;      }</div><div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    )</div><div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;  );</div><div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;}</div><div class="ttc" id="classfusion__server_1_1WebSocketSession_html_aa533f100506622253f93d196738ef8d3"><div class="ttname"><a href="classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3">fusion_server::WebSocketSession::websocket_</a></div><div class="ttdeci">boost::beast::websocket::stream&lt; boost::asio::ip::tcp::socket &gt; websocket_</div><div class="ttdef"><b>Definition:</b> websocket_session.hpp:144</div></div>
+<div class="ttc" id="classfusion__server_1_1WebSocketSession_html_aa96c7fc70ae7d74a97e4a19ccd471528"><div class="ttname"><a href="classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528">fusion_server::WebSocketSession::strand_</a></div><div class="ttdeci">boost::asio::strand&lt; boost::asio::io_context::executor_type &gt; strand_</div><div class="ttdef"><b>Definition:</b> websocket_session.hpp:154</div></div>
+</div><!-- fragment -->
 </div>
 </div>
 <a id="a7232313b7614d1b5ffddb15c3680605b"></a>
@@ -472,6 +499,29 @@ template&lt;typename Body , typename Allocator &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a59eb9dd741f6cd0e3d2801d5c1769c69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a59eb9dd741f6cd0e3d2801d5c1769c69">&#9670;&nbsp;</a></span>buffer_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::beast::multi_buffer fusion_server::WebSocketSession::buffer_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the buffer for the incomming packages. </p>
+
+</div>
+</div>
 <a id="a5ff7ae315d10a98df793bf99d41af68a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ff7ae315d10a98df793bf99d41af68a">&#9670;&nbsp;</a></span>delegate_</h2>
 
@@ -484,6 +534,171 @@ template&lt;typename Body , typename Allocator &gt; </div>
       </table>
 </div><div class="memdoc">
 <p>This delegate is called each time when a new package arrives. </p>
+
+</div>
+</div>
+<a id="a749f83ec225befb23be6b2afb6569dc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a749f83ec225befb23be6b2afb6569dc4">&#9670;&nbsp;</a></span>handshake_complete_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;bool&gt; fusion_server::WebSocketSession::handshake_complete_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This indicates whether or not the handshake has been completed. </p>
+
+</div>
+</div>
+<a id="a89d9efbd0a8df7f8638f02170f883f4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89d9efbd0a8df7f8638f02170f883f4d">&#9670;&nbsp;</a></span>in_closing_procedure_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::atomic&lt;bool&gt; fusion_server::WebSocketSession::in_closing_procedure_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This indicates wheter or not the closing procedure has started. If it's true, no writing to the </p>
+
+</div>
+</div>
+<a id="a84a0f94db552650cb621b358cc87a52d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84a0f94db552650cb621b358cc87a52d">&#9670;&nbsp;</a></span>outgoing_queue_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::deque&lt;Package&gt; fusion_server::WebSocketSession::outgoing_queue_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This queue holds all outgoing packages, which have not yet been sent. </p>
+
+</div>
+</div>
+<a id="aee639aad52ed0bcf377ba26aeafbb60b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee639aad52ed0bcf377ba26aeafbb60b">&#9670;&nbsp;</a></span>outgoing_queue_mtx_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex fusion_server::WebSocketSession::outgoing_queue_mtx_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the mutex for outgoing queue. </p>
+
+</div>
+</div>
+<a id="a8e6be47039c711b7cc2db566ee870e95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e6be47039c711b7cc2db566ee870e95">&#9670;&nbsp;</a></span>package_verifier_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classfusion__server_1_1PackageVerifier.html">PackageVerifier</a> fusion_server::WebSocketSession::package_verifier_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is a package verifier used to parse a read package and verify if it's properly formed. </p>
+
+</div>
+</div>
+<a id="aa96c7fc70ae7d74a97e4a19ccd471528"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa96c7fc70ae7d74a97e4a19ccd471528">&#9670;&nbsp;</a></span>strand_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::strand&lt;boost::asio::io_context::executor_type&gt; fusion_server::WebSocketSession::strand_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the strand for this instance of <a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a> class. </p>
+
+<p class="reference">Referenced by <a class="el" href="classfusion__server_1_1WebSocketSession.html#a764fc87d89796909977f3003a45d42da">Run()</a>.</p>
+
+</div>
+</div>
+<a id="aa533f100506622253f93d196738ef8d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa533f100506622253f93d196738ef8d3">&#9670;&nbsp;</a></span>websocket_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::beast::websocket::stream&lt;boost::asio::ip::tcp::socket&gt; fusion_server::WebSocketSession::websocket_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the WebSocket wrapper around the socket connected to a client. </p>
+
+<p class="reference">Referenced by <a class="el" href="classfusion__server_1_1WebSocketSession.html#a764fc87d89796909977f3003a45d42da">Run()</a>.</p>
 
 </div>
 </div>

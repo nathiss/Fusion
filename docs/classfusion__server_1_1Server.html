@@ -67,6 +67,9 @@ $(function() {
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classfusion__server_1_1Server-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">fusion_server::Server Class Reference</div>  </div>
@@ -74,6 +77,26 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="server_8hpp_source.html">server.hpp</a>&gt;</code></p>
+<div class="dynheader">
+Collaboration diagram for fusion_server::Server:</div>
+<div class="dyncontent">
+<div class="center"><img src="classfusion__server_1_1Server__coll__graph.png" border="0" usemap="#fusion__server_1_1Server_coll__map" alt="Collaboration graph"/></div>
+<map name="fusion__server_1_1Server_coll__map" id="fusion__server_1_1Server_coll__map">
+<area shape="rect" id="node3" href="classfusion__server_1_1Game.html" title="{fusion_server::Game\n|+ kMaxPlayersPerTeam\l&#45; first_team_mtx_\l&#45; second_team_mtx_\l&#45; next_player_id_\l&#45; rays_mtx_\l&#45; delegete_\l|+ Game()\l+ operator=()\l+ Game()\l+ Join()\l+ Leave()\l+ BroadcastPackage()\l+ GetPlayersCount()\l&#45; IsInGame()\l&#45; GetCurrentState()\l&#45; DoResponse()\l}" alt="" coords="264,708,427,991"/>
+<area shape="rect" id="node5" href="classfusion__server_1_1Ray.html" title="{fusion_server::Ray\n|+ id_\l+ gradient_\l+ intercept_\l|+ ToJson()\l}" alt="" coords="90,189,222,296"/>
+<area shape="rect" id="node6" href="structfusion__server_1_1Color.html" title="{fusion_server::Color\n|+ r\l+ g\l+ b\l|+ ToJson()\l}" alt="" coords="168,5,307,112"/>
+<area shape="rect" id="node7" href="structfusion__server_1_1Point.html" title="{fusion_server::Point\n|+ x\l+ y\l|+ operator=()\l+ ToJson()\l}" alt="" coords="5,5,144,112"/>
+<area shape="rect" id="node8" title="STL class. " alt="" coords="752,204,875,281"/>
+<area shape="rect" id="node12" title="STL class. " alt="" coords="569,204,668,281"/>
+<area shape="rect" id="node20" title="STL class. " alt="" coords="1267,204,1381,281"/>
+<area shape="rect" id="node25" title="STL class. " alt="" coords="1619,320,1759,397"/>
+<area shape="rect" id="node13" title="STL class. " alt="" coords="483,811,563,888"/>
+<area shape="rect" id="node14" title="STL class. " alt="" coords="454,451,581,543"/>
+<area shape="rect" id="node16" href="classfusion__server_1_1WebSocketSession.html" title="{fusion_server::WebSocket\lSession\n|+ delegate_\l&#45; websocket_\l&#45; buffer_\l&#45; strand_\l&#45; outgoing_queue_mtx_\l&#45; handshake_complete_\l&#45; in_closing_procedure_\l|+ WebSocketSession()\l+ WebSocketSession()\l+ operator=()\l+ operator=()\l+ WebSocketSession()\l+ ~WebSocketSession()\l+ Write()\l+ Run()\l+ Close()\l+ Close()\l+ operator bool()\l+ HandleHandshake()\l+ HandleRead()\l+ HandleWrite()\l}" alt="" coords="1064,664,1240,1035"/>
+<area shape="rect" id="node21" href="classfusion__server_1_1PackageVerifier.html" title="{fusion_server::PackageVerifier\n||+ Verify()\l&#45; makeNotValidJSON()\l&#45; makeTypeNotFound()\l&#45; makeNotValidJoin()\l&#45; makeNotValidUpdate()\l&#45; makeNotValidLeave()\l}" alt="" coords="1428,421,1628,572"/>
+<area shape="rect" id="node22" href="classfusion__server_1_1PackageParser.html" title="{fusion_server::PackageParser\n||+ Parse()\l}" alt="" coords="1405,204,1603,281"/>
+</map>
+</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -90,10 +113,68 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aaf4d84503595da30fd37b6c1e75803c5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classfusion__server_1_1Server.html">Server</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#aaf4d84503595da30fd37b6c1e75803c5">GetInstance</a> () noexcept</td></tr>
 <tr class="separator:aaf4d84503595da30fd37b6c1e75803c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a173ca05d64aba33c6afe1f069d312e07"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#a173ca05d64aba33c6afe1f069d312e07">Server</a> () noexcept</td></tr>
+<tr class="separator:a173ca05d64aba33c6afe1f069d312e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8ba8e24dc73a3048f5b25089a7d611a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#ab8ba8e24dc73a3048f5b25089a7d611a">MakeResponse</a> (<a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a> *session, const <a class="el" href="classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> &amp;request) noexcept</td></tr>
+<tr class="separator:ab8ba8e24dc73a3048f5b25089a7d611a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ab10d1c4c2232db35a24330f8e0d69477"><td class="memItemLeft" align="right" valign="top">system_abstractions::IncommingPackageDelegate&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#ab10d1c4c2232db35a24330f8e0d69477">unjoined_delegate_</a></td></tr>
+<tr class="separator:ab10d1c4c2232db35a24330f8e0d69477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69baf9c5e1f4ca98198fbc5b5bf7d44c"><td class="memItemLeft" align="right" valign="top">boost::asio::io_context&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#a69baf9c5e1f4ca98198fbc5b5bf7d44c">ioc_</a></td></tr>
+<tr class="separator:a69baf9c5e1f4ca98198fbc5b5bf7d44c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3de51c4a1a0d1b03dfadb2d86506eb1"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#ae3de51c4a1a0d1b03dfadb2d86506eb1">unidentified_sessions_</a></td></tr>
+<tr class="separator:ae3de51c4a1a0d1b03dfadb2d86506eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace1271b17612a8d5748b21a036d50243"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#ace1271b17612a8d5748b21a036d50243">unidentified_sessions_mtx_</a></td></tr>
+<tr class="separator:ace1271b17612a8d5748b21a036d50243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affd72e294daee1f8935693c53b527fd7"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="classfusion__server_1_1Game.html">Game</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#affd72e294daee1f8935693c53b527fd7">games_</a></td></tr>
+<tr class="separator:affd72e294daee1f8935693c53b527fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc9ff6283fa5dd8d73b1f46819750bb9"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#adc9ff6283fa5dd8d73b1f46819750bb9">games_mtx_</a></td></tr>
+<tr class="separator:adc9ff6283fa5dd8d73b1f46819750bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5adec400761d49c49af961492e2d8fc1"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a> *, std::optional&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#a5adec400761d49c49af961492e2d8fc1">sessions_correlation_</a></td></tr>
+<tr class="separator:a5adec400761d49c49af961492e2d8fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ce33501f3175adf8b570be2454c12ed"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#a6ce33501f3175adf8b570be2454c12ed">sessions_correlation_mtx_</a></td></tr>
+<tr class="separator:a6ce33501f3175adf8b570be2454c12ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a7ae6e4fc2deaaaaa9fdc3cb298b686de"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classfusion__server_1_1Server.html">Server</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfusion__server_1_1Server.html#a7ae6e4fc2deaaaaa9fdc3cb298b686de">instance_</a></td></tr>
+<tr class="separator:a7ae6e4fc2deaaaaa9fdc3cb298b686de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class represents the server itself. It holds all the WebSocket sessions and manages all games. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a173ca05d64aba33c6afe1f069d312e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a173ca05d64aba33c6afe1f069d312e07">&#9670;&nbsp;</a></span>Server()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">fusion_server::Server::Server </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This constructor is called only once, by the <a class="el" href="classfusion__server_1_1Server.html#aaf4d84503595da30fd37b6c1e75803c5">GetInstance()</a> function. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
 <a id="aaf4d84503595da30fd37b6c1e75803c5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaf4d84503595da30fd37b6c1e75803c5">&#9670;&nbsp;</a></span>GetInstance()</h2>
 
@@ -145,6 +226,51 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>This method returns the reference to the I/O context used in this server.</p>
 <dl class="section return"><dt>Returns</dt><dd>The reference to the I/O context used in this server is returned. </dd></dl>
+
+</div>
+</div>
+<a id="ab8ba8e24dc73a3048f5b25089a7d611a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8ba8e24dc73a3048f5b25089a7d611a">&#9670;&nbsp;</a></span>MakeResponse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> fusion_server::Server::MakeResponse </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a> *&#160;</td>
+          <td class="paramname"><em>session</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> &amp;&#160;</td>
+          <td class="paramname"><em>request</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method returns a response for the given request from a client.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">session</td><td>The WebSocket session connected to the client.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">request</td><td>This is a client's request.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A response for the given request from a client is returned. </dd></dl>
 
 </div>
 </div>
@@ -241,6 +367,214 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section note"><dt>Note</dt><dd>This method is thread-safe. If it's executed concurrently with the same argument, the second call will do nothing. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="affd72e294daee1f8935693c53b527fd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affd72e294daee1f8935693c53b527fd7">&#9670;&nbsp;</a></span>games_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, <a class="el" href="classfusion__server_1_1Game.html">Game</a>&gt; fusion_server::Server::games_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This map associates all games in the server with their names. </p>
+
+</div>
+</div>
+<a id="adc9ff6283fa5dd8d73b1f46819750bb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc9ff6283fa5dd8d73b1f46819750bb9">&#9670;&nbsp;</a></span>games_mtx_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex fusion_server::Server::games_mtx_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This mutex is used to synchronise the access to the set of the games collection. </p>
+
+</div>
+</div>
+<a id="a7ae6e4fc2deaaaaa9fdc3cb298b686de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ae6e4fc2deaaaaa9fdc3cb298b686de">&#9670;&nbsp;</a></span>instance_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classfusion__server_1_1Server.html">Server</a>&gt; fusion_server::Server::instance_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the pointer pointing to the only instance of this class. </p>
+
+</div>
+</div>
+<a id="a69baf9c5e1f4ca98198fbc5b5bf7d44c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69baf9c5e1f4ca98198fbc5b5bf7d44c">&#9670;&nbsp;</a></span>ioc_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::asio::io_context fusion_server::Server::ioc_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The context for providing core I/O functionality. </p>
+
+</div>
+</div>
+<a id="a5adec400761d49c49af961492e2d8fc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5adec400761d49c49af961492e2d8fc1">&#9670;&nbsp;</a></span>sessions_correlation_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;<a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a>*, std::optional&lt;std::string&gt; &gt; fusion_server::Server::sessions_correlation_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This map associates all sessions in the server and games to which they have joined. If a sessions has not been joined to any game (it's unidentified) the value is in its invalid state. </p>
+
+</div>
+</div>
+<a id="a6ce33501f3175adf8b570be2454c12ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ce33501f3175adf8b570be2454c12ed">&#9670;&nbsp;</a></span>sessions_correlation_mtx_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex fusion_server::Server::sessions_correlation_mtx_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This mutex is used to synchronise the access to the map of the sessions and their games. </p>
+
+</div>
+</div>
+<a id="ae3de51c4a1a0d1b03dfadb2d86506eb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3de51c4a1a0d1b03dfadb2d86506eb1">&#9670;&nbsp;</a></span>unidentified_sessions_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;<a class="el" href="classfusion__server_1_1WebSocketSession.html">WebSocketSession</a>*&gt; fusion_server::Server::unidentified_sessions_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This container holds all unidentifies WebSocket sessions. </p>
+
+</div>
+</div>
+<a id="ace1271b17612a8d5748b21a036d50243"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace1271b17612a8d5748b21a036d50243">&#9670;&nbsp;</a></span>unidentified_sessions_mtx_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex fusion_server::Server::unidentified_sessions_mtx_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This mutex is used to synchronise the access to the set of the unidentified sessions. </p>
+
+</div>
+</div>
+<a id="ab10d1c4c2232db35a24330f8e0d69477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab10d1c4c2232db35a24330f8e0d69477">&#9670;&nbsp;</a></span>unjoined_delegate_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">system_abstractions::IncommingPackageDelegate fusion_server::Server::unjoined_delegate_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function object is called by WebSocket sessions from a clients, who are not yet in any game, each time when a new package arrives. </p>
 
 </div>
 </div>

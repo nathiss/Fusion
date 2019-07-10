@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_20bool',['operator bool',['../classfusion__server_1_1HTTPSession.html#aa28746f49768ce4cf2410f2f784959ff',1,'fusion_server::HTTPSession::operator bool()'],['../classfusion__server_1_1WebSocketSession.html#a5dfd0abec96b2b7352df58fc26c98236',1,'fusion_server::WebSocketSession::operator bool()']]]
+  ['join',['Join',['../classfusion__server_1_1Game.html#a3e8a15a64e988c914ea6dd7b4cef7ce9',1,'fusion_server::Game']]]
 ];

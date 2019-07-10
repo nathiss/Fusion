@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['register',['Register',['../classfusion__server_1_1Server.html#a8f700f2483c810c35fe5ffdbe91f050c',1,'fusion_server::Server']]],
-  ['run',['Run',['../classfusion__server_1_1HTTPSession.html#a50809a5e273849f969f0b9537036b228',1,'fusion_server::HTTPSession::Run()'],['../classfusion__server_1_1Listener.html#a814d6efbdbcc9482d2f0efb9ac1dfb1c',1,'fusion_server::Listener::Run()'],['../classfusion__server_1_1WebSocketSession.html#a764fc87d89796909977f3003a45d42da',1,'fusion_server::WebSocketSession::Run()']]]
+  ['makenotvalidjoin',['makeNotValidJoin',['../classfusion__server_1_1PackageVerifier.html#a32c611196639b05e14e3bfe608e1c84f',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidjson',['makeNotValidJSON',['../classfusion__server_1_1PackageVerifier.html#af27f66cd89af9397ee48ad45c06fc8bd',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidleave',['makeNotValidLeave',['../classfusion__server_1_1PackageVerifier.html#a03fbb040b99b99b87e25e092db227c34',1,'fusion_server::PackageVerifier']]],
+  ['makenotvalidupdate',['makeNotValidUpdate',['../classfusion__server_1_1PackageVerifier.html#a164f64ed150d69c94d800927d61027a5',1,'fusion_server::PackageVerifier']]],
+  ['makeresponse',['MakeResponse',['../classfusion__server_1_1Server.html#ab8ba8e24dc73a3048f5b25089a7d611a',1,'fusion_server::Server']]],
+  ['maketypenotfound',['makeTypeNotFound',['../classfusion__server_1_1PackageVerifier.html#a73c002b7ce2e371fe767f92d9c1e9380',1,'fusion_server::PackageVerifier']]]
 ];
