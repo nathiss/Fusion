@@ -14,13 +14,58 @@ namespace fusion_server {
  */
 class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  public:
-  HTTPSession(const HTTPSession&) = delete;
-  HTTPSession(HTTPSession&&) = delete;
-  HTTPSession& operator=(const HTTPSession&) = delete;
-  HTTPSession& operator=(HTTPSession&&) = delete;
+  /**
+   * @brief Explicitly deleted copy constructor.
+   * It's deleted due to presence of boost::asio's socket.
+   *
+   * @param[in] other
+   *   Copied object.
+   */
+  HTTPSession(const HTTPSession& other) = delete;
+
+  /**
+   * @brief Explitly deleted move constructor.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   */
+  HTTPSession(HTTPSession&& other) = delete;
+
+  /**
+   * @brief Explicitly deleted copy operator.
+   * It's deleted due to presence of socket in class hierarchy.
+   *
+   * @param[in] other
+   *   Copied object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  HTTPSession& operator=(const HTTPSession& other) = delete;
+
+  /**
+   * @brief Explitly deleted move operator.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  HTTPSession& operator=(HTTPSession&& other) = delete;
 
   /**
    * This constructor takes the overship of the socket connected to a client.
+   *
+   * @param[in] socket
+   *   @brief A socket connected to a client.
+   *   If the socket is not connected or is not in "ready" state, the behaviour
+   *   is undefined.
+   *
    */
   HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 

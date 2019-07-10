@@ -16,17 +16,17 @@ struct Color {
   /**
    * This is red channel.
    */
-  uint8_t r{};
+  std::uint8_t r{};
 
   /**
    * This is green channel.
    */
-  uint8_t g{};
+  std::uint8_t g{};
 
   /**
    * This is blue channel.
    */
-  uint8_t b{};
+  std::uint8_t b{};
 
   /**
    * This method returns a dump of this object encoded as JSON.
@@ -57,6 +57,17 @@ struct Point {
    */
   int64_t y{};
 
+  /**
+   * @brief Extract data from a JSON object.
+   * This method sets the inner fields of this object extracted from the given
+   * JSON object. It returns a reference to this object.
+   *
+   * @param[in] array
+   *   This is the JSON object containing values under `x` and `y` keys.
+   *
+   * @return
+   *   Reference to this object is returned.
+   */
   Point& operator=(const PackageParser::JSON& array) noexcept {
     x = array[0];
     y = array[1];

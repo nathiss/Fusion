@@ -1,5 +1,0 @@
-<map id="fusion_server::WebSocketSession" name="fusion_server::WebSocketSession">
-<area shape="rect" id="node5" title="STL class. " alt="" coords="291,145,406,223"/>
-<area shape="rect" id="node7" href="$classfusion__server_1_1PackageVerifier.html" title="{fusion_server::PackageVerifier\n||+ Verify()\l&#45; makeNotValidJSON()\l&#45; makeTypeNotFound()\l&#45; makeNotValidJoin()\l&#45; makeNotValidUpdate()\l&#45; makeNotValidLeave()\l}" alt="" coords="435,285,635,436"/>
-<area shape="rect" id="node8" href="$classfusion__server_1_1PackageParser.html" title="{fusion_server::PackageParser\n||+ Parse()\l}" alt="" coords="437,145,634,223"/>
-</map>

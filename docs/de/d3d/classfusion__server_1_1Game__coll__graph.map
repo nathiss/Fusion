@@ -1,0 +1,7 @@
+<map id="fusion_server::Game" name="fusion_server::Game">
+<area shape="rect" id="node3" href="$df/dcd/classfusion__server_1_1Ray.html" title="{fusion_server::Ray\n|+ id_\l+ gradient_\l+ intercept_\l|+ ToJson()\l}" alt="" coords="153,189,285,296"/>
+<area shape="rect" id="node4" href="$dd/d7f/structfusion__server_1_1Color.html" title="{fusion_server::Color\n|+ r\l+ g\l+ b\l|+ ToJson()\l}" alt="" coords="168,5,307,112"/>
+<area shape="rect" id="node5" href="$d4/d04/structfusion__server_1_1Point.html" title="{fusion_server::Point\n|+ x\l+ y\l|+ operator=()\l+ ToJson()\l}" alt="" coords="5,5,144,112"/>
+<area shape="rect" id="node6" title="STL class. " alt="" coords="309,204,432,281"/>
+<area shape="rect" id="node10" title="STL class. " alt="" coords="472,204,571,281"/>
+</map>

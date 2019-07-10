@@ -16,11 +16,49 @@ namespace fusion_server {
  */
 class Listener : public std::enable_shared_from_this<Listener> {
  public:
-  Listener(const Listener&) = delete;
-  Listener(Listener&&) = delete;
+  /**
+   * @brief Explicitly deleted copy constructor.
+   * It's deleted due to presence of boost::asio's socket.
+   *
+   * @param[in] other
+   *   Copied object.
+   */
+  Listener(const Listener& other) = delete;
 
-  Listener& operator=(const Listener&) = delete;
-  Listener& operator=(Listener&&) = delete;
+  /**
+   * @brief Explitly deleted move constructor.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   */
+  Listener(Listener&& other) = delete;
+
+  /**
+   * @brief Explicitly deleted copy operator.
+   * It's deleted due to presence of socket in class hierarchy.
+   *
+   * @param[in] other
+   *   Copied object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  Listener& operator=(const Listener& other) = delete;
+
+  /**
+   * @brief Explitly deleted move operator.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  Listener& operator=(Listener&& other) = delete;
 
   /**
    * This constructor may be used for accepting connections on a specific
@@ -35,7 +73,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * @param[in] port_numer
    *   A port numer.
    */
-  Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint16_t port_numer) noexcept;
+  Listener(boost::asio::io_context& ioc, std::string_view ip_address, std::uint16_t port_numer) noexcept;
 
   /**
    * This constructor may be used for accepting connections on the given
@@ -56,10 +94,10 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * @param[in] ioc
    *   The context for providing core I/O functionality.
    *
-   * @param[in] port_numer
+   * @param[in] port_number
    *   A port numer.
    */
-  Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept;
+  Listener(boost::asio::io_context& ioc, std::uint16_t port_number) noexcept;
 
   /**
    * This is the default destructor.

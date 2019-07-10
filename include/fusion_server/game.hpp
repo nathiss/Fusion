@@ -56,9 +56,26 @@ class Game {
   using join_result_t =
   std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON, std::size_t>>;
 
-  Game(const Game&) noexcept = delete;
+  /**
+   * @brief Explicitly deleted copy constructor.
+   * It's deleted due to presence of unique_ptr in class hierarchy.
+   *
+   * @param[in] other
+   *   Copied object.
+   */
+  Game(const Game& other) noexcept = delete;
 
-  Game& operator=(const Game&) noexcept = delete;
+  /**
+   * @brief Explicitly deleted copy operator.
+   * It's deleted due to presence of unique_ptr in class hierarchy.
+   *
+   * @param[in] other
+   *   Copied object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  Game& operator=(const Game& other) noexcept = delete;
 
   /**
    * This constructor creates the asynchronous reading delegate.

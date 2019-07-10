@@ -23,10 +23,49 @@ namespace fusion_server {
  */
 class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
  public:
-  WebSocketSession(const WebSocketSession&) = delete;
-  WebSocketSession(WebSocketSession&&) = delete;
-  WebSocketSession& operator=(const WebSocketSession&) = delete;
-  WebSocketSession& operator=(WebSocketSession&&) = delete;
+  /**
+   * @brief Explicitly deleted copy constructor.
+   * It's deleted due to presence of boost::asio's socket.
+   *
+   * @param[in] other
+   *   Copied object.
+   */
+  WebSocketSession(const WebSocketSession& other) = delete;
+
+  /**
+   * @brief Explitly deleted move constructor.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   */
+  WebSocketSession(WebSocketSession&& other) = delete;
+
+  /**
+   * @brief Explicitly deleted copy operator.
+   * It's deleted due to presence of socket in class hierarchy.
+   *
+   * @param[in] other
+   *   Copied object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  WebSocketSession& operator=(const WebSocketSession& other) = delete;
+
+  /**
+   * @brief Explitly deleted move operator.
+   * It's deleted just because it's not used. Although it could be dangerous,
+   * due to asynchronous operations are made on this object.
+   *
+   * @param[in] other
+   *   Moved object.
+   *
+   * @return
+   *   Reference to `this` object.
+   */
+  WebSocketSession& operator=(WebSocketSession&& other) = delete;
 
   /**
    * This constructor takes the overship of the socket connected to a client and

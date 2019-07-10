@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['join',['Join',['../classfusion__server_1_1Game.html#a3e8a15a64e988c914ea6dd7b4cef7ce9',1,'fusion_server::Game']]]
+  ['join',['Join',['../dd/d01/classfusion__server_1_1Game.html#adb41d08fec45bad2b29867bb0de25392',1,'fusion_server::Game']]]
 ];

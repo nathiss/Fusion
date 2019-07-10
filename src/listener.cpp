@@ -14,7 +14,7 @@
 
 namespace fusion_server {
 
-Listener::Listener(boost::asio::io_context& ioc, std::string_view ip_address, uint16_t port_numer) noexcept
+Listener::Listener(boost::asio::io_context& ioc, std::string_view ip_address, std::uint16_t port_numer) noexcept
     : ioc_{ioc}, acceptor_{ioc_}, socket_{ioc_},
       endpoint_{boost::asio::ip::make_address(ip_address), port_numer} {
   OpenAcceptor();
@@ -26,7 +26,7 @@ Listener::Listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::endpoint 
   OpenAcceptor();
 }
 
-Listener::Listener(boost::asio::io_context& ioc, uint16_t port_number) noexcept
+Listener::Listener(boost::asio::io_context& ioc, std::uint16_t port_number) noexcept
     : ioc_{ioc}, acceptor_{ioc_}, socket_{ioc_},
       endpoint_{boost::asio::ip::tcp::v4(), port_number} {
   OpenAcceptor();

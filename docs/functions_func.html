@@ -9,6 +9,13 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript">
+  $(document).ready(initResizable);
+</script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -22,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Fusion Server
-   &#160;<span id="projectnumber">0.1</span>
+   &#160;<span id="projectnumber">v0.1</span>
    </div>
    <div id="projectbrief">This is the server for the Fusion game.</div>
   </td>
@@ -45,6 +52,20 @@ $(function() {
 </script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){initNavTree('functions_func.html','');});
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -64,206 +85,216 @@ $(function() {
 
 <h3><a id="index_b"></a>- b -</h3><ul>
 <li>BroadcastPackage()
-: <a class="el" href="classfusion__server_1_1Game.html#a0fe5ab974abced57eab1df7d770f49ec">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#a0fe5ab974abced57eab1df7d770f49ec">fusion_server::Game</a>
 </li>
 </ul>
 
 
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>Close()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#a5fb0e765bf5604b8e03fa048149f2481">fusion_server::HTTPSession</a>
-, <a class="el" href="classfusion__server_1_1WebSocketSession.html#aa16b5415857b855f201d871b2daba5fa">fusion_server::WebSocketSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#a5fb0e765bf5604b8e03fa048149f2481">fusion_server::HTTPSession</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#aa16b5415857b855f201d871b2daba5fa">fusion_server::WebSocketSession</a>
 </li>
 </ul>
 
 
 <h3><a id="index_d"></a>- d -</h3><ul>
 <li>DoResponse()
-: <a class="el" href="classfusion__server_1_1Game.html#ab53501341fa16c6775cef8d8347620cf">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#ab53501341fa16c6775cef8d8347620cf">fusion_server::Game</a>
 </li>
 </ul>
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
 <li>Game()
-: <a class="el" href="classfusion__server_1_1Game.html#afab12e65a961b8bfca93df885e47b98e">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#aa0608c8e62ed8247a5d5bdbabcf8fd9a">fusion_server::Game</a>
 </li>
 <li>GetCurrentState()
-: <a class="el" href="classfusion__server_1_1Game.html#abab3259402c15963fa863cd2e8e4d354">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#abab3259402c15963fa863cd2e8e4d354">fusion_server::Game</a>
 </li>
 <li>GetInstance()
-: <a class="el" href="classfusion__server_1_1Server.html#aaf4d84503595da30fd37b6c1e75803c5">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#ab13ecc30acdc4c9a80aac01c2a62a5de">fusion_server::Server</a>
 </li>
 <li>GetIOContext()
-: <a class="el" href="classfusion__server_1_1Server.html#a7d2faa6a5e404069d6a1db7a3f6ca427">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#abb74983799e8f78c3ae24906d2e4835c">fusion_server::Server</a>
 </li>
 <li>GetPlayersCount()
-: <a class="el" href="classfusion__server_1_1Game.html#a4ab15c7af690c965b8b14ef1eaf7af08">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#a4ab15c7af690c965b8b14ef1eaf7af08">fusion_server::Game</a>
 </li>
 </ul>
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
 <li>HandleAccept()
-: <a class="el" href="classfusion__server_1_1Listener.html#ab61718da34dbed6b2ea77f558b74f880">fusion_server::Listener</a>
+: <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#ab61718da34dbed6b2ea77f558b74f880">fusion_server::Listener</a>
 </li>
 <li>HandleHandshake()
-: <a class="el" href="classfusion__server_1_1WebSocketSession.html#af78337a22f85bef4f49c31a412deaefd">fusion_server::WebSocketSession</a>
+: <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#af78337a22f85bef4f49c31a412deaefd">fusion_server::WebSocketSession</a>
 </li>
 <li>HandleRead()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#aa813ce90624987f38b45f46708078506">fusion_server::HTTPSession</a>
-, <a class="el" href="classfusion__server_1_1WebSocketSession.html#a77ae7b57464e7f31d9b7a3257e15867e">fusion_server::WebSocketSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#aa813ce90624987f38b45f46708078506">fusion_server::HTTPSession</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#a77ae7b57464e7f31d9b7a3257e15867e">fusion_server::WebSocketSession</a>
 </li>
 <li>HandleWrite()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#af1926ae945a8fd047a707378d6b98590">fusion_server::HTTPSession</a>
-, <a class="el" href="classfusion__server_1_1WebSocketSession.html#afb2eda707b5672090893bcd6562d870b">fusion_server::WebSocketSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#af1926ae945a8fd047a707378d6b98590">fusion_server::HTTPSession</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#afb2eda707b5672090893bcd6562d870b">fusion_server::WebSocketSession</a>
 </li>
 <li>HTTPSession()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#a4b23f5d27711573733ecfa3c8cdfefb4">fusion_server::HTTPSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#a182c4112993596662000c21e60525443">fusion_server::HTTPSession</a>
 </li>
 </ul>
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>IsInGame()
-: <a class="el" href="classfusion__server_1_1Game.html#a8a7d0c001bc793904fb0ecc629b9c657">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#a8a7d0c001bc793904fb0ecc629b9c657">fusion_server::Game</a>
 </li>
 </ul>
 
 
 <h3><a id="index_j"></a>- j -</h3><ul>
 <li>Join()
-: <a class="el" href="classfusion__server_1_1Game.html#a3e8a15a64e988c914ea6dd7b4cef7ce9">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#adb41d08fec45bad2b29867bb0de25392">fusion_server::Game</a>
 </li>
 </ul>
 
 
 <h3><a id="index_l"></a>- l -</h3><ul>
 <li>Leave()
-: <a class="el" href="classfusion__server_1_1Game.html#ad0c44ac565f28d7f525d15f36b6d43a8">fusion_server::Game</a>
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#ad0c44ac565f28d7f525d15f36b6d43a8">fusion_server::Game</a>
 </li>
 <li>Listener()
-: <a class="el" href="classfusion__server_1_1Listener.html#ab02b2f59fdd610800c4c674e9f4dacf3">fusion_server::Listener</a>
+: <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#a5b62a90e6e49ae25de4f30812f7d7fac">fusion_server::Listener</a>
 </li>
 </ul>
 
 
 <h3><a id="index_m"></a>- m -</h3><ul>
 <li>makeNotValidJoin()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#a32c611196639b05e14e3bfe608e1c84f">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#a32c611196639b05e14e3bfe608e1c84f">fusion_server::PackageVerifier</a>
 </li>
 <li>makeNotValidJSON()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#af27f66cd89af9397ee48ad45c06fc8bd">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#af27f66cd89af9397ee48ad45c06fc8bd">fusion_server::PackageVerifier</a>
 </li>
 <li>makeNotValidLeave()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#a03fbb040b99b99b87e25e092db227c34">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#a03fbb040b99b99b87e25e092db227c34">fusion_server::PackageVerifier</a>
 </li>
 <li>makeNotValidUpdate()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#a164f64ed150d69c94d800927d61027a5">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#a164f64ed150d69c94d800927d61027a5">fusion_server::PackageVerifier</a>
 </li>
 <li>MakeResponse()
-: <a class="el" href="classfusion__server_1_1Server.html#ab8ba8e24dc73a3048f5b25089a7d611a">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#ab8ba8e24dc73a3048f5b25089a7d611a">fusion_server::Server</a>
 </li>
 <li>makeTypeNotFound()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#a73c002b7ce2e371fe767f92d9c1e9380">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#a73c002b7ce2e371fe767f92d9c1e9380">fusion_server::PackageVerifier</a>
 </li>
 </ul>
 
 
 <h3><a id="index_o"></a>- o -</h3><ul>
 <li>OpenAcceptor()
-: <a class="el" href="classfusion__server_1_1Listener.html#af6d25dc9dfdad359dbab4a567c566f88">fusion_server::Listener</a>
+: <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#af6d25dc9dfdad359dbab4a567c566f88">fusion_server::Listener</a>
 </li>
 <li>operator bool()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#aa28746f49768ce4cf2410f2f784959ff">fusion_server::HTTPSession</a>
-, <a class="el" href="classfusion__server_1_1WebSocketSession.html#a5dfd0abec96b2b7352df58fc26c98236">fusion_server::WebSocketSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#aa28746f49768ce4cf2410f2f784959ff">fusion_server::HTTPSession</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#a5dfd0abec96b2b7352df58fc26c98236">fusion_server::WebSocketSession</a>
+</li>
+<li>operator=()
+: <a class="el" href="dd/d01/classfusion__server_1_1Game.html#ab11ee2dd47b3386d7a00414aa8c8b823">fusion_server::Game</a>
+, <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#a7f37ef9a8a9f56e528ff5508259e4dd0">fusion_server::HTTPSession</a>
+, <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#af3ddfa9e0dd2fa9ef7cfc4de5836ad6e">fusion_server::Listener</a>
+, <a class="el" href="d4/d04/structfusion__server_1_1Point.html#aaa059b94e571cd2d671eae89e811edc3">fusion_server::Point</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#ace04661fef76edef9c47c5be2dc72091">fusion_server::WebSocketSession</a>
 </li>
 </ul>
 
 
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>Parse()
-: <a class="el" href="classfusion__server_1_1PackageParser.html#a54df450c5b154bdb2d352edc534a068d">fusion_server::PackageParser</a>
+: <a class="el" href="d6/d88/classfusion__server_1_1PackageParser.html#a67564e1add25dccc4d0f5fc0d048d37a">fusion_server::PackageParser</a>
 </li>
 <li>Player()
-: <a class="el" href="classfusion__server_1_1Player.html#a8e92d48945ef815dc930ce1888e08b53">fusion_server::Player</a>
+: <a class="el" href="d5/d95/classfusion__server_1_1Player.html#a8e92d48945ef815dc930ce1888e08b53">fusion_server::Player</a>
 </li>
 </ul>
 
 
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>Register()
-: <a class="el" href="classfusion__server_1_1Server.html#a8f700f2483c810c35fe5ffdbe91f050c">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#a939dbf6b6c2124604ecde8ffda960ec6">fusion_server::Server</a>
 </li>
 <li>Run()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#a50809a5e273849f969f0b9537036b228">fusion_server::HTTPSession</a>
-, <a class="el" href="classfusion__server_1_1Listener.html#a814d6efbdbcc9482d2f0efb9ac1dfb1c">fusion_server::Listener</a>
-, <a class="el" href="classfusion__server_1_1WebSocketSession.html#a764fc87d89796909977f3003a45d42da">fusion_server::WebSocketSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#a50809a5e273849f969f0b9537036b228">fusion_server::HTTPSession</a>
+, <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#a814d6efbdbcc9482d2f0efb9ac1dfb1c">fusion_server::Listener</a>
+, <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#a764fc87d89796909977f3003a45d42da">fusion_server::WebSocketSession</a>
 </li>
 </ul>
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>Server()
-: <a class="el" href="classfusion__server_1_1Server.html#a173ca05d64aba33c6afe1f069d312e07">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#a173ca05d64aba33c6afe1f069d312e07">fusion_server::Server</a>
 </li>
 <li>StartAccepting()
-: <a class="el" href="classfusion__server_1_1Server.html#a0d5c17fed0acdb5365b0206ae9e0ba78">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#a0d5c17fed0acdb5365b0206ae9e0ba78">fusion_server::Server</a>
 </li>
 </ul>
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>ToJson()
-: <a class="el" href="structfusion__server_1_1Color.html#af81acc6753fcb78446336722fc568665">fusion_server::Color</a>
-, <a class="el" href="classfusion__server_1_1Player.html#a7e67598002532d45cf16779e598d3785">fusion_server::Player</a>
-, <a class="el" href="structfusion__server_1_1Point.html#aa83e59b13b0ed217aaa0dbd1ec3b6fd7">fusion_server::Point</a>
-, <a class="el" href="classfusion__server_1_1Ray.html#a48519f3977223ff2f4e391b3ef643ddd">fusion_server::Ray</a>
+: <a class="el" href="dd/d7f/structfusion__server_1_1Color.html#af81acc6753fcb78446336722fc568665">fusion_server::Color</a>
+, <a class="el" href="d5/d95/classfusion__server_1_1Player.html#a7e67598002532d45cf16779e598d3785">fusion_server::Player</a>
+, <a class="el" href="d4/d04/structfusion__server_1_1Point.html#aa83e59b13b0ed217aaa0dbd1ec3b6fd7">fusion_server::Point</a>
+, <a class="el" href="df/dcd/classfusion__server_1_1Ray.html#a48519f3977223ff2f4e391b3ef643ddd">fusion_server::Ray</a>
 </li>
 </ul>
 
 
 <h3><a id="index_u"></a>- u -</h3><ul>
 <li>Unregister()
-: <a class="el" href="classfusion__server_1_1Server.html#a8103b54d40efddcef982172a805abb6b">fusion_server::Server</a>
+: <a class="el" href="d4/d1d/classfusion__server_1_1Server.html#a8103b54d40efddcef982172a805abb6b">fusion_server::Server</a>
 </li>
 </ul>
 
 
 <h3><a id="index_v"></a>- v -</h3><ul>
 <li>Verify()
-: <a class="el" href="classfusion__server_1_1PackageVerifier.html#a6b2799ccaeb7546a0cfd6452f2a7f80c">fusion_server::PackageVerifier</a>
+: <a class="el" href="d7/d92/classfusion__server_1_1PackageVerifier.html#a516b0b73d1aae4458aeaffe225757df0">fusion_server::PackageVerifier</a>
 </li>
 </ul>
 
 
 <h3><a id="index_w"></a>- w -</h3><ul>
 <li>WebSocketSession()
-: <a class="el" href="classfusion__server_1_1WebSocketSession.html#ab201d047e8d7886166be982ee35448de">fusion_server::WebSocketSession</a>
+: <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#ac198853b27a2ccd3ea5552b99c74226c">fusion_server::WebSocketSession</a>
 </li>
 <li>Write()
-: <a class="el" href="classfusion__server_1_1WebSocketSession.html#a7232313b7614d1b5ffddb15c3680605b">fusion_server::WebSocketSession</a>
+: <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#a7232313b7614d1b5ffddb15c3680605b">fusion_server::WebSocketSession</a>
 </li>
 </ul>
 
 
 <h3><a id="index_0x7e"></a>- ~ -</h3><ul>
 <li>~HTTPSession()
-: <a class="el" href="classfusion__server_1_1HTTPSession.html#ae1769223ec600a3f27dfedb54583ad20">fusion_server::HTTPSession</a>
+: <a class="el" href="df/d9c/classfusion__server_1_1HTTPSession.html#ae1769223ec600a3f27dfedb54583ad20">fusion_server::HTTPSession</a>
 </li>
 <li>~Listener()
-: <a class="el" href="classfusion__server_1_1Listener.html#a1648748217ba3439840d2503d3bf6e86">fusion_server::Listener</a>
+: <a class="el" href="d6/d23/classfusion__server_1_1Listener.html#a1648748217ba3439840d2503d3bf6e86">fusion_server::Listener</a>
 </li>
 <li>~WebSocketSession()
-: <a class="el" href="classfusion__server_1_1WebSocketSession.html#a256ea8b094151c16b3a7e6fbb68e7495">fusion_server::WebSocketSession</a>
+: <a class="el" href="db/d0f/classfusion__server_1_1WebSocketSession.html#a256ea8b094151c16b3a7e6fbb68e7495">fusion_server::WebSocketSession</a>
 </li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by &#160;<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.13
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by
+    <a href="http://www.doxygen.org/index.html">
+    <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
+  </ul>
+</div>
 </body>
 </html>
