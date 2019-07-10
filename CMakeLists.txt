@@ -49,11 +49,11 @@ find_package(Threads REQUIRED)
 add_library(${This} ${Sources} ${Headers})
 
 target_link_libraries(${This}
-  PUBLIC ${Boost_LIBRARIES}
   PUBLIC nlohmann_json::nlohmann_json
+  PRIVATE ${Boost_LIBRARIES}
   PRIVATE Threads::Threads
 )
 target_include_directories(${This}
-  PUBLIC ${Boost_INCLUDE_DIR}
   PUBLIC include
+  PRIVATE ${Boost_INCLUDE_DIR}
 )
