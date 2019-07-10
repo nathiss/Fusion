@@ -207,7 +207,10 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     Close(system_abstractions::make_Package(msg.dump()));
     return;
   }
-  delegate_(std::move(msg), this);
+
+  boost::asio::post(websocket_.get_executor(), [this, &msg]{
+    delegate_(std::move(msg), this);
+  });
 
   websocket_.async_read(
     buffer_,

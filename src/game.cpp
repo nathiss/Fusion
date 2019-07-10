@@ -21,45 +21,49 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
   if (IsInGame(session)) {
     return {}; // This should never happen.
   }
+  std::size_t player_id;
 
   switch (team) {
     case Team::kFirst: {
-      std::lock_guard l{first_team_mtx_};
-      if (first_team_.size() >= kMaxPlayersPerTeam)
-        return {};
-      auto player_id = next_player_id_++;
-      first_team_.insert({session, std::make_unique<Player>(player_id)});
-      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
+      {
+        std::lock_guard l{first_team_mtx_};
+        if (first_team_.size() >= kMaxPlayersPerTeam)
+          return {};
+        player_id = next_player_id_++;
+        first_team_.insert({session, std::make_unique<Player>(player_id)});
+      }
+      break;
     }
 
     case Team::kSecond: {
-      std::lock_guard l{second_team_mtx_};
-      if (second_team_.size() >= kMaxPlayersPerTeam)
-        return {};
-      auto player_id = next_player_id_++;
-      second_team_.insert({session, std::make_unique<Player>(player_id)});
-      return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
+      {
+        std::lock_guard l{second_team_mtx_};
+        if (second_team_.size() >= kMaxPlayersPerTeam)
+          return {};
+        player_id = next_player_id_++;
+        second_team_.insert({session, std::make_unique<Player>(player_id)});
+      }
+      break;
     }
 
     case Team::kRandom:
     default: {
-      std::lock_guard l1{first_team_mtx_};
-      std::lock_guard l2{second_team_mtx_};
-      if (first_team_.size() > second_team_.size()) {
+      std::lock_guard lf{first_team_mtx_};
+      if (std::lock_guard ls{second_team_mtx_}; first_team_.size() >= second_team_.size()) {
         if (second_team_.size() >= kMaxPlayersPerTeam)
           return {};
-        auto player_id = next_player_id_++;
+        player_id = next_player_id_++;
         second_team_.insert({session, std::make_unique<Player>(player_id)});
-        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
-      } else { // Either the second is bigger or they have the same size.
-        if (first_team_.size() >= kMaxPlayersPerTeam)
-          return {};
-        auto player_id = next_player_id_++;
-        first_team_.insert({session, std::make_unique<Player>(player_id)});
-        return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
+        break;
       }
+      // The second team is bigger than the first.
+      if (first_team_.size() >= kMaxPlayersPerTeam)
+        return {};
+      player_id = next_player_id_++;
+      first_team_.insert({session, std::make_unique<Player>(player_id)});
     }
   }  // switch
+  return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
 }
 
 bool Game::Leave(WebSocketSession* session) noexcept {
@@ -136,10 +140,12 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
 }
 
 PackageParser::JSON Game::GetCurrentState() const noexcept {
-  PackageParser::JSON state{
-    {"players", decltype(state)::array()},
-    {"rays", decltype(state)::array()},
-  };
+  auto state = []{
+    PackageParser::JSON ret = PackageParser::JSON::object();
+    ret["players"] = PackageParser::JSON::array();
+    ret["rays"] = PackageParser::JSON::array();
+    return ret;
+  }();
 
   {
     std::lock_guard l{rays_mtx_};
@@ -148,15 +154,13 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
   }
 
   {
-    // We don't need to lock the mutex, because it's already locked by the
-    // callee.
+    std::lock_guard l{first_team_mtx_};
     for (auto& [_, player_ptr] : first_team_)
       state["players"].push_back(player_ptr->ToJson());
   }
 
   {
-    // We don't need to lock the mutex, because it's already locked by the
-    // callee.
+    std::lock_guard l{second_team_mtx_};
     for (auto& [_, player_ptr] : second_team_)
       state["players"].push_back(player_ptr->ToJson());
   }
