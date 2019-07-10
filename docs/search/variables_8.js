@@ -5,5 +5,6 @@ var searchData=
   ['instance_5f',['instance_',['../d4/d1d/classfusion__server_1_1Server.html#ae98570e80cb8129494af694a820cafef',1,'fusion_server::Server']]],
   ['intercept_5f',['intercept_',['../df/dcd/classfusion__server_1_1Ray.html#acdf456df0fa913e0064d6fb6d1012e55',1,'fusion_server::Ray']]],
   ['ioc_5f',['ioc_',['../d6/d23/classfusion__server_1_1Listener.html#a09fb1facba8c40846cffe48a3fbd4c6b',1,'fusion_server::Listener::ioc_()'],['../d4/d1d/classfusion__server_1_1Server.html#a69baf9c5e1f4ca98198fbc5b5bf7d44c',1,'fusion_server::Server::ioc_()']]],
-  ['is_5ffiring_5f',['is_firing_',['../d5/d95/classfusion__server_1_1Player.html#aec75a397c90a3c0adafcd8e4016e6f45',1,'fusion_server::Player']]]
+  ['is_5ffiring_5f',['is_firing_',['../d5/d95/classfusion__server_1_1Player.html#aec75a397c90a3c0adafcd8e4016e6f45',1,'fusion_server::Player']]],
+  ['is_5fopen_5f',['is_open_',['../d6/d23/classfusion__server_1_1Listener.html#a6a5404c1738be36c6ab708b586bcb755',1,'fusion_server::Listener']]]
 ];

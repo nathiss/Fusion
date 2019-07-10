@@ -107,6 +107,10 @@ class Listener : public std::enable_shared_from_this<Listener> {
   /**
    * This method starts the asynchronous accepting loop on the specified
    * endpoint.
+   *
+   * @note
+   *   If the acceptor binding has not been successful (@ref is_open_ is set to
+   *   false), this method does nothing.
    */
   void Run() noexcept;
 
@@ -140,6 +144,12 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * This is the local endpoint on which new connections will be accepted.
    */
   boost::asio::ip::tcp::endpoint endpoint_;
+
+  /**
+   * This is an indication whether or not this listener has been properly bind
+   * to the endpoint.
+   */
+  bool is_open_;
 
 };
 

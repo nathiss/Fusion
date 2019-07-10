@@ -15,6 +15,16 @@ namespace fusion_server {
 class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
  public:
   /**
+   * This is the type of a HTTP request used in this class.
+   */
+  using Request_t = boost::beast::http::request<boost::beast::http::string_body>;
+
+  /**
+   * This is the type of a HTTP response used in this class.
+   */
+  using Response_t = boost::beast::http::response<boost::beast::http::string_body>;
+
+  /**
    * @brief Explicitly deleted copy constructor.
    * It's deleted due to presence of boost::asio's socket.
    *
@@ -127,6 +137,36 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   void HandleWrite(const boost::system::error_code& ec, std::size_t bytes_transmitted, bool close) noexcept;
 
  private:
+  /**
+   * This method calls asynchronous writing to the client.
+   *
+   * @param[in] response
+   *   A HTTP response to be sent.
+   *
+   * @note
+   *   This method has to take the ownership of the response object.
+   */
+  void PerformAsyncWrite(Response_t response) noexcept;
+
+  /**
+   * @brief Constructs a response to the stored request.
+   * This method returns a HTTP response to the stored HTTP request.
+   *
+   * @return
+   *   A HTTP response to the stored request.
+   */
+  Response_t MakeResponse() const noexcept;
+
+  /**
+   * @brief Constructs a "Bad Request" (400) response.
+   * This method returns a HTTP response with the status code set to 400.
+   *
+   * @return
+   *   A HTTP "Bad Request" (400) response.
+   *
+   * @see [[RFC 2616] 10.4.1 400 Bad Request](https://tools.ietf.org/html/rfc2616#section-10.4.1)
+   */
+  Response_t MakeBadRequest() const noexcept;
 
   /**
    * This is the socket connected to the client.

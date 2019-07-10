@@ -58,11 +58,40 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
 #ifdef DEBUG
   std::cout << "[HTTPSession: " << this << "] Read " << bytes_transmitted << " bytes." << std::endl;
 #endif
-  if (ec == boost::beast::http::error::end_of_stream) {
-    // The client closed the connection.
+  if (ec == boost::beast::http::error::end_of_stream ||
+    ec == boost::beast::http::error::partial_message) {
+    // The client closed the connection. We either read none or read incomplete
+    // message. We don't care about both.
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     return;
   }
+  if (ec == boost::beast::http::error::buffer_overflow ||
+    ec == boost::beast::http::error::header_limit ||
+    ec == boost::beast::http::error::body_limit) {
+    // This means a HTTP content would exceed the maximum size of the buffer.
+    // This should never happened in normal use, so we close the connection.
+    std::cerr << "[HTTPSession: " << this << "] message from " << socket_.remote_endpoint()
+      << " is too large. Closing the connection." << std::endl;
+    socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+    return;
+  }
+
+  if (ec == boost::beast::http::error::bad_line_ending ||
+    ec == boost::beast::http::error::bad_method ||
+    ec == boost::beast::http::error::bad_target ||
+    ec == boost::beast::http::error::bad_version ||
+    ec == boost::beast::http::error::bad_status ||
+    ec == boost::beast::http::error::bad_reason ||
+    ec == boost::beast::http::error::bad_field ||
+    ec == boost::beast::http::error::bad_value ||
+    ec == boost::beast::http::error::bad_content_length ||
+    ec == boost::beast::http::error::bad_transfer_encoding ||
+    ec == boost::beast::http::error::bad_chunk ||
+    ec == boost::beast::http::error::bad_chunk_extension ||
+    ec == boost::beast::http::error::bad_obs_fold) {
+    // This means the request is ill-formed.
+    PerformAsyncWrite(MakeBadRequest());
+    }
 
   if (ec) {
     std::cerr << "HTTPSession::HandleRead: " << ec.message() << std::endl;
@@ -79,30 +108,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
 
-  auto response = [&req_ = request_]{
-    namespace http =  boost::beast::http;
-    http::response<http::string_body> res{
-      req_.target() == "/" ? http::status::ok : http::status::not_found,
-      req_.version()
-    };
-    res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
-    res.set(http::field::content_type, "text/plain; charset=utf-8");
-    res.keep_alive(req_.keep_alive());
-    res.body() = "FeelsBadMan\r\n";
-    res.prepare_payload();
-    return std::make_shared<decltype(res)>(std::move(res));
-  }();
-
-  boost::beast::http::async_write(
-    socket_,
-    *response,
-    [self = shared_from_this(), response](
-      const boost::system::error_code& ec,
-      std::size_t bytes_transmitted
-    ) {
-      self->HandleWrite(ec, bytes_transmitted, response->need_eof());
-    }
-  );
+  PerformAsyncWrite(MakeResponse());
 }
 
 void HTTPSession::HandleWrite(const boost::system::error_code& ec,
@@ -135,6 +141,47 @@ void HTTPSession::HandleWrite(const boost::system::error_code& ec,
       self->HandleRead(ec, bytes_transmitted);
     }
   );
+}
+
+void HTTPSession::PerformAsyncWrite(Response_t response) noexcept {
+  auto response_ptr = std::make_shared<decltype(response)>(std::move(response));
+
+  boost::beast::http::async_write(
+    socket_,
+    *response_ptr,
+    [self = shared_from_this(), response_ptr](
+      const boost::system::error_code& ec,
+      std::size_t bytes_transmitted
+    ) {
+      self->HandleWrite(ec, bytes_transmitted, response_ptr->need_eof());
+    }
+  );
+}
+
+auto HTTPSession::MakeResponse() const noexcept -> Response_t {
+  Response_t res{
+    request_.target() == "/" ? boost::beast::http::status::ok :
+    boost::beast::http::status::not_found, request_.version()
+  };
+  res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+  res.set(boost::beast::http::field::content_type, "text/plain; charset=utf-8");
+  res.keep_alive(request_.keep_alive());
+  res.body() = "FeelsBadMan\r\n";
+  res.prepare_payload();
+  return res;
+}
+
+auto HTTPSession::MakeBadRequest() const noexcept -> Response_t {
+  Response_t res{
+    boost::beast::http::status::bad_request,
+    request_.version()
+  };
+  res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
+  res.set(boost::beast::http::field::content_type, "text/html; charset=utf-8");
+  res.keep_alive(request_.keep_alive());
+  res.body() = "<html><body><h1>400 Bad Request</h1></body></html>";
+  res.prepare_payload();
+  return res;
 }
 
 }  // namespace fusion_server
