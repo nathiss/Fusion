@@ -81,9 +81,12 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec,
 
   auto response = [&req_ = request_]{
     namespace http =  boost::beast::http;
-    http::response<http::string_body> res{http::status::ok, req_.version()};
-    res.set(http::field::server, "server_name"); // TODO: set the real server name
-    res.set(http::field::content_type, "text/plain");
+    http::response<http::string_body> res{
+      req_.target() == "/" ? http::status::ok : http::status::not_found,
+      req_.version()
+    };
+    res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+    res.set(http::field::content_type, "text/plain; charset=utf-8");
     res.keep_alive(req_.keep_alive());
     res.body() = "FeelsBadMan\r\n";
     res.prepare_payload();
