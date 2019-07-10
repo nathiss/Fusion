@@ -20,4 +20,6 @@ set(Sources
 
 add_executable(${This} ${Sources} ${Headers})
 
-target_link_libraries(${This} FusionServerLib)
+target_link_libraries(${This}
+  PRIVATE FusionServerLib
+)
