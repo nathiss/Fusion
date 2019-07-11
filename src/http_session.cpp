@@ -1,8 +1,5 @@
 #include <cstdlib>
 
-#ifdef DEBUG
-#include <iostream>
-#endif
 #include <memory>
 #include <utility>
 

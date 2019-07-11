@@ -1,8 +1,5 @@
 #include <cstdlib>
 
-#ifdef DEBUG
-#include <iostream>
-#endif
 #include <memory>
 #include <mutex>
 #include <string>
@@ -11,6 +8,7 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
+#include <fusion_server/logger_types.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
 

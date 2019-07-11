@@ -1,6 +1,7 @@
+#include <cstring>
+
 #include <chrono>
 #include <functional>
-#include <iostream>
 #include <memory>
 #include <thread>
 #include <vector>
@@ -19,7 +20,7 @@ void HandleSignal(boost::asio::io_context& ioc,
       ec.message());
   }
   spdlog::get("server")->warn("Received a signal ({}). Stoping the io_context.",
-    signal);
+    strsignal(signal));
   ioc.stop();
 }
 
@@ -149,7 +150,7 @@ int main() {
   spdlog::get("server")->info("No more tasks. Waiting for threads to join.");
 
   for (auto& worker : workers) {
-    auto id = worker.get_id();
+    auto id = worker.native_handle();
     worker.join();
     spdlog::get("server")->info("Worker {} has joined.", id);
   }

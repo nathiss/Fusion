@@ -1,3 +1,4 @@
+#include <fusion_server/logger_types.hpp>
 #include <fusion_server/game.hpp>
 #include <fusion_server/package_parser.hpp>
 #include <fusion_server/server.hpp>
@@ -53,6 +54,7 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
         if (second_team_.size() >= kMaxPlayersPerTeam)
           return {};
         player_id = next_player_id_++;
+        team = Team::kSecond;
         second_team_.insert({session, std::make_unique<Player>(player_id)});
         break;
       }
@@ -60,12 +62,17 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       if (first_team_.size() >= kMaxPlayersPerTeam)
         return {};
       player_id = next_player_id_++;
+      team = Team::kFirst;
       first_team_.insert({session, std::make_unique<Player>(player_id)});
     }
   }  // switch
 
   logger_->debug("{} joined the game.", session->GetRemoteEndpoint());
 
+  {
+    std::lock_guard l{players_cache_mtx_};
+    players_cache_[session] = team;
+  }
   return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
 }
 

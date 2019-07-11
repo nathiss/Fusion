@@ -1,10 +1,8 @@
-#ifdef DEBUG
-#include <iostream>
-#endif
 #include <string_view>
 #include <tuple>
 #include <utility>
 
+#include <fusion_server/logger_types.hpp>
 #include <fusion_server/package_parser.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>

@@ -1,8 +1,5 @@
 #include <cstdint>
 
-#ifdef DEBUG
-#include <iostream>
-#endif
 #include <memory>
 #include <string_view>
 #include <utility>
