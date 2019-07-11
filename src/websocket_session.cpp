@@ -34,8 +34,7 @@ void WebSocketSession::Write(Package package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
 
   if (in_closing_procedure_) {
-    logger_->warn("Trying to write to {} while in closing procedue. Aborting the task",
-      GetRemoteEndpoint());
+    logger_->warn("Trying to write to {} while in closing procedue.", GetRemoteEndpoint());
     // We're not allowed to queued any package, when the closing procedure has
     // started.
     return;
@@ -49,8 +48,7 @@ void WebSocketSession::Write(Package package) noexcept {
   }
 
   if (!handshake_complete_) {
-    logger_->warn("Trying to write to {} before handshake was complete. Aborting the task",
-      GetRemoteEndpoint());
+    logger_->warn("Trying to write to {} before handshake was complete.", GetRemoteEndpoint());
     // We need to wait for the handshake to complete.
     return;
   }
@@ -130,7 +128,7 @@ void WebSocketSession::Close(Package package) noexcept {
   boost::system::error_code ec;
   websocket_.write(boost::asio::buffer(*package), ec);
   if (ec) {
-    logger_->warn("An error occured during sync writing the closing message. [Boost:{}]",
+    logger_->error("An error occured during sync writing the closing message. [Boost:{}]",
       ec.message());
   }
   Close();
@@ -156,7 +154,7 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
   logger_->debug("Handshake to {} completed.", GetRemoteEndpoint());
 
   if (std::lock_guard l{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
-    logger_->debug("Sending a message queued before handshake complition.");
+    logger_->debug("Sending a message queued before handshake completion.");
     websocket_.async_write(
       boost::asio::buffer(*outgoing_queue_.front()),
       boost::asio::bind_executor(
@@ -261,7 +259,7 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
   if (in_closing_procedure_) {
     // We're in closing procedure. The next package is the last one to be sent.
     // After writing we close the session.
-    logger_->debug("[ClosingProcedure] Sync writing closing package to {}.",
+    logger_->debug("[ClosingProcedure] Sync writing the closing package to {}.",
       GetRemoteEndpoint());
 
     if (!outgoing_queue_.empty()) {

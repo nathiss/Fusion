@@ -76,15 +76,20 @@ class Server {
   void Unregister(WebSocketSession* session) noexcept;
 
   /**
-   * This method binds the listener to the interface taken from the
-   * configuration file and runs the accepting loop.
+   * This method creates a Listener object and calls Run() on it. It returns an
+   * indication whether or not the opening of the acceptor was successful.
+   *
+   * @return
+   *   An indication whether or not the opening of the acceptor was successful
+   *   is returned.
    *
    * @note
    *   This method is indended to be called only once.
    *   If it is called more than once the behaviour is undefined.
    *
+   * @see [class Listener](@ref Listener)
    */
-  void StartAccepting() noexcept;
+  bool StartAccepting() noexcept;
 
  private:
   /**

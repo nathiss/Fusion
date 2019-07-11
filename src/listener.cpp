@@ -39,10 +39,10 @@ Listener::Listener(boost::asio::io_context& ioc, std::uint16_t port_number) noex
 
 Listener::~Listener() noexcept = default;
 
-void Listener::Run() noexcept {
+bool Listener::Run() noexcept {
   if (!is_open_) {
     logger_->critical("The listener is not ready to listen.");
-    return;
+    return false;
   }
 
   logger_->info("Starting asynchronous accepting on {}.", endpoint_);
@@ -52,6 +52,8 @@ void Listener::Run() noexcept {
       self->HandleAccept(ec);
     }
   );
+
+  return true;
 }
 
 void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
@@ -71,7 +73,7 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
   if (ec) {
     logger_->error("An error occured during handling a new connection. [Boost:{}]",
       ec.message());
-    // TODO: find out if any error can cause the listener to stop working.
+    // TODO: find out if any other error can cause the listener to stop working.
   }
   else {
     logger_->debug("Accepted a new connection from {}.", socket_.remote_endpoint());
@@ -91,15 +93,13 @@ void Listener::OpenAcceptor() noexcept {
 
   acceptor_.open(endpoint_.protocol(), ec);
   if (ec) {
-    logger_->error("An error occured during opening the acceptor. [Boost:{}]",
-      ec.message());
+    logger_->error("Open: {}", ec.message());
     return;
   }
 
   acceptor_.set_option(boost::asio::socket_base::reuse_address(true), ec);
   if (ec) {
-    logger_->error("An error occured during setting an option. [Boost:{}]",
-      ec.message());
+    logger_->error("Set option (reuse address): {}", ec.message());
     return;
   }
 
@@ -117,20 +117,18 @@ void Listener::OpenAcceptor() noexcept {
     return;
   }
   if (ec) {
-    logger_->error("An error occured during biding the acceptor. [Boost:{}]",
-      ec.message());
+    logger_->error("Bind: {}", ec.message());
     return;
   }
 
   acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
   if (ec) {
-    logger_->error("An error occured during listening on the acceptor. [Boost:{}]",
-      ec.message());
+    logger_->error("Listen: {}", ec.message());
     return;
   }
 
   is_open_ = true;
-  logger_->info("Acceptor is successfully bind to {}.", endpoint_);
+  logger_->info("Acceptor is bind to {}.", endpoint_);
 }
 
 }  // namespace fusio_server

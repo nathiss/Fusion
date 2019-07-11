@@ -107,13 +107,20 @@ class Listener : public std::enable_shared_from_this<Listener> {
 
   /**
    * This method starts the asynchronous accepting loop on the specified
-   * endpoint.
+   * endpoint. It returns an indication whether or not the operation was
+   * successful.
+   *
+   * @return true
+   *   Started the asynchronous accepting loop.
+   *
+   * @return false
+   *   A critical error occured. Operation has failed.
    *
    * @note
    *   If the acceptor binding has not been successful (@ref is_open_ is set to
-   *   false), this method does nothing.
+   *   false), this method returns false.
    */
-  void Run() noexcept;
+  bool Run() noexcept;
 
   /**
    * This is the callback to asynchronous accept of a new connection.

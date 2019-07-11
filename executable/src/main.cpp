@@ -121,7 +121,9 @@ int main() {
   InitLogger();
 
   auto& server = fusion_server::Server::GetInstance();
-  server.StartAccepting();
+  if (!server.StartAccepting()) {
+    return EXIT_FAILURE;
+  }
 
   auto& ioc = server.GetIOContext();
 

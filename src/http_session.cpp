@@ -38,14 +38,13 @@ void HTTPSession::Run() noexcept {
 
 void HTTPSession::Close() noexcept {
   auto endpoint = socket_.remote_endpoint();
-  logger_->info("Closing connection from {}.", endpoint);
+  logger_->debug("Closing connection to {}.", endpoint);
 
   boost::system::error_code ec;
   socket_.close(ec);
 
   if (ec)
-    logger_->warn("An error occured during closing the connection from {}",
-      endpoint);
+    logger_->warn("An error occured during closing the connection to {}", endpoint);
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Set on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
@@ -62,13 +61,12 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
   if (ec == boost::beast::http::error::end_of_stream ||
     ec == boost::beast::http::error::partial_message) {
     // Either client closed the connection or the connection timed out.
-    logger_->debug("Connection from {} has been closed.",
-      socket_.remote_endpoint());
+    logger_->debug("Connection from {} has been closed.", socket_.remote_endpoint());
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_send);
     return;
   }
   if (IsTooLargeRequestError(ec)) {
-    logger_->warn("A message from {} is too large. Closing the connection. [Size: {}]",
+    logger_->warn("A request from {} is too large. Closing the connection. [Size: {}]",
       socket_.remote_endpoint(), bytes_transmitted);
     socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
     return;

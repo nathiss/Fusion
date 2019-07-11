@@ -25,24 +25,22 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
   return ioc_;
 }
 
-auto Server::Register(WebSocketSession* new_session) noexcept
+auto Server::Register(WebSocketSession* session) noexcept
     -> system_abstractions::IncommingPackageDelegate& {
     unidentified_sessions_mtx_.lock();
-    auto [it, took_place] = unidentified_sessions_.insert(new_session);
+    auto [it, took_place] = unidentified_sessions_.insert(session);
     unidentified_sessions_mtx_.unlock();
 
   if (!took_place) {
-    logger_->warn("Second registration of a session {}.",
-    new_session->GetRemoteEndpoint());
+    logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
     return unjoined_delegate_;
   }
 
   sessions_correlation_mtx_.lock();
-  sessions_correlation_[new_session] = {};
+  sessions_correlation_[session] = {};
   sessions_correlation_mtx_.unlock();
 
-  logger_->info("New WebSocket session registered {}.",
-    new_session->GetRemoteEndpoint());
+  logger_->debug("New WebSocket session registered {}.", session->GetRemoteEndpoint());
 
   return unjoined_delegate_;
 }
@@ -56,18 +54,16 @@ void Server::Unregister(WebSocketSession* session) noexcept {
     sessions_correlation_mtx_.unlock();
 
     if (!game_name) {
-      logger_->info("Unregistering session {}.",
-        session->GetRemoteEndpoint());
+      logger_->debug("Unregistering session {}.", session->GetRemoteEndpoint());
       std::lock_guard l{unidentified_sessions_mtx_};
       unidentified_sessions_.erase(session);
     } else {
-      logger_->info("Removing session {} from game {}.",
-        session->GetRemoteEndpoint(), game_name.value());
+      logger_->debug("Removing session {} from game {}.", session->GetRemoteEndpoint(), game_name.value());
       std::lock_guard l{games_mtx_};
       auto& game = games_[game_name.value()];
       game.Leave(session);
       if (game.GetPlayersCount() == 0) {
-        logger_->info("Game {} has no players. Removing.", game_name.value());
+        logger_->debug("Game {} has no players. Removing.", game_name.value());
           games_.erase(game_name.value());
       }
       return;
@@ -78,10 +74,11 @@ void Server::Unregister(WebSocketSession* session) noexcept {
     session->GetRemoteEndpoint());
 }
 
-void Server::StartAccepting() noexcept {
-  logger_->info("Creating Listener object.");
+bool Server::StartAccepting() noexcept {
+  logger_->info("Creating a Listener object.");
+
   // TODO: read the local endpoint from a config file.
-  std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
+  return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
 }
 
 Server::Server() noexcept {
