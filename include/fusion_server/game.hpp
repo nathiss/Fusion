@@ -28,7 +28,7 @@ namespace fusion_server {
 class WebSocketSession;
 
 /**
- * This class represents a game. It creates a common context for at least two
+ * This class represents a game. It creates a common context for all joined
  * clients.
  */
 class Game {

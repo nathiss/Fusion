@@ -38,7 +38,6 @@ Listener::~Listener() noexcept = default;
 
 bool Listener::Run() noexcept {
   if (!is_open_) {
-    logger_->critical("The listener is not ready to listen.");
     return false;
   }
 
@@ -63,7 +62,7 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
 
   if (ec == boost::asio::error::no_recovery) {
     // Unidentified no recovery error occured.
-    logger_->critical("A non-recoverable error occured during handling a new connection. [Boost:{}]",
+    logger_->error("A non-recoverable error occured during handling a new connection. [Boost:{}]",
       ec.message());
     return;
   }
@@ -103,13 +102,13 @@ void Listener::OpenAcceptor() noexcept {
   acceptor_.bind(endpoint_, ec);
   if (ec == boost::asio::error::access_denied) {
     // This means we don't have permision to bind acceptor to the this endpoint.
-    logger_->critical("Cannot bind acceptor to {} (permition denied).",
+    logger_->error("Cannot bind acceptor to {} (permition denied).",
       endpoint_);
     return;
   }
   if (ec == boost::asio::error::address_in_use) {
     // This means the endpoint is already is use.
-    logger_->critical("Cannot bind acceptor to {} (address in use).",
+    logger_->error("Cannot bind acceptor to {} (address in use).",
       endpoint_);
     return;
   }
