@@ -8,6 +8,7 @@ using fusion_server::system_abstractions::Package;
 namespace fusion_server {
 
 Game::Game() noexcept {
+  logger_ = spdlog::get("game");
   delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
     DoResponse(src, package);
   };
@@ -15,14 +16,13 @@ Game::Game() noexcept {
 
 auto Game::Join(WebSocketSession *session, Team team) noexcept
     -> join_result_t {
-#ifdef DEBUG
-  std::cout << "[Game: " << this << "] Joining: " << session << std::endl;
-#endif
   if (IsInGame(session)) {
-    return {}; // This should never happen.
+    logger_->warn("Tryig to join already joined session. ({})",
+      session->GetRemoteEndpoint());
+    return {};
   }
-  std::size_t player_id;
 
+  std::size_t player_id;
   switch (team) {
     case Team::kFirst: {
       {
@@ -63,18 +63,20 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
       first_team_.insert({session, std::make_unique<Player>(player_id)});
     }
   }  // switch
+
+  logger_->debug("{} joined the game.", session->GetRemoteEndpoint());
+
   return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
 }
 
 bool Game::Leave(WebSocketSession* session) noexcept {
-#ifdef DEBUG
-  std::cout << "[Game: " << this << "] Leaving: " << session << std::endl;
-#endif
   Team team_id{Team::kRandom};
 
   if (std::lock_guard l{players_cache_mtx_}; players_cache_.count(session) != 0) {
     team_id = players_cache_[session];
     players_cache_.erase(session);
+  } else{
+    logger_->warn("The given session doesn't exist in the cache. Searching in both teams.");
   }
 
   if (team_id == Team::kFirst || team_id == Team::kRandom) {
@@ -99,9 +101,6 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 }
 
 void Game::BroadcastPackage(Package package) noexcept {
-#ifdef DEBUG
-  std::cout << "[Game: " << this << "] Broadcasting: " << *package << std::endl;
-#endif
   {
     std::lock_guard l{first_team_mtx_};
     for (auto& pair : first_team_)
@@ -207,21 +206,20 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
 
   if (request["type"] == "leave") {
     if(!Leave(session)) {
-      // This means we're analysing a package from a client who hasn't joined
-      // to this game. This should never happened.
-      std::cerr << "[Game::DoResponse]: Player " << session << " is not in this"
-      " game, but received its package." << std::endl;
+      logger_->warn("Trying to remove an unjoined session ({}).",
+        session->GetRemoteEndpoint());
       session->Close();
       return;
+    } else {
+      logger_->debug("Session {} left the game.", session->GetRemoteEndpoint());
     }
-    // We need to update the other client's state.
-    BroadcastPackage(system_abstractions::make_Package(
-      GetCurrentState().dump()
-    ));
+
+    // TODO: broadcast the leaving
     session->delegate_ = Server::GetInstance().Register(session);
   }
 
-  // If we're here it means we've received an unidentified package.
+  logger_->warn("Received an unidentified package from {}. [type={}]",
+    session->GetRemoteEndpoint(), request["type"].dump());
   session->Write(system_abstractions::make_Package(make_unidentified()));
 }
 

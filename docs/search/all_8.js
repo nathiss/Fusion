@@ -7,5 +7,7 @@ var searchData=
   ['ioc_5f',['ioc_',['../d6/d23/classfusion__server_1_1Listener.html#a09fb1facba8c40846cffe48a3fbd4c6b',1,'fusion_server::Listener::ioc_()'],['../d4/d1d/classfusion__server_1_1Server.html#a69baf9c5e1f4ca98198fbc5b5bf7d44c',1,'fusion_server::Server::ioc_()']]],
   ['is_5ffiring_5f',['is_firing_',['../d5/d95/classfusion__server_1_1Player.html#aec75a397c90a3c0adafcd8e4016e6f45',1,'fusion_server::Player']]],
   ['is_5fopen_5f',['is_open_',['../d6/d23/classfusion__server_1_1Listener.html#a6a5404c1738be36c6ab708b586bcb755',1,'fusion_server::Listener']]],
-  ['isingame',['IsInGame',['../dd/d01/classfusion__server_1_1Game.html#a8a7d0c001bc793904fb0ecc629b9c657',1,'fusion_server::Game']]]
+  ['isbadrequesterror',['IsBadRequestError',['../df/d9c/classfusion__server_1_1HTTPSession.html#a9a6ac7cd5351bd0d4b8e0af1a9991a7c',1,'fusion_server::HTTPSession']]],
+  ['isingame',['IsInGame',['../dd/d01/classfusion__server_1_1Game.html#a8a7d0c001bc793904fb0ecc629b9c657',1,'fusion_server::Game']]],
+  ['istoolargerequesterror',['IsTooLargeRequestError',['../df/d9c/classfusion__server_1_1HTTPSession.html#a2d47ec395be5b8ddbcfd33637b8dbca6',1,'fusion_server::HTTPSession']]]
 ];

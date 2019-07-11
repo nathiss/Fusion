@@ -15,6 +15,7 @@ std::unique_ptr<Server> Server::instance_ = nullptr;
 
 Server& Server::GetInstance() noexcept {
   if (instance_ == nullptr) {
+    spdlog::get("server")->info("Creating a new server instance.");
     instance_.reset(new Server);
   }
   return *instance_;
@@ -26,62 +27,68 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 
 auto Server::Register(WebSocketSession* new_session) noexcept
     -> system_abstractions::IncommingPackageDelegate& {
-  std::lock_guard l{unidentified_sessions_mtx_};
-  auto [it, took_place] = unidentified_sessions_.insert(new_session);
-#ifdef DEBUG
-  std::cout << "[Server: " << this << "] New session registered: " << new_session << std::endl;
-#endif
+    unidentified_sessions_mtx_.lock();
+    auto [it, took_place] = unidentified_sessions_.insert(new_session);
+    unidentified_sessions_mtx_.unlock();
 
   if (!took_place) {
-    std::cerr << "Server::Register: the session " << new_session
-    << " has already been registered." << std::endl;
-  } else {
-    std::lock_guard l{sessions_correlation_mtx_};
-    sessions_correlation_[new_session] = {};
+    logger_->warn("Second registration of a session {}.",
+    new_session->GetRemoteEndpoint());
+    return unjoined_delegate_;
   }
+
+  sessions_correlation_mtx_.lock();
+  sessions_correlation_[new_session] = {};
+  sessions_correlation_mtx_.unlock();
+
+  logger_->info("New WebSocket session registered {}.",
+    new_session->GetRemoteEndpoint());
 
   return unjoined_delegate_;
 }
 
 void Server::Unregister(WebSocketSession* session) noexcept {
-  decltype(sessions_correlation_)::value_type::second_type game_name{};
-  {
-    std::lock_guard l{sessions_correlation_mtx_};
-    game_name = sessions_correlation_[session];
-    sessions_correlation_.erase(session);
-  }
+  // If the game is registered it's in sessions_correlation_ set.
+  sessions_correlation_mtx_.lock();
+  if (auto it = sessions_correlation_.find(session); it != sessions_correlation_.end()) {
+    auto game_name = it->second;
+    sessions_correlation_.erase(it);
+    sessions_correlation_mtx_.unlock();
 
-  if (!game_name) {
-#ifdef DEBUG
-  std::cout << "[Server: " << this << "] Removing session: " << session << std::endl;
-#endif
-    std::lock_guard l{unidentified_sessions_mtx_};
-    unidentified_sessions_.erase(session);
-    return;
+    if (!game_name) {
+      logger_->info("Unregistering session {}.",
+        session->GetRemoteEndpoint());
+      std::lock_guard l{unidentified_sessions_mtx_};
+      unidentified_sessions_.erase(session);
+    } else {
+      logger_->info("Removing session {} from game {}.",
+        session->GetRemoteEndpoint(), game_name.value());
+      std::lock_guard l{games_mtx_};
+      auto& game = games_[game_name.value()];
+      game.Leave(session);
+      if (game.GetPlayersCount() == 0) {
+        logger_->info("Game {} has no players. Removing.", game_name.value());
+          games_.erase(game_name.value());
+      }
+      return;
+    }
   }
-
-  std::lock_guard l{games_mtx_};
-  auto& game = games_[game_name.value()];
-  game.Leave(session);
-  if (game.GetPlayersCount() == 0) {
-#ifdef DEBUG
-    std::cout << "[Server: " << this << "] Game " << &game << " has no more playes. Removing." << std::endl;
-#endif
-    games_.erase(game_name.value());
-  }
+  sessions_correlation_mtx_.unlock();
+  logger_->warn("Trying to unregister session which is not registered. [{}]",
+    session->GetRemoteEndpoint());
 }
 
 void Server::StartAccepting() noexcept {
+  logger_->info("Creating Listener object.");
   // TODO: read the local endpoint from a config file.
-  std::make_shared<Listener>(ioc_, "127.0.0.1", 80)->Run();
+  std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
 }
 
 Server::Server() noexcept {
-  unjoined_delegate_ = [this](
-    const PackageParser::JSON& package, WebSocketSession* src) {
-#ifdef DEBUG
-    std::cout << "[Server " << this << "] A new package from " << src << std::endl;
-#endif
+  logger_ = spdlog::get("server");
+
+  unjoined_delegate_ = [this](const PackageParser::JSON& package, WebSocketSession* src) {
+    logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
     auto response = MakeResponse(src, package);
     src->Write(system_abstractions::make_Package(response.dump()));
   };
@@ -141,6 +148,8 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
   }  // "join"
 
   // If we're here it means we've received an unidentified package.
+  logger_->warn("Received an unidentified package from {}. [type={}]",
+    src->GetRemoteEndpoint(), request["type"].dump());
   return std::make_pair(false, make_unidentified());
 }
 

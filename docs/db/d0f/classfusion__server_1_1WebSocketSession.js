@@ -6,6 +6,7 @@ var classfusion__server_1_1WebSocketSession =
     [ "~WebSocketSession", "db/d0f/classfusion__server_1_1WebSocketSession.html#a256ea8b094151c16b3a7e6fbb68e7495", null ],
     [ "Close", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa16b5415857b855f201d871b2daba5fa", null ],
     [ "Close", "db/d0f/classfusion__server_1_1WebSocketSession.html#ae54960abe27cc2b4c7e5cf107915ebb3", null ],
+    [ "GetRemoteEndpoint", "db/d0f/classfusion__server_1_1WebSocketSession.html#af4e6e20ecb13dff3237fa0f0bf32f53f", null ],
     [ "HandleHandshake", "db/d0f/classfusion__server_1_1WebSocketSession.html#af78337a22f85bef4f49c31a412deaefd", null ],
     [ "HandleRead", "db/d0f/classfusion__server_1_1WebSocketSession.html#a77ae7b57464e7f31d9b7a3257e15867e", null ],
     [ "HandleWrite", "db/d0f/classfusion__server_1_1WebSocketSession.html#afb2eda707b5672090893bcd6562d870b", null ],
@@ -18,9 +19,11 @@ var classfusion__server_1_1WebSocketSession =
     [ "delegate_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a5ff7ae315d10a98df793bf99d41af68a", null ],
     [ "handshake_complete_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a749f83ec225befb23be6b2afb6569dc4", null ],
     [ "in_closing_procedure_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a89d9efbd0a8df7f8638f02170f883f4d", null ],
+    [ "logger_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a49f1154e3dd4506fa819074631e5cbc7", null ],
     [ "outgoing_queue_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a84a0f94db552650cb621b358cc87a52d", null ],
     [ "outgoing_queue_mtx_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aee639aad52ed0bcf377ba26aeafbb60b", null ],
     [ "package_verifier_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a8e6be47039c711b7cc2db566ee870e95", null ],
+    [ "remote_endpoint_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa7e95999bf1fd1a2584c2f43d0ddfa2a", null ],
     [ "strand_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528", null ],
     [ "websocket_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3", null ]
 ];

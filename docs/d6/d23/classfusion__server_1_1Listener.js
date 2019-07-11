@@ -15,5 +15,6 @@ var classfusion__server_1_1Listener =
     [ "endpoint_", "d6/d23/classfusion__server_1_1Listener.html#ad73254139a30cb722156b4d5a7012fa8", null ],
     [ "ioc_", "d6/d23/classfusion__server_1_1Listener.html#a09fb1facba8c40846cffe48a3fbd4c6b", null ],
     [ "is_open_", "d6/d23/classfusion__server_1_1Listener.html#a6a5404c1738be36c6ab708b586bcb755", null ],
+    [ "logger_", "d6/d23/classfusion__server_1_1Listener.html#aa693d1e25d346792d3a66f49b601230d", null ],
     [ "socket_", "d6/d23/classfusion__server_1_1Listener.html#a0b752059908ec7165a4f4776a7c9c3a4", null ]
 ];

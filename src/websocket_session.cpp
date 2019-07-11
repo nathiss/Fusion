@@ -17,8 +17,12 @@
 namespace fusion_server {
 
 WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
-    : websocket_{std::move(socket)}, strand_{websocket_.get_executor()},
-      handshake_complete_{false}, in_closing_procedure_{false} {
+    : websocket_{std::move(socket)},
+      remote_endpoint_{websocket_.next_layer().remote_endpoint()},
+      strand_{websocket_.get_executor()},
+      handshake_complete_{false},
+      in_closing_procedure_{false} {
+  logger_ = spdlog::get("websocket");
   delegate_ = Server::GetInstance().Register(this);
 }
 
@@ -30,6 +34,8 @@ void WebSocketSession::Write(Package package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
 
   if (in_closing_procedure_) {
+    logger_->warn("Trying to write to {} while in closing procedue. Aborting the task",
+      GetRemoteEndpoint());
     // We're not allowed to queued any package, when the closing procedure has
     // started.
     return;
@@ -43,6 +49,8 @@ void WebSocketSession::Write(Package package) noexcept {
   }
 
   if (!handshake_complete_) {
+    logger_->warn("Trying to write to {} before handshake was complete. Aborting the task",
+      GetRemoteEndpoint());
     // We need to wait for the handshake to complete.
     return;
   }
@@ -88,11 +96,12 @@ void WebSocketSession::Close() noexcept {
     // error.
 
   if (ec) {
-    std::cerr << "WebSocketSession::Close: " << ec.message() << std::endl;
+    logger_->warn("An error occured during closing a websocket. [Boost: {}]",
+      ec.message());
     // TODO: Find out if the comment below applies to the WebSocket connections.
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
-    // [Thrown on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
+    // [Set on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
   }
 }
 
@@ -121,10 +130,8 @@ void WebSocketSession::Close(Package package) noexcept {
   boost::system::error_code ec;
   websocket_.write(boost::asio::buffer(*package), ec);
   if (ec) {
-    std::cerr << "WebSocketSession::Close: " << ec.message() << std::endl;
-    // Since we want to close the session and an error occured we just return
-    // to destroy the object.
-    return;
+    logger_->warn("An error occured during sync writing the closing message. [Boost:{}]",
+      ec.message());
   }
   Close();
 }
@@ -133,19 +140,23 @@ WebSocketSession::operator bool() const noexcept {
   return websocket_.is_open();
 }
 
+const boost::asio::ip::tcp::socket::endpoint_type&
+WebSocketSession::GetRemoteEndpoint() const noexcept {
+  return remote_endpoint_;
+}
+
 void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noexcept {
   if (ec) {
-    std::cerr << "WebSocketSession::HandleHandshake: " << ec.message() << std::endl;
-    // We assume what the session cannot be fixed.
-    // TODO: Find out if that's true.
+    logger_->error("An error occured during handshake. Closing the session to {}. [Boost: {}]",
+      GetRemoteEndpoint(), ec.message());
     return;
   }
   handshake_complete_ = true;
-#ifdef DEBUG
-  std::cout << "[WebSocketSession: " << this << "] Handshake completed" << std::endl;
-#endif
+
+  logger_->debug("Handshake to {} completed.", GetRemoteEndpoint());
 
   if (std::lock_guard l{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
+    logger_->debug("Sending a message queued before handshake complition.");
     websocket_.async_write(
       boost::asio::buffer(*outgoing_queue_.front()),
       boost::asio::bind_executor(
@@ -176,23 +187,23 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
 
 void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
-#ifdef DEBUG
-  std::cout << "[WebSocketSession " << this << "] Read " << bytes_transmitted << " bytes" << std::endl;
-#endif
+
+  logger_->debug("Read {} bytes from {}.", bytes_transmitted, GetRemoteEndpoint());
   // TODO: find out what's that doing.
   boost::ignore_unused(buffer_);
 
   if (ec == boost::beast::websocket::error::closed) {
-    // The WebSocketSession was closed. We don't need to report that.
+    logger_->debug("The session to {} was closed.", GetRemoteEndpoint());
     return;
   }
   if (ec == boost::asio::error::operation_aborted) {
-    // The operation has been canceled due to some server's inner operation
-    // (e.g. WebSocketSession::Close() has been called).
+    logger_->debug("The read operation from {} was abroted.", GetRemoteEndpoint());
     return;
   }
+
   if (ec) {
-    std::cerr << "WebSocketSession::HandleRead: " << ec.message() << std::endl;
+    logger_->error("An error occured during reading from {}. [Boost: {}]",
+      GetRemoteEndpoint(), ec.message());
     // We assume what the session cannot be fixed.
     // TODO: Find out if that's true.
     return;
@@ -204,6 +215,8 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   auto [is_valid, msg] = package_verifier_.Verify(std::move(package));
 
   if (!is_valid) {
+    logger_->warn("A package from {} was not valid. Closing the connection.",
+      GetRemoteEndpoint());
     Close(system_abstractions::make_Package(msg.dump()));
     return;
   }
@@ -228,17 +241,17 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
 
 void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
-#ifdef DEBUG
-  std::cout << "[WebSocketSession " << this << "] Written " << bytes_transmitted << " bytes" << std::endl;
-#endif
+  logger_->debug("Written {} bytes to {}.", bytes_transmitted,
+    GetRemoteEndpoint());
+
   if (ec == boost::beast::websocket::error::closed) {
-    // The WebSocketSession was closed. We don't need to report that.
+    logger_->debug("The session to {} was closed.", GetRemoteEndpoint());
     return;
   }
+
   if (ec) {
-    std::cerr << "WebSocketSession::HandleWrite: " << ec.message() << std::endl;
-    // We assume what the session cannot be fixed.
-    // TODO: Find out if that's true.
+    logger_->error("An error occured during writing to {}. [Boost: {}]",
+      GetRemoteEndpoint(), ec.message());
     return;
   }
 
@@ -248,19 +261,21 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
   if (in_closing_procedure_) {
     // We're in closing procedure. The next package is the last one to be sent.
     // After writing we close the session.
+    logger_->debug("[ClosingProcedure] Sync writing closing package to {}.",
+      GetRemoteEndpoint());
+
     if (!outgoing_queue_.empty()) {
       boost::system::error_code ec;
       websocket_.write(boost::asio::buffer(*outgoing_queue_.front()), ec);
+
       if (ec) {
-        std::cerr << "WebSocketSession::HandleWrite: " << ec.message() << std::endl;
-        // Since we want to close the session and an error occured we just
-        // return to destroy the object.
-        return;
+        logger_->error("An error occured during writing closing package to {}. [Boost: {}]",
+          GetRemoteEndpoint(), ec.message());
       }
     }
     Close();
     return;
-  }
+  }  // in_closing_procedure_
 
   if (!outgoing_queue_.empty()) {
     websocket_.async_write(

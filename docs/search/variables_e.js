@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['second_5fteam_5f',['second_team_',['../dd/d01/classfusion__server_1_1Game.html#a1165e354b919c9b633c3f4e8e34d20e4',1,'fusion_server::Game']]],
-  ['second_5fteam_5fmtx_5f',['second_team_mtx_',['../dd/d01/classfusion__server_1_1Game.html#a15878966164006cf54053d8a8e8988d6',1,'fusion_server::Game']]],
-  ['sessions_5fcorrelation_5f',['sessions_correlation_',['../d4/d1d/classfusion__server_1_1Server.html#a5adec400761d49c49af961492e2d8fc1',1,'fusion_server::Server']]],
-  ['sessions_5fcorrelation_5fmtx_5f',['sessions_correlation_mtx_',['../d4/d1d/classfusion__server_1_1Server.html#a6ce33501f3175adf8b570be2454c12ed',1,'fusion_server::Server']]],
-  ['socket_5f',['socket_',['../df/d9c/classfusion__server_1_1HTTPSession.html#aaf1b76b472d8549254f8b76df0ebd6f2',1,'fusion_server::HTTPSession::socket_()'],['../d6/d23/classfusion__server_1_1Listener.html#a0b752059908ec7165a4f4776a7c9c3a4',1,'fusion_server::Listener::socket_()']]],
-  ['src_5f',['src_',['../df/dcd/classfusion__server_1_1Ray.html#abacf4f163c62066589980d899cd9eea7',1,'fusion_server::Ray']]],
-  ['strand_5f',['strand_',['../df/d9c/classfusion__server_1_1HTTPSession.html#aaf42f88cf627d7a1ad844e8d54d4f183',1,'fusion_server::HTTPSession::strand_()'],['../db/d0f/classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528',1,'fusion_server::WebSocketSession::strand_()']]]
+  ['r',['r',['../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9',1,'fusion_server::Color']]],
+  ['rays_5f',['rays_',['../dd/d01/classfusion__server_1_1Game.html#a75c72740bd0a85467d1ec14ae4b72a92',1,'fusion_server::Game']]],
+  ['rays_5fmtx_5f',['rays_mtx_',['../dd/d01/classfusion__server_1_1Game.html#a8f8b00ee5bd2d995f624061aeac4da88',1,'fusion_server::Game']]],
+  ['remote_5fendpoint_5f',['remote_endpoint_',['../db/d0f/classfusion__server_1_1WebSocketSession.html#aa7e95999bf1fd1a2584c2f43d0ddfa2a',1,'fusion_server::WebSocketSession']]],
+  ['request_5f',['request_',['../df/d9c/classfusion__server_1_1HTTPSession.html#a57da941414226d609d3ce66e74aba2a7',1,'fusion_server::HTTPSession']]]
 ];

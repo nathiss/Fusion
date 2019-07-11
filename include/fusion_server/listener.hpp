@@ -7,6 +7,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include <spdlog/spdlog.h>
 
 namespace fusion_server {
 
@@ -150,6 +151,12 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * to the endpoint.
    */
   bool is_open_;
+
+  /**
+   * @brief Listener's logger.
+   * This is a pointer to the logger used in Listener class.
+   */
+  std::shared_ptr<spdlog::logger> logger_;
 
 };
 

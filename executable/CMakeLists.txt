@@ -23,3 +23,5 @@ add_executable(${This} ${Sources} ${Headers})
 target_link_libraries(${This}
   PRIVATE FusionServerLib
 )
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")

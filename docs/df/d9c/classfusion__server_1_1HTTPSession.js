@@ -9,6 +9,8 @@ var classfusion__server_1_1HTTPSession =
     [ "Close", "df/d9c/classfusion__server_1_1HTTPSession.html#a5fb0e765bf5604b8e03fa048149f2481", null ],
     [ "HandleRead", "df/d9c/classfusion__server_1_1HTTPSession.html#aa813ce90624987f38b45f46708078506", null ],
     [ "HandleWrite", "df/d9c/classfusion__server_1_1HTTPSession.html#af1926ae945a8fd047a707378d6b98590", null ],
+    [ "IsBadRequestError", "df/d9c/classfusion__server_1_1HTTPSession.html#a9a6ac7cd5351bd0d4b8e0af1a9991a7c", null ],
+    [ "IsTooLargeRequestError", "df/d9c/classfusion__server_1_1HTTPSession.html#a2d47ec395be5b8ddbcfd33637b8dbca6", null ],
     [ "MakeBadRequest", "df/d9c/classfusion__server_1_1HTTPSession.html#af50a05758a4875d53f9b12d519d529e7", null ],
     [ "MakeResponse", "df/d9c/classfusion__server_1_1HTTPSession.html#a455ab53fe4ffd26a3982507d0afc1673", null ],
     [ "operator bool", "df/d9c/classfusion__server_1_1HTTPSession.html#aa28746f49768ce4cf2410f2f784959ff", null ],
@@ -17,6 +19,7 @@ var classfusion__server_1_1HTTPSession =
     [ "PerformAsyncWrite", "df/d9c/classfusion__server_1_1HTTPSession.html#a400138825d5efd4a57e276a2a5482db2", null ],
     [ "Run", "df/d9c/classfusion__server_1_1HTTPSession.html#a50809a5e273849f969f0b9537036b228", null ],
     [ "buffer_", "df/d9c/classfusion__server_1_1HTTPSession.html#ad2cd1c37b563eadd3cab16c1f0df526b", null ],
+    [ "logger_", "df/d9c/classfusion__server_1_1HTTPSession.html#ad8127806794bcb76a9a84081bae46f39", null ],
     [ "request_", "df/d9c/classfusion__server_1_1HTTPSession.html#a57da941414226d609d3ce66e74aba2a7", null ],
     [ "socket_", "df/d9c/classfusion__server_1_1HTTPSession.html#aaf1b76b472d8549254f8b76df0ebd6f2", null ],
     [ "strand_", "df/d9c/classfusion__server_1_1HTTPSession.html#aaf42f88cf627d7a1ad844e8d54d4f183", null ]

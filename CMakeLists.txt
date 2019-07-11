@@ -15,6 +15,7 @@ set(Headers
   include/fusion_server/game.hpp
   include/fusion_server/http_session.hpp
   include/fusion_server/listener.hpp
+  include/fusion_server/logger_types.hpp
   include/fusion_server/package_parser.hpp
   include/fusion_server/package_verifier.hpp
   include/fusion_server/player.hpp
@@ -56,11 +57,9 @@ target_link_libraries(${This}
   PUBLIC nlohmann_json::nlohmann_json
   PRIVATE ${Boost_LIBRARIES}
   PRIVATE Threads::Threads
-  PRIVATE spdlog::spdlog
+  PUBLIC spdlog::spdlog
 )
 target_include_directories(${This}
   PUBLIC include
   PRIVATE ${Boost_INCLUDE_DIR}
 )
-
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")

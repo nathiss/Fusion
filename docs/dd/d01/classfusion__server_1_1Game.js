@@ -20,6 +20,7 @@ var classfusion__server_1_1Game =
     [ "first_team_", "dd/d01/classfusion__server_1_1Game.html#a669196673d763a595f966ecbca1c1137", null ],
     [ "first_team_mtx_", "dd/d01/classfusion__server_1_1Game.html#a6211ee4ff796155dae7ac3ca5de1e318", null ],
     [ "kMaxPlayersPerTeam", "dd/d01/classfusion__server_1_1Game.html#a88ca16978f0803a158aa941070376e21", null ],
+    [ "logger_", "dd/d01/classfusion__server_1_1Game.html#a1fa79ebdacae378bfaa4645e661bb1de", null ],
     [ "next_player_id_", "dd/d01/classfusion__server_1_1Game.html#ab9a299d0e7333c0318f7480d1e393b2c", null ],
     [ "players_cache_", "dd/d01/classfusion__server_1_1Game.html#a0daead639acf4a374243a3fde6868078", null ],
     [ "players_cache_mtx_", "dd/d01/classfusion__server_1_1Game.html#ac54c1e08c4c9f970b447ea386656575a", null ],

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['outgoing_5fqueue_5f',['outgoing_queue_',['../db/d0f/classfusion__server_1_1WebSocketSession.html#a84a0f94db552650cb621b358cc87a52d',1,'fusion_server::WebSocketSession']]],
-  ['outgoing_5fqueue_5fmtx_5f',['outgoing_queue_mtx_',['../db/d0f/classfusion__server_1_1WebSocketSession.html#aee639aad52ed0bcf377ba26aeafbb60b',1,'fusion_server::WebSocketSession']]]
+  ['next_5fplayer_5fid_5f',['next_player_id_',['../dd/d01/classfusion__server_1_1Game.html#ab9a299d0e7333c0318f7480d1e393b2c',1,'fusion_server::Game']]],
+  ['nick_5f',['nick_',['../d5/d95/classfusion__server_1_1Player.html#add52091c27ae41c71802485a6b2b057d',1,'fusion_server::Player']]]
 ];

@@ -8,6 +8,7 @@
 #include <string>
 
 #include <boost/asio.hpp>
+#include <spdlog/spdlog.h>
 
 #include <fusion_server/game.hpp>
 #include <fusion_server/listener.hpp>
@@ -151,6 +152,12 @@ class Server {
    * and their games.
    */
   std::mutex sessions_correlation_mtx_;
+
+  /**
+   * @brief Server's logger.
+   * This is a pointer to the logger used in Server class.
+   */
+  std::shared_ptr<spdlog::logger> logger_;
 
   /**
    * This is the pointer pointing to the only instance of this class.

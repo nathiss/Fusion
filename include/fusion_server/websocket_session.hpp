@@ -10,6 +10,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include <spdlog/spdlog.h>
 
 #include <fusion_server/package_verifier.hpp>
 #include <fusion_server/system_abstractions.hpp>
@@ -141,6 +142,21 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   explicit operator bool() const noexcept;
 
   /**
+   * @brief Returns the remote endpoint.
+   * This method returns a reference to the remote endpoint connected to the
+   * stored socket.
+   *
+   * @return
+   *   A reference to the remote endpoint connected to the stored socket is
+   *   returned.
+   *
+   * @note
+   *   This method is unsed for debugging and logging only.
+   */
+  const boost::asio::ip::tcp::socket::endpoint_type&
+  GetRemoteEndpoint() const noexcept;
+
+  /**
    * This method is the callback to asynchronous handshake with the client.
    *
    * @param[in] ec
@@ -183,6 +199,12 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   boost::beast::websocket::stream<boost::asio::ip::tcp::socket> websocket_;
 
   /**
+   * @brief The remote endpoint.
+   * This is the remote endpoint of the websocket_'s underlying socket.
+   */
+  decltype(websocket_)::next_layer_type::endpoint_type remote_endpoint_;
+
+  /**
    * This is the buffer for the incomming packages.
    */
   boost::beast::multi_buffer buffer_;
@@ -218,6 +240,12 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * properly formed.
    */
   PackageVerifier package_verifier_;
+
+  /**
+   * @brief WebSocketSession's logger.
+   * This is a pointer to the logger used in WebSocketSession class.
+   */
+  std::shared_ptr<spdlog::logger> logger_;
 };
 
 template <typename Body, typename Allocator>

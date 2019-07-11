@@ -13,6 +13,8 @@
 #include <utility>
 #include <variant>
 
+#include <spdlog/spdlog.h>
+
 #include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
@@ -244,6 +246,12 @@ class Game {
    * all clients in this game.
    */
   system_abstractions::IncommingPackageDelegate delegete_;
+
+  /**
+   * @brief Game's logger.
+   * This is a pointer to the logger used in Game class.
+   */
+  std::shared_ptr<spdlog::logger> logger_;
 };
 
 }  // namespace fusion_server

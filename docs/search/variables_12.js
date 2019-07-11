@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['x',['x',['../d4/d04/structfusion__server_1_1Point.html#a2ba1034c978eaf75a0ba12466c0865e3',1,'fusion_server::Point']]]
+  ['websocket_5f',['websocket_',['../db/d0f/classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3',1,'fusion_server::WebSocketSession']]]
 ];

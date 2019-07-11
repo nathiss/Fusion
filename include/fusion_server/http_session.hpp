@@ -6,6 +6,7 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
+#include <spdlog/spdlog.h>
 
 namespace fusion_server {
 
@@ -169,6 +170,40 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   Response_t MakeBadRequest() const noexcept;
 
   /**
+   * @brief Checks if the error indicates a bad request.
+   * This method returns an indication whether or not the given error code
+   * indicates that a request is ill-formed.
+   *
+   * @param ec
+   *   A Boost error code.
+   *
+   * @return
+   *   An indication whether or not the given error code indicates that a
+   *   request is ill-formed is returned.
+   *
+   * @see [boost::system::error_code](https://www.boost.org/doc/libs/1_67_0/libs/system/doc/reference.html#Class-error_code)
+   */
+  inline bool IsBadRequestError(const boost::system::error_code& ec) const noexcept;
+
+  /**
+   * @brief Checks if the error indicates a too large request.
+   * This method returns an indication whether or not the given error code
+   * indicates that a request (or some part of the request) is too large and
+   * would cause buffer overflow.
+   *
+   * @param ec
+   *   A Boost error code.
+   *
+   * @return
+   *   An indication whether or not the given error code indicates that a
+   *   request (or some part of the request) is too large and would cause buffer
+   *   overflow is returned.
+   *
+   * @see [boost::system::error_code](https://www.boost.org/doc/libs/1_67_0/libs/system/doc/reference.html#Class-error_code)
+   */
+  inline bool IsTooLargeRequestError(const boost::system::error_code& ec) const noexcept;
+
+  /**
    * This is the socket connected to the client.
    */
   boost::asio::ip::tcp::socket socket_;
@@ -187,6 +222,12 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    * This holds the parsed client's request.
    */
   boost::beast::http::request<boost::beast::http::string_body> request_;
+
+  /**
+   * @brief HTTPSession's logger.
+   * This is a pointer to the logger used in HTTPSession class.
+   */
+  std::shared_ptr<spdlog::logger> logger_;
 };
 
 }  // namespace fusion_server

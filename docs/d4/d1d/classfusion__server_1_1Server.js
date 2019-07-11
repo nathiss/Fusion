@@ -11,6 +11,7 @@ var classfusion__server_1_1Server =
     [ "games_mtx_", "d4/d1d/classfusion__server_1_1Server.html#adc9ff6283fa5dd8d73b1f46819750bb9", null ],
     [ "instance_", "d4/d1d/classfusion__server_1_1Server.html#ae98570e80cb8129494af694a820cafef", null ],
     [ "ioc_", "d4/d1d/classfusion__server_1_1Server.html#a69baf9c5e1f4ca98198fbc5b5bf7d44c", null ],
+    [ "logger_", "d4/d1d/classfusion__server_1_1Server.html#ae828b0fc4ab7d47a609c22c02bf8db52", null ],
     [ "sessions_correlation_", "d4/d1d/classfusion__server_1_1Server.html#a5adec400761d49c49af961492e2d8fc1", null ],
     [ "sessions_correlation_mtx_", "d4/d1d/classfusion__server_1_1Server.html#a6ce33501f3175adf8b570be2454c12ed", null ],
     [ "unidentified_sessions_", "d4/d1d/classfusion__server_1_1Server.html#ae3de51c4a1a0d1b03dfadb2d86506eb1", null ],
