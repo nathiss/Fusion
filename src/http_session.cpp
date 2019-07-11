@@ -1,3 +1,12 @@
+/**
+ * @file http_session.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the HTTPSession class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <cstdlib>
 
 #include <memory>

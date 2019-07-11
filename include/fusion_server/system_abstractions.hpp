@@ -1,3 +1,13 @@
+/**
+ * @file system_abstractions.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the common abstractions of the server.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
+
 #pragma once
 
 #include <functional>

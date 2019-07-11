@@ -1,3 +1,12 @@
+/**
+ * @file websocket_session.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the WebSocketSession class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <cstdlib>
 
 #include <memory>

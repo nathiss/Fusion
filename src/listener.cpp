@@ -1,3 +1,12 @@
+/**
+ * @file listener.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the Listener class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <cstdint>
 
 #include <memory>

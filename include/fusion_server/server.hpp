@@ -1,3 +1,12 @@
+/**
+ * @file server.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the Server class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <functional>

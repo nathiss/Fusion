@@ -1,3 +1,12 @@
+/**
+ * @file listener.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the Listener class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <cstdint>

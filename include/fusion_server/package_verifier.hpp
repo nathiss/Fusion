@@ -1,3 +1,12 @@
+/**
+ * @file package_verifier.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the PackageVerifier class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <utility>

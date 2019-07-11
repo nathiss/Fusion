@@ -1,3 +1,14 @@
+/**
+ * @file websocket_session.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the WebSocketSession class.
+ *
+ * @see fusion_server::WebSocketSession
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <cstdlib>
@@ -21,6 +32,9 @@ namespace fusion_server {
 
 /**
  * This class represents the WebSocket session between a client and the server.
+ * Boost::Beast library is used to perform communication.
+ *
+ * @see [Boost::Beast](https://www.boost.org/doc/libs/1_67_0/libs/beast/doc/html/index.html)
  */
 class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
  public:
@@ -74,6 +88,8 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *
    * @param[in] socket
    *   The socket connected to a client.
+   *
+   * @see [boost::asio::ip::tcp::socket](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/ip__tcp/socket.html)
    */
   WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
 

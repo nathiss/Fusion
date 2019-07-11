@@ -1,0 +1,14 @@
+<map id="include/fusion_server/package_parser.hpp" name="include/fusion_server/package_parser.hpp">
+<area shape="rect" id="node2" href="$d7/d63/package__verifier_8hpp.html" title="include/fusion_server\l/package_verifier.hpp" alt="" coords="123,184,270,225"/>
+<area shape="rect" id="node4" href="$df/dd9/game_8cpp.html" title="src/game.cpp" alt="" coords="114,363,215,389"/>
+<area shape="rect" id="node6" href="$df/dd7/server_8cpp.html" title="src/server.cpp" alt="" coords="616,363,721,389"/>
+<area shape="rect" id="node9" href="$d9/d85/player_8hpp.html" title="include/fusion_server\l/player.hpp" alt="" coords="248,95,393,136"/>
+<area shape="rect" id="node12" href="$d2/d40/system__abstractions_8hpp.html" title="include/fusion_server\l/system_abstractions.hpp" alt="" coords="417,95,589,136"/>
+<area shape="rect" id="node13" href="$d6/d79/package__parser_8cpp.html" title="src/package_parser.cpp" alt="" coords="677,102,838,129"/>
+<area shape="rect" id="node3" href="$de/df7/websocket__session_8hpp.html" title="include/fusion_server\l/websocket_session.hpp" alt="" coords="265,273,432,315"/>
+<area shape="rect" id="node8" href="$d0/d11/package__verifier_8cpp.html" title="src/package_verifier.cpp" alt="" coords="25,281,189,307"/>
+<area shape="rect" id="node5" href="$d7/db4/http__session_8cpp.html" title="src/http_session.cpp" alt="" coords="240,363,382,389"/>
+<area shape="rect" id="node7" href="$de/def/websocket__session_8cpp.html" title="src/websocket_session.cpp" alt="" coords="407,363,591,389"/>
+<area shape="rect" id="node10" href="$d8/d39/game_8hpp.html" title="include/fusion_server\l/game.hpp" alt="" coords="294,184,440,225"/>
+<area shape="rect" id="node11" href="$df/d0a/server_8hpp.html" title="include/fusion_server\l/server.hpp" alt="" coords="456,273,601,315"/>
+</map>

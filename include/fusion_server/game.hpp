@@ -1,3 +1,12 @@
+/**
+ * @file game.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares the Game class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <cstdlib>

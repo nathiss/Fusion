@@ -1,3 +1,12 @@
+/**
+ * @file package_verifier.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the PackageVerifier class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <fusion_server/package_verifier.hpp>
 
 namespace fusion_server {

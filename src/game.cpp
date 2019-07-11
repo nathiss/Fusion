@@ -1,3 +1,12 @@
+/**
+ * @file game.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the Game class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <fusion_server/logger_types.hpp>
 #include <fusion_server/game.hpp>
 #include <fusion_server/package_parser.hpp>

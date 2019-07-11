@@ -1,3 +1,12 @@
+/**
+ * @file server.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the Server class.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <string_view>
 #include <tuple>
 #include <utility>

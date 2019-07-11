@@ -1,3 +1,12 @@
+/**
+ * @file player.hpp
+ *
+ * This module is a part of Fusion Server project.
+ * It declares all UI types.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #pragma once
 
 #include <cstdint>
