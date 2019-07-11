@@ -145,7 +145,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    *   A HTTP response to be sent.
    *
    * @note
-   *   This method has to take the ownership of the response object.
+   *   This method takes the ownership of the response object.
    */
   void PerformAsyncWrite(Response_t response) noexcept;
 

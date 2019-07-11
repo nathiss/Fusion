@@ -113,6 +113,8 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This structure is used to represent colors on the map. </p>
+
+<p class="definition">Definition at line <a class="el" href="../../d9/d85/player_8hpp_source.html#l00015">15</a> of file <a class="el" href="../../d9/d85/player_8hpp_source.html">player.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af81acc6753fcb78446336722fc568665"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af81acc6753fcb78446336722fc568665">&#9670;&nbsp;</a></span>ToJson()</h2>
@@ -139,13 +141,15 @@ Public Attributes</h2></td></tr>
 <p>This method returns a dump of this object encoded as JSON.</p>
 <dl class="section return"><dt>Returns</dt><dd>A dump of this object encoded as JSON is returned. </dd></dl>
 
-<p class="reference">References <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#ac0d4e4fbea878e22be0a980574a24405">b</a>, <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#a5f113cc709eb7713babf5971ea2e36c1">g</a>, and <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9">r</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d85/player_8hpp_source.html#l00037">37</a> of file <a class="el" href="../../d9/d85/player_8hpp_source.html">player.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d5/d95/classfusion__server_1_1Player.html#a7e67598002532d45cf16779e598d3785">fusion_server::Player::ToJson()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                                            {</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> ret = PackageParser::JSON::array();</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9">r</a>);</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#a5f113cc709eb7713babf5971ea2e36c1">g</a>);</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#ac0d4e4fbea878e22be0a980574a24405">b</a>);</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  }</div><div class="ttc" id="classfusion__server_1_1PackageParser_html_ab2c94553552b0005d6608dac222f80d2"><div class="ttname"><a href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">fusion_server::PackageParser::JSON</a></div><div class="ttdeci">nlohmann::json JSON</div><div class="ttdef"><b>Definition:</b> package_parser.hpp:19</div></div>
-<div class="ttc" id="structfusion__server_1_1Color_html_ac0d4e4fbea878e22be0a980574a24405"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#ac0d4e4fbea878e22be0a980574a24405">fusion_server::Color::b</a></div><div class="ttdeci">std::uint8_t b</div><div class="ttdef"><b>Definition:</b> player.hpp:29</div></div>
-<div class="ttc" id="structfusion__server_1_1Color_html_a5f113cc709eb7713babf5971ea2e36c1"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#a5f113cc709eb7713babf5971ea2e36c1">fusion_server::Color::g</a></div><div class="ttdeci">std::uint8_t g</div><div class="ttdef"><b>Definition:</b> player.hpp:24</div></div>
-<div class="ttc" id="structfusion__server_1_1Color_html_ad96c01349f104799a51fb4ae3d4b1ba9"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9">fusion_server::Color::r</a></div><div class="ttdeci">std::uint8_t r</div><div class="ttdef"><b>Definition:</b> player.hpp:19</div></div>
+<p class="reference">References <a class="el" href="../../d9/d85/player_8hpp_source.html#l00029">b</a>, <a class="el" href="../../d9/d85/player_8hpp_source.html#l00024">g</a>, and <a class="el" href="../../d9/d85/player_8hpp_source.html#l00019">r</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d9/d85/player_8hpp_source.html#l00206">fusion_server::Player::ToJson()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                                            {</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <a class="code" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> ret = PackageParser::JSON::array();</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9">r</a>);</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#a5f113cc709eb7713babf5971ea2e36c1">g</a>);</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    ret.push_back(<a class="code" href="../../dd/d7f/structfusion__server_1_1Color.html#ac0d4e4fbea878e22be0a980574a24405">b</a>);</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">return</span> ret;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  }</div><div class="ttc" id="classfusion__server_1_1PackageParser_html_ab2c94553552b0005d6608dac222f80d2"><div class="ttname"><a href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">fusion_server::PackageParser::JSON</a></div><div class="ttdeci">nlohmann::json JSON</div><div class="ttdef"><b>Definition:</b> <a href="../../de/de6/package__parser_8hpp_source.html#l00019">package_parser.hpp:19</a></div></div>
+<div class="ttc" id="structfusion__server_1_1Color_html_ac0d4e4fbea878e22be0a980574a24405"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#ac0d4e4fbea878e22be0a980574a24405">fusion_server::Color::b</a></div><div class="ttdeci">std::uint8_t b</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/d85/player_8hpp_source.html#l00029">player.hpp:29</a></div></div>
+<div class="ttc" id="structfusion__server_1_1Color_html_a5f113cc709eb7713babf5971ea2e36c1"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#a5f113cc709eb7713babf5971ea2e36c1">fusion_server::Color::g</a></div><div class="ttdeci">std::uint8_t g</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/d85/player_8hpp_source.html#l00024">player.hpp:24</a></div></div>
+<div class="ttc" id="structfusion__server_1_1Color_html_ad96c01349f104799a51fb4ae3d4b1ba9"><div class="ttname"><a href="../../dd/d7f/structfusion__server_1_1Color.html#ad96c01349f104799a51fb4ae3d4b1ba9">fusion_server::Color::r</a></div><div class="ttdeci">std::uint8_t r</div><div class="ttdef"><b>Definition:</b> <a href="../../d9/d85/player_8hpp_source.html#l00019">player.hpp:19</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -163,7 +167,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>This is blue channel. </p>
 
-<p class="reference">Referenced by <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#af81acc6753fcb78446336722fc568665">ToJson()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d85/player_8hpp_source.html#l00029">29</a> of file <a class="el" href="../../d9/d85/player_8hpp_source.html">player.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d9/d85/player_8hpp_source.html#l00037">ToJson()</a>.</p>
 
 </div>
 </div>
@@ -180,7 +186,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>This is green channel. </p>
 
-<p class="reference">Referenced by <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#af81acc6753fcb78446336722fc568665">ToJson()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d85/player_8hpp_source.html#l00024">24</a> of file <a class="el" href="../../d9/d85/player_8hpp_source.html">player.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d9/d85/player_8hpp_source.html#l00037">ToJson()</a>.</p>
 
 </div>
 </div>
@@ -197,7 +205,9 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 <p>This is red channel. </p>
 
-<p class="reference">Referenced by <a class="el" href="../../dd/d7f/structfusion__server_1_1Color.html#af81acc6753fcb78446336722fc568665">ToJson()</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d9/d85/player_8hpp_source.html#l00019">19</a> of file <a class="el" href="../../d9/d85/player_8hpp_source.html">player.hpp</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d9/d85/player_8hpp_source.html#l00037">ToJson()</a>.</p>
 
 </div>
 </div>
