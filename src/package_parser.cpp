@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the PackageParser class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <utility>

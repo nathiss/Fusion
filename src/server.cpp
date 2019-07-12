@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the Server class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <string_view>
@@ -34,7 +34,6 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 
 auto Server::Register(WebSocketSession* session) noexcept
     -> system_abstractions::IncommingPackageDelegate& {
-
     if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
       logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
       return unjoined_delegate_;
@@ -58,13 +57,13 @@ void Server::Unregister(WebSocketSession* session) noexcept {
     return;
   }
 
-  // TODO: change lock scope of this mutex.
+  // TODO(nathiss): change lock scope of this mutex.
   std::lock_guard l{sessions_correlation_mtx_};
   if (auto it = sessions_correlation_.find(session); it != sessions_correlation_.end()) {
     auto game_name = it->second;
     sessions_correlation_.erase(it);
 
-    // TODO: refactor this.
+    // TODO(nathiss): refactor this.
     if (!game_name) {
       logger_->debug("Unregistering session {}.", session->GetRemoteEndpoint());
       std::lock_guard l{unidentified_sessions_mtx_};
@@ -88,7 +87,7 @@ void Server::Unregister(WebSocketSession* session) noexcept {
 bool Server::StartAccepting() noexcept {
   logger_->info("Creating a Listener object.");
 
-  // TODO: read the local endpoint from a config file.
+  // TODO(nathiss): read the local endpoint from a config file.
   return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
 }
 
@@ -125,7 +124,6 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
   };
 
   if (request["type"] == "join") {
-
     std::string game_name = std::move(request["game"]);
     games_mtx_.lock();
     auto it = games_.find(game_name);
@@ -149,7 +147,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
       sessions_correlation_[src] = std::make_optional<std::string>(std::move(game_name));
     }
 
-    auto response = [&request, &join_result]{
+    auto response = [&request, &join_result] {
       PackageParser::JSON ret = PackageParser::JSON::object();
       ret["id"] = request["id"];
       ret["result"] = "joined";

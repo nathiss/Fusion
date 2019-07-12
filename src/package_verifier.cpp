@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the PackageVerifier class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <fusion_server/package_verifier.hpp>
@@ -21,8 +21,7 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
   auto json = std::move(parsed.value());
 
   if (!(json.contains("type") &&
-  json["type"].type() == decltype(json)::value_t::string
-  )) {
+  json["type"].type() == decltype(json)::value_t::string)) {
     return std::make_pair(false, MakeTypeNotFound());
   }
 
@@ -33,8 +32,7 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
     json.size() ==  3 + 1 &&
     json["id"].type() == decltype(json)::value_t::number_unsigned &&
     json["nick"].type() == decltype(json)::value_t::string &&
-    json["game"].type() == decltype(json)::value_t::string
-    )) {
+    json["game"].type() == decltype(json)::value_t::string)) {
       return std::make_pair(false, MakeNotValidJoin());
     }
     return std::make_pair(true, std::move(json));
@@ -50,8 +48,7 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
     json["position"].size() == 2 &&
     json["position"][0].type() == decltype(json)::value_t::number_float &&
     json["position"][1].type() == decltype(json)::value_t::number_float &&
-    json["angle"].type() == decltype(json)::value_t::number_float
-    )) {
+    json["angle"].type() == decltype(json)::value_t::number_float)) {
       return std::make_pair(false, MakeNotValidUpdate());
     }
     return std::make_pair(true, std::move(json));

@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the Listener class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <cstdint>
@@ -55,8 +55,7 @@ bool Listener::Run() noexcept {
     socket_,
     [self = shared_from_this()](const boost::system::error_code& ec) {
       self->HandleAccept(ec);
-    }
-  );
+  });
 
   return true;
 }
@@ -78,9 +77,8 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
   if (ec) {
     logger_->error("An error occured during handling a new connection. [Boost:{}]",
       ec.message());
-    // TODO: find out if any other error can cause the listener to stop working.
-  }
-  else {
+    // TODO(nathiss): find out if any other error can cause the listener to stop working.
+  } else {
     logger_->debug("Accepted a new connection from {}.", socket_.remote_endpoint());
     std::make_shared<HTTPSession>(std::move(socket_))->Run();
   }
@@ -89,8 +87,7 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
     socket_,
     [self = shared_from_this()](const boost::system::error_code& ec) {
       self->HandleAccept(ec);
-    }
-  );
+  });
 }
 
 void Listener::OpenAcceptor() noexcept {
@@ -136,4 +133,4 @@ void Listener::OpenAcceptor() noexcept {
   logger_->info("Acceptor is bind to {}.", endpoint_);
 }
 
-}  // namespace fusio_server
+}  // namespace fusion_server

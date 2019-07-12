@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the Game class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <fusion_server/game.hpp>
@@ -95,7 +95,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
   if (std::lock_guard l{players_cache_mtx_}; players_cache_.count(session) != 0) {
     team_id = players_cache_[session];
     players_cache_.erase(session);
-  } else{
+  } else {
     logger_->warn("The given session doesn't exist in the cache. Searching in both teams.");
   }
 
@@ -154,7 +154,7 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
 }
 
 PackageParser::JSON Game::GetCurrentState() const noexcept {
-  auto state = []{
+  auto state = [] {
     PackageParser::JSON ret = PackageParser::JSON::object();
     ret["players"] = PackageParser::JSON::array();
     ret["rays"] = PackageParser::JSON::array();
@@ -212,7 +212,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
       }
     }
 
-    const auto response = [this]{
+    const auto response = [this] {
       PackageParser::JSON ret = PackageParser::JSON::object();
       ret["type"] = "update";
       auto state = GetCurrentState();
@@ -225,7 +225,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
   }  // "update"
 
   if (request["type"] == "leave") {
-    if(!Leave(session)) {
+    if (!Leave(session)) {
       logger_->warn("Trying to remove an unjoined session ({}).",
         session->GetRemoteEndpoint());
       session->Close();
@@ -234,7 +234,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
       logger_->debug("Session {} left the game.", session->GetRemoteEndpoint());
     }
 
-    // TODO: broadcast the leaving
+    // TODO(nathiss): broadcast the leaving
     session->delegate_ = Server::GetInstance().Register(session);
   }
 

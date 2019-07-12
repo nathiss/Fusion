@@ -55,6 +55,9 @@ find_package(Boost 1.67 EXACT COMPONENTS REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+set(CMAKE_LINK_WHAT_YOU_USE TRUE)
+set(CMAKE_CXX_CPPLINT "cpplint;--linelength=120;--quiet")
+
 add_library(${This} ${Sources} ${Headers})
 
 target_link_libraries(${This}

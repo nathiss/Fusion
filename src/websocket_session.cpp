@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the WebSocketSession class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <cstdlib>
@@ -69,9 +69,7 @@ void WebSocketSession::Write(Package package) noexcept {
           std::size_t bytes_transmitted
         ) {
           self->HandleWrite(ec, bytes_transmitted);
-        }
-      )
-  );
+        }));
 }
 
 void WebSocketSession::Close() noexcept {
@@ -103,7 +101,7 @@ void WebSocketSession::Close() noexcept {
   if (ec) {
     logger_->warn("An error occured during closing a websocket. [Boost: {}]",
       ec.message());
-    // TODO: Find out if the comment below applies to the WebSocket connections.
+    // TODO(nathiss): Find out if the comment below applies to the WebSocket connections.
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Set on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
@@ -171,9 +169,7 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
           std::size_t bytes_transmitted
         ) {
           self->HandleWrite(ec, bytes_transmitted);
-        }
-      )
-    );
+        }));
   }
 
   websocket_.async_read(
@@ -185,16 +181,13 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
         std::size_t bytes_transmitted
       ) {
         self->HandleRead(ec, bytes_transmitted);
-      }
-    )
-  );
+      }));
 }
 
 void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   [[ maybe_unused ]] std::size_t bytes_transmitted) noexcept {
-
   logger_->debug("Read {} bytes from {}.", bytes_transmitted, GetRemoteEndpoint());
-  // TODO: find out what's that doing.
+  // TODO(nathiss): find out what's that doing.
   boost::ignore_unused(buffer_);
 
   if (ec == boost::beast::websocket::error::closed) {
@@ -210,14 +203,14 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     logger_->error("An error occured during reading from {}. [Boost: {}]",
       GetRemoteEndpoint(), ec.message());
     // We assume what the session cannot be fixed.
-    // TODO: Find out if that's true.
+    // TODO(nathiss): Find out if that's true.
     return;
   }
 
   const auto package = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  auto [is_valid, msg] = package_verifier_.Verify(std::move(package));
+  auto[is_valid, msg] = package_verifier_.Verify(std::move(package));
 
   if (!is_valid) {
     logger_->warn("A package from {} was not valid. Closing the connection.",
@@ -239,9 +232,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
         std::size_t bytes_transmitted
       ) {
         self->HandleRead(ec, bytes_transmitted);
-      }
-    )
-  );
+      }));
 }
 
 void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
@@ -292,9 +283,7 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
           std::size_t bytes_transmitted
         ) {
           self->HandleWrite(ec, bytes_transmitted);
-        }
-      )
-    );
+        }));
   }
 }
 

@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of the HTTPSession class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <cstdlib>
@@ -38,8 +38,7 @@ void HTTPSession::Run() noexcept {
       std::size_t bytes_transmitted
     ) {
       self->HandleRead(ec, bytes_transmitted);
-    }
-  );
+  });
 }
 
 void HTTPSession::Close() noexcept {
@@ -90,9 +89,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
 
   if (boost::beast::websocket::is_upgrade(request_)) {
     logger_->debug("Received an upgrade request from {}.", socket_.remote_endpoint());
-    std::make_shared<WebSocketSession>(std::move(socket_))->Run(
-      std::move(request_)
-    );
+    std::make_shared<WebSocketSession>(std::move(socket_))->Run(std::move(request_));
     return;
   }
 
@@ -131,8 +128,7 @@ void HTTPSession::HandleWrite(const boost::system::error_code& ec,
       std::size_t bytes_transmitted
     ) {
       self->HandleRead(ec, bytes_transmitted);
-    }
-  );
+  });
 }
 
 void HTTPSession::PerformAsyncWrite(Response_t response) noexcept {
@@ -146,8 +142,7 @@ void HTTPSession::PerformAsyncWrite(Response_t response) noexcept {
       std::size_t bytes_transmitted
     ) {
       self->HandleWrite(ec, bytes_transmitted, response_ptr->need_eof());
-    }
-  );
+  });
 }
 
 auto HTTPSession::MakeResponse() const noexcept -> Response_t {
