@@ -34,13 +34,13 @@ set(Sources
   src/websocket_session.cpp
 )
 
-add_subdirectory(spdlog)
+add_subdirectory(third_party/spdlog)
 
 set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
-add_subdirectory(nlohmann_json)
+add_subdirectory(third_party/nlohmann_json)
 
-add_subdirectory(googletest)
+add_subdirectory(third_party/googletest)
 add_subdirectory(executable)
 add_subdirectory(test)
 

@@ -2,6 +2,15 @@
 
 This is the source code of the server for the **Fusion** game.
 
+## Third-party libraries
+
+* [spdlog](https://github.com/gabime/spdlog) - Very fast, header-only/compiled,
+  C++ logging library.
+* [nlohmann/json](https://github.com/nlohmann/json) - JSON for Modern C++.
+* [Google Test](https://github.com/google/googletest) - Google's C++ test framework.
+* [Boost](https://www.boost.org/) - free peer-reviewed portable C++ source libraries
+  (requires the Boost 1.67 installed on the system).
+
 ## Protocol
 
 This section describes the protocol used in the connunication between the server
