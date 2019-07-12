@@ -1,3 +1,12 @@
+/**
+ * @file main.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of main function.
+ *
+ * (c) 2019 by Kamil Rusin
+ */
+
 #include <cstring>
 
 #include <chrono>
@@ -12,6 +21,19 @@
 #include <fusion_server/server.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
+/**
+ * @brief Asynchronous signal handler.
+ * This function used as the asynchronous signal handler.
+ *
+ * @param ioc
+ *   The I/O context used in the program.
+ *
+ * @param ec
+ *   The Boost's error code that incicates whether or not an error occured.
+ *
+ * @param signal
+ *   The signal code of the received signal.
+ */
 void HandleSignal(boost::asio::io_context& ioc,
   const boost::system::error_code& ec, int signal) noexcept {
   if (ec) {
@@ -25,6 +47,10 @@ void HandleSignal(boost::asio::io_context& ioc,
   fusion_server::Server::GetInstance().Shutdown();
 }
 
+/**
+ * @brief Initialises loggers.
+ * This function initialises loggers for main modules of the program.
+ */
 void InitLogger() noexcept {
   namespace fs = fusion_server::system_abstractions;
 
@@ -38,6 +64,17 @@ void InitLogger() noexcept {
   fs::CreateLogger("websocket", true, all_file_sink);
 }
 
+/**
+ * @brief The program's entry point.
+ * This function is the program's entry point. It creates the server instance,
+ * registers handled singnals and creates worker threads.
+ *
+ * @return 0
+ *   No error occured.
+ *
+ * @return
+ *   A error number.
+ */
 int main() {
   InitLogger();
 

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['websocket_5fsession_2ecpp',['websocket_session.cpp',['../de/def/websocket__session_8cpp.html',1,'']]],
-  ['websocket_5fsession_2ehpp',['websocket_session.hpp',['../de/df7/websocket__session_8hpp.html',1,'']]]
+  ['server_2ecpp',['server.cpp',['../df/dd7/server_8cpp.html',1,'']]],
+  ['server_2ehpp',['server.hpp',['../df/d0a/server_8hpp.html',1,'']]],
+  ['system_5fabstractions_2ehpp',['system_abstractions.hpp',['../d2/d40/system__abstractions_8hpp.html',1,'']]]
 ];
