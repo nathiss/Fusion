@@ -100,6 +100,16 @@ class Server {
    */
   bool StartAccepting() noexcept;
 
+  /**
+   * @brief Closes all server's connections.
+   * This method closes all connection stored in this server.
+   *
+   * @note
+   *   It is indented to be called only once. If it's called more than once, the
+   *   behaviour is undefined.
+   */
+  void Shutdown() noexcept;
+
  private:
   /**
    * This constructor is called only once, by the GetInstance() function.
@@ -177,6 +187,13 @@ class Server {
    * This is a pointer to the logger used in Server class.
    */
   std::shared_ptr<spdlog::logger> logger_;
+
+  /**
+   * This flag indicates whether or not this server has stopped.
+   *
+   * @see fusion_server::Server#Shutdown
+   */
+  bool has_stopped_;
 
   /**
    * This is the pointer pointing to the only instance of this class.

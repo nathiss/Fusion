@@ -18,9 +18,11 @@ void HandleSignal(boost::asio::io_context& ioc,
     spdlog::get("server")->error("An error occured during signal handling. [Boost: {}]",
       ec.message());
   }
-  spdlog::get("server")->warn("Received a signal ({}). Stoping the io_context.",
+  spdlog::get("server")->warn("Received a signal ({}). Stoping the I/O context.",
     strsignal(signal));
+
   ioc.stop();
+  fusion_server::Server::GetInstance().Shutdown();
 }
 
 void InitLogger() noexcept {

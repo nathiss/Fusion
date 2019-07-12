@@ -34,18 +34,17 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 
 auto Server::Register(WebSocketSession* session) noexcept
     -> system_abstractions::IncommingPackageDelegate& {
+
+    if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
+      logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
+      return unjoined_delegate_;
+    } else {
+      sessions_correlation_[session] = {};
+    }
+
     unidentified_sessions_mtx_.lock();
-    auto [it, took_place] = unidentified_sessions_.insert(session);
+    unidentified_sessions_.insert(session);
     unidentified_sessions_mtx_.unlock();
-
-  if (!took_place) {
-    logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
-    return unjoined_delegate_;
-  }
-
-  sessions_correlation_mtx_.lock();
-  sessions_correlation_[session] = {};
-  sessions_correlation_mtx_.unlock();
 
   logger_->debug("New WebSocket session registered {}.", session->GetRemoteEndpoint());
 
@@ -53,13 +52,19 @@ auto Server::Register(WebSocketSession* session) noexcept
 }
 
 void Server::Unregister(WebSocketSession* session) noexcept {
-  // If the game is registered it's in sessions_correlation_ set.
-  sessions_correlation_mtx_.lock();
+  if (has_stopped_) {
+    // The server has stopped. We don't allow session to unregister in order to
+    // prevent double free.
+    return;
+  }
+
+  // TODO: change lock scope of this mutex.
+  std::lock_guard l{sessions_correlation_mtx_};
   if (auto it = sessions_correlation_.find(session); it != sessions_correlation_.end()) {
     auto game_name = it->second;
     sessions_correlation_.erase(it);
-    sessions_correlation_mtx_.unlock();
 
+    // TODO: refactor this.
     if (!game_name) {
       logger_->debug("Unregistering session {}.", session->GetRemoteEndpoint());
       std::lock_guard l{unidentified_sessions_mtx_};
@@ -73,12 +78,11 @@ void Server::Unregister(WebSocketSession* session) noexcept {
         logger_->debug("Game {} has no players. Removing.", game_name.value());
           games_.erase(game_name.value());
       }
-      return;
     }
+  } else {
+    logger_->warn("Trying to unregister session which is not registered. [{}]",
+      session->GetRemoteEndpoint());
   }
-  sessions_correlation_mtx_.unlock();
-  logger_->warn("Trying to unregister session which is not registered. [{}]",
-    session->GetRemoteEndpoint());
 }
 
 bool Server::StartAccepting() noexcept {
@@ -88,8 +92,13 @@ bool Server::StartAccepting() noexcept {
   return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
 }
 
+void Server::Shutdown() noexcept {
+  has_stopped_ = true;
+}
+
 Server::Server() noexcept {
   logger_ = spdlog::get("server");
+  has_stopped_ = false;
 
   unjoined_delegate_ = [this](const PackageParser::JSON& package, WebSocketSession* src) {
     logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
@@ -137,7 +146,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     }
     {
       std::lock_guard l{sessions_correlation_mtx_};
-      sessions_correlation_[src] = std::move(game_name);
+      sessions_correlation_[src] = std::make_optional<std::string>(std::move(game_name));
     }
 
     auto response = [&request, &join_result]{
