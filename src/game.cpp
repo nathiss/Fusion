@@ -7,18 +7,19 @@
  * (c) 2019 by Kamil Rusin
  */
 
-#include <fusion_server/logger_types.hpp>
 #include <fusion_server/game.hpp>
+#include <fusion_server/logger_types.hpp>
 #include <fusion_server/package_parser.hpp>
 #include <fusion_server/server.hpp>
+#include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/websocket_session.hpp>
 
 using fusion_server::system_abstractions::Package;
 
 namespace fusion_server {
 
-Game::Game() noexcept {
-  logger_ = spdlog::get("game");
+Game::Game(const std::string& game_name) noexcept {
+  logger_ = system_abstractions::CreateLogger(game_name, false);
   delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
     DoResponse(src, package);
   };

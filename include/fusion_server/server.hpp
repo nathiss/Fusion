@@ -145,8 +145,13 @@ class Server {
 
   /**
    * This map associates all games in the server with their names.
+   *
+   * @note
+   *   The shared_ptr is used to prevent calling copy constructor when creating
+   *   `std::pair<...>` from an iterator.
+   *   [Solution for this.](https://stackoverflow.com/a/10057516)
    */
-  std::map<std::string, Game> games_;
+  std::map<std::string, std::shared_ptr<Game>> games_;
 
   /**
    * This mutex is used to synchronise the access to the set of the games

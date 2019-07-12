@@ -68,8 +68,8 @@ void Server::Unregister(WebSocketSession* session) noexcept {
       logger_->debug("Removing session {} from game {}.", session->GetRemoteEndpoint(), game_name.value());
       std::lock_guard l{games_mtx_};
       auto& game = games_[game_name.value()];
-      game.Leave(session);
-      if (game.GetPlayersCount() == 0) {
+      game->Leave(session);
+      if (game->GetPlayersCount() == 0) {
         logger_->debug("Game {} has no players. Removing.", game_name.value());
           games_.erase(game_name.value());
       }
@@ -117,12 +117,14 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
 
   if (request["type"] == "join") {
 
-    Game::join_result_t join_result;
-    {
-      std::lock_guard l{games_mtx_};
-      auto& game = games_[request["game"]];
-      join_result = game.Join(src);
+    std::string game_name = std::move(request["game"]);
+    games_mtx_.lock();
+    auto it = games_.find(game_name);
+    if (it == games_.end()) {
+      it = games_.emplace(game_name, std::make_shared<Game>(game_name)).first;
     }
+    games_mtx_.lock();
+    auto join_result = it->second->Join(src);
     if (!join_result) {  // The game is full.
       return std::make_pair(false, make_game_full(request["id"]));
     }
@@ -135,7 +137,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     }
     {
       std::lock_guard l{sessions_correlation_mtx_};
-      sessions_correlation_[src] = request["game"];
+      sessions_correlation_[src] = std::move(game_name);
     }
 
     auto response = [&request, &join_result]{

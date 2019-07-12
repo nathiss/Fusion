@@ -90,9 +90,13 @@ class Game {
   Game& operator=(const Game& other) noexcept = delete;
 
   /**
-   * This constructor creates the asynchronous reading delegate.
+   * This constructor creates the asynchronous reading delegate and creates a
+   * new logger for this game.
+   *
+   * @param[in] game_name
+   *   The name of this game. The object takes the ownership of this argument.
    */
-  Game() noexcept;
+  Game(const std::string& game_name) noexcept;
 
   /**
    * This method joins the client to this game and adds its session to the
