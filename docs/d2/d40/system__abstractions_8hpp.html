@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('d2/d40/system__abstractions_8hpp.html'
 <div class="header">
   <div class="summary">
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">system_abstractions.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -92,6 +93,9 @@ $(document).ready(function(){initNavTree('d2/d40/system__abstractions_8hpp.html'
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
+<code>#include &lt;spdlog/spdlog.h&gt;</code><br />
+<code>#include &lt;spdlog/sinks/stdout_color_sinks.h&gt;</code><br />
+<code>#include &lt;spdlog/sinks/basic_file_sink.h&gt;</code><br />
 <code>#include &lt;<a class="el" href="../../de/de6/package__parser_8hpp_source.html">fusion_server/package_parser.hpp</a>&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for system_abstractions.hpp:</div>
@@ -130,6 +134,17 @@ Functions</h2></td></tr>
 <tr class="memitem:afcef835583e430fa096e189b5d27ac7a"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:afcef835583e430fa096e189b5d27ac7a"><td class="memTemplItemLeft" align="right" valign="top">Package&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/d40/system__abstractions_8hpp.html#afcef835583e430fa096e189b5d27ac7a">fusion_server::system_abstractions::make_Package</a> (Args... args) noexcept</td></tr>
 <tr class="separator:afcef835583e430fa096e189b5d27ac7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65fb6ddc74ee61b1a013c910caf9b6ac"><td class="memTemplParams" colspan="2">template&lt;typename ... Sinks&gt; </td></tr>
+<tr class="memitem:a65fb6ddc74ee61b1a013c910caf9b6ac"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/d40/system__abstractions_8hpp.html#a65fb6ddc74ee61b1a013c910caf9b6ac">fusion_server::system_abstractions::CreateLogger</a> (std::string logger_name, bool registrate, Sinks... sinks) noexcept</td></tr>
+<tr class="memdesc:a65fb6ddc74ee61b1a013c910caf9b6ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a logger. This function creates a logger and associates it with the given name. If <code>registrate</code> is set to true, the new logger will be registered in global registry.  <a href="../../d2/d40/system__abstractions_8hpp.html#a65fb6ddc74ee61b1a013c910caf9b6ac">More...</a><br /></td></tr>
+<tr class="separator:a65fb6ddc74ee61b1a013c910caf9b6ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a3dcbc1a61e958c21ff43cfe9eeb4c58a"><td class="memItemLeft" align="right" valign="top"><a id="a3dcbc1a61e958c21ff43cfe9eeb4c58a"></a>
+static constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d40/system__abstractions_8hpp.html#a3dcbc1a61e958c21ff43cfe9eeb4c58a">fusion_server::system_abstractions::kLoggerPattern</a> = &quot;[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v&quot;</td></tr>
+<tr class="memdesc:a3dcbc1a61e958c21ff43cfe9eeb4c58a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Logging pattern. This constant is a default pattern for log lines, both in files and console. <br /></td></tr>
+<tr class="separator:a3dcbc1a61e958c21ff43cfe9eeb4c58a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This module is a part of Fusion Server project. It declares the common abstractions of the server.</p>
@@ -157,7 +172,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00058">58</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00062">62</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
 
 </div>
 </div>
@@ -174,11 +189,81 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>This is the package type used in both WebSocket and HTTP sessions. </p>
 
-<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00032">32</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00036">36</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="file_a65fb6ddc74ee61b1a013c910caf9b6ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a65fb6ddc74ee61b1a013c910caf9b6ac">&#9670;&nbsp;</a></span>CreateLogger()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ... Sinks&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto fusion_server::system_abstractions::CreateLogger </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>logger_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>registrate</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Sinks...&#160;</td>
+          <td class="paramname"><em>sinks</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a logger. This function creates a logger and associates it with the given name. If <code>registrate</code> is set to true, the new logger will be registered in global registry. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Sinks</td><td>A pack of types that meet spdlog::sink_ptr concepts.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">logger_name</td><td>The name of a new logger.</td></tr>
+    <tr><td class="paramname">registrate</td><td>If true the logger will be registered in the global registry.</td></tr>
+    <tr><td class="paramname">sinks</td><td>A pack of sinks that will be forwarded to the new logger object.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A shared pointer to the new logger.</dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a href="https://github.com/gabime/spdlog/wiki/4.-Sinks">spdlog Sinks</a> </dd>
+<dd>
+<a href="https://github.com/gabime/spdlog/wiki/5.-Logger-registry">spdlog Logger registry</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00095">95</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00095">fusion_server::system_abstractions::CreateLogger()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00095">fusion_server::system_abstractions::CreateLogger()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                                                                                   {</div><div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;</div><div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#ifdef DEBUG</span></div><div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;  <span class="keyword">auto</span> console_log_level = spdlog::level::debug;</div><div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#else</span></div><div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;  <span class="keyword">auto</span> console_log_level = spdlog::level::warn;</div><div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#endif</span></div><div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div><div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="comment">// TODO: read the path from config file</span></div><div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;  std::string file_name{<span class="stringliteral">&quot;logs/&quot;</span>};</div><div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;  file_name += logger_name + <span class="stringliteral">&quot;.log&quot;</span>;</div><div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div><div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="keyword">auto</span> file_sink = std::make_shared&lt;spdlog::sinks::basic_file_sink_mt&gt;(file_name, <span class="keyword">true</span>);</div><div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  file_sink-&gt;set_level(console_log_level);</div><div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;  file_sink-&gt;set_pattern(kLoggerPattern);</div><div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div><div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  <span class="keyword">auto</span> console_sink = std::make_shared&lt;spdlog::sinks::stdout_color_sink_mt&gt;();</div><div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  console_sink-&gt;set_level(console_log_level);</div><div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  console_sink-&gt;set_pattern(kLoggerPattern);</div><div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;</div><div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;  spdlog::sinks_init_list sinks_list{file_sink, console_sink, std::forward&lt;Sinks&gt;(sinks)...};</div><div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div><div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;  <span class="keyword">auto</span> logger = std::make_shared&lt;spdlog::logger&gt;(logger_name, std::move(sinks_list));</div><div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;  logger-&gt;set_level(spdlog::level::debug);</div><div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;  logger-&gt;flush_on(console_log_level);</div><div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div><div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;  <span class="keywordflow">if</span> (registrate)</div><div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    spdlog::register_logger(logger);</div><div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;</div><div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  <span class="keywordflow">return</span> logger;</div><div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;}</div></div><!-- fragment -->
+</div>
+</div>
 <a id="file_afcef835583e430fa096e189b5d27ac7a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#file_afcef835583e430fa096e189b5d27ac7a">&#9670;&nbsp;</a></span>make_Package()</h2>
 
@@ -213,12 +298,12 @@ template&lt;typename... Args&gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The created Package object. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00044">44</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00048">48</a> of file <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html">system_abstractions.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00044">fusion_server::system_abstractions::make_Package()</a>.</p>
+<p class="reference">References <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00048">fusion_server::system_abstractions::make_Package()</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00044">fusion_server::system_abstractions::make_Package()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                                            {</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;  <span class="keywordflow">return</span> std::make_shared&lt;const std::string&gt;(std::forward&lt;Args&gt;(args)...);</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;}</div></div><!-- fragment -->
+<p class="reference">Referenced by <a class="el" href="../../d2/d40/system__abstractions_8hpp_source.html#l00048">fusion_server::system_abstractions::make_Package()</a>.</p>
+<div class="fragment"><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                                            {</div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;  <span class="keywordflow">return</span> std::make_shared&lt;const std::string&gt;(std::forward&lt;Args&gt;(args)...);</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

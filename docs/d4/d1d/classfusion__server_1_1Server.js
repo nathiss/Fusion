@@ -7,7 +7,7 @@ var classfusion__server_1_1Server =
     [ "Register", "d4/d1d/classfusion__server_1_1Server.html#a939dbf6b6c2124604ecde8ffda960ec6", null ],
     [ "StartAccepting", "d4/d1d/classfusion__server_1_1Server.html#aecfcada9e5faf3165e959a4bd4aa06a5", null ],
     [ "Unregister", "d4/d1d/classfusion__server_1_1Server.html#a8103b54d40efddcef982172a805abb6b", null ],
-    [ "games_", "d4/d1d/classfusion__server_1_1Server.html#affd72e294daee1f8935693c53b527fd7", null ],
+    [ "games_", "d4/d1d/classfusion__server_1_1Server.html#af30fab29910ac621dd75baf79d6e7d2d", null ],
     [ "games_mtx_", "d4/d1d/classfusion__server_1_1Server.html#adc9ff6283fa5dd8d73b1f46819750bb9", null ],
     [ "instance_", "d4/d1d/classfusion__server_1_1Server.html#ae98570e80cb8129494af694a820cafef", null ],
     [ "ioc_", "d4/d1d/classfusion__server_1_1Server.html#a69baf9c5e1f4ca98198fbc5b5bf7d44c", null ],

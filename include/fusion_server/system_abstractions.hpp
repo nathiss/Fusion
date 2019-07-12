@@ -61,12 +61,16 @@ template <typename... Args>
  */
 using IncommingPackageDelegate = std::function< void(const PackageParser::JSON&  package, WebSocketSession* session) >;
 
+/**
+ * @brief Logging pattern.
+ * This constant is a default pattern for log lines, both in files and console.
+ */
 static constexpr const char* kLoggerPattern = "[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v";
 
 /**
  * @brief Creates a logger.
  * This function creates a logger and associates it with the given name.
- * If @p register is set to true, the new logger will be registered in global
+ * If @p registrate is set to true, the new logger will be registered in global
  * registry.
  *
  * @tparam Sinks
@@ -75,14 +79,14 @@ static constexpr const char* kLoggerPattern = "[%H:%M:%S:%e] [thread %t] [%^%l@%
  * @param logger_name
  *   The name of a new logger.
  *
- * @param register
+ * @param registrate
  *   If true the logger will be registered in the global registry.
  *
  * @param sinks
  *   A pack of sinks that will be forwarded to the new logger object.
  *
  * @return
- *   A pointer to the new logger.
+ *   A shared pointer to the new logger.
  *
  * @see [spdlog Sinks](https://github.com/gabime/spdlog/wiki/4.-Sinks)
  * @see [spdlog Logger registry](https://github.com/gabime/spdlog/wiki/5.-Logger-registry)

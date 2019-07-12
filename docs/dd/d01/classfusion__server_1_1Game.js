@@ -7,7 +7,7 @@ var classfusion__server_1_1Game =
       [ "kRandom", "dd/d01/classfusion__server_1_1Game.html#a86bf93d9a437b1c5d9c2d5362c3b3e3eaecd2373ff9952754683cb6e4aad76547", null ]
     ] ],
     [ "Game", "dd/d01/classfusion__server_1_1Game.html#aa0608c8e62ed8247a5d5bdbabcf8fd9a", null ],
-    [ "Game", "dd/d01/classfusion__server_1_1Game.html#afab12e65a961b8bfca93df885e47b98e", null ],
+    [ "Game", "dd/d01/classfusion__server_1_1Game.html#a8bd23deb6b615a615066c6bc96ac8e77", null ],
     [ "BroadcastPackage", "dd/d01/classfusion__server_1_1Game.html#a0fe5ab974abced57eab1df7d770f49ec", null ],
     [ "DoResponse", "dd/d01/classfusion__server_1_1Game.html#ab53501341fa16c6775cef8d8347620cf", null ],
     [ "GetCurrentState", "dd/d01/classfusion__server_1_1Game.html#abab3259402c15963fa863cd2e8e4d354", null ],

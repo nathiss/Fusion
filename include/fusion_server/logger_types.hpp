@@ -30,7 +30,7 @@ namespace fusion_server {
  *   This is an endpoint to be printed.
  *
  * @return
- *
+ *   A reference to @p os.
  */
 template <typename OStream>
 OStream& operator<<(OStream& os, const boost::asio::ip::tcp::socket::endpoint_type& endpoint) noexcept {
