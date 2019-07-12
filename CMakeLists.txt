@@ -11,27 +11,31 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
+set(HeadersBase "include/fusion_server")
+
 set(Headers
-  include/fusion_server/game.hpp
-  include/fusion_server/http_session.hpp
-  include/fusion_server/listener.hpp
-  include/fusion_server/logger_types.hpp
-  include/fusion_server/package_parser.hpp
-  include/fusion_server/package_verifier.hpp
-  include/fusion_server/player.hpp
-  include/fusion_server/server.hpp
-  include/fusion_server/system_abstractions.hpp
-  include/fusion_server/websocket_session.hpp
+  ${HeadersBase}/game.hpp
+  ${HeadersBase}/http_session.hpp
+  ${HeadersBase}/listener.hpp
+  ${HeadersBase}/logger_types.hpp
+  ${HeadersBase}/package_parser.hpp
+  ${HeadersBase}/package_verifier.hpp
+  ${HeadersBase}/player.hpp
+  ${HeadersBase}/server.hpp
+  ${HeadersBase}/system_abstractions.hpp
+  ${HeadersBase}/websocket_session.hpp
 )
 
+set(SourcesBase "src")
+
 set(Sources
-  src/game.cpp
-  src/http_session.cpp
-  src/listener.cpp
-  src/package_parser.cpp
-  src/package_verifier.cpp
-  src/server.cpp
-  src/websocket_session.cpp
+  ${SourcesBase}/game.cpp
+  ${SourcesBase}/http_session.cpp
+  ${SourcesBase}/listener.cpp
+  ${SourcesBase}/package_parser.cpp
+  ${SourcesBase}/package_verifier.cpp
+  ${SourcesBase}/server.cpp
+  ${SourcesBase}/websocket_session.cpp
 )
 
 add_subdirectory(third_party/spdlog)
