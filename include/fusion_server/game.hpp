@@ -96,7 +96,7 @@ class Game {
    * @param[in] game_name
    *   The name of this game. The object takes the ownership of this argument.
    */
-  Game(std::string game_name) noexcept;
+  explicit Game(std::string game_name) noexcept;
 
   /**
    * This method joins the client to this game and adds its session to the
