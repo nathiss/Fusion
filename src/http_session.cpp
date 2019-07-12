@@ -48,11 +48,12 @@ void HTTPSession::Close() noexcept {
   boost::system::error_code ec;
   socket_.close(ec);
 
-  if (ec)
+  if (ec) {
     logger_->warn("An error occured during closing the connection to {}", endpoint);
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Set on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
+  }
 }
 
 HTTPSession::operator bool() const noexcept {
@@ -145,7 +146,7 @@ void HTTPSession::PerformAsyncWrite(Response_t response) noexcept {
   });
 }
 
-auto HTTPSession::MakeResponse() const noexcept -> Response_t {
+HTTPSession::Response_t HTTPSession::MakeResponse() const noexcept {
   Response_t res{
     request_.target() == "/" ? boost::beast::http::status::ok :
     boost::beast::http::status::not_found, request_.version()
@@ -158,7 +159,7 @@ auto HTTPSession::MakeResponse() const noexcept -> Response_t {
   return res;
 }
 
-auto HTTPSession::MakeBadRequest() const noexcept -> Response_t {
+HTTPSession::Response_t  HTTPSession::MakeBadRequest() const noexcept {
   Response_t res{
     boost::beast::http::status::bad_request,
     request_.version()

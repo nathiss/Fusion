@@ -12,8 +12,8 @@
 namespace fusion_server {
 
 std::pair<bool, PackageParser::JSON>
-PackageVerifier::Verify(std::string raw_package) const noexcept {
-  auto parsed = package_parser_.Parse(std::move(raw_package));
+PackageVerifier::Verify(const std::string& raw_package) const noexcept {
+  auto parsed = package_parser_.Parse(raw_package);
   if (!parsed) {
     return std::make_pair(false, MakeNotValidJSON());
   }
@@ -67,51 +67,51 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
 }
 
 PackageParser::JSON PackageVerifier::MakeNotValidJSON() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "One of the packages didn't contain a valid JSON.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"One of the packages didn't contain a valid JSON."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 PackageParser::JSON PackageVerifier::MakeTypeNotFound() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "One of the packages didn't have a \"type\" field.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"One of the packages didn't have a \"type\" field."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 PackageParser::JSON PackageVerifier::MakeNotValidJoin() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "A \"JOIN\" was ill-formed.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"A \"JOIN\" was ill-formed.."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 PackageParser::JSON PackageVerifier::MakeNotValidUpdate() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "A \"UPDATE\" was ill-formed.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"A \"UPDATE\" was ill-formed."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 PackageParser::JSON PackageVerifier::MakeNotValidLeave() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "A \"LEAVE\" was ill-formed.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"A \"LEAVE\" was ill-formed."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 PackageParser::JSON PackageVerifier::MakeUnidentified() const noexcept {
-  PackageParser::JSON ret = PackageParser::JSON::object();
-  ret["closed"] = true;
-  ret["type"] = "error";
-  ret["message"] = "Cannot identify a packge.";
-  return ret;
+  return PackageParser::JSON({
+    {"closed", {true}},
+    {"type", {"error"}},
+    {"message", {"Cannot identify a packge."}}
+  }, false, PackageParser::JSON::value_t::object);
 }
 
 }  // namespace fusion_server

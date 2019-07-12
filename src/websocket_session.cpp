@@ -28,8 +28,9 @@ WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
       remote_endpoint_{websocket_.next_layer().remote_endpoint()},
       strand_{websocket_.get_executor()},
       handshake_complete_{false},
-      in_closing_procedure_{false} {
-  logger_ = spdlog::get("websocket");
+      in_closing_procedure_{false},
+      package_verifier_{},
+      logger_{spdlog::get("websocket")} {
   delegate_ = Server::GetInstance().Register(this);
 }
 
@@ -207,10 +208,10 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
 
-  const auto package = boost::beast::buffers_to_string(buffer_.data());
+  auto package = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  auto[is_valid, msg] = package_verifier_.Verify(std::move(package));
+  auto[is_valid, msg] = package_verifier_.Verify(package);
 
   if (!is_valid) {
     logger_->warn("A package from {} was not valid. Closing the connection.",
@@ -219,8 +220,8 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
 
-  boost::asio::post(websocket_.get_executor(), [this, msg = std::move(msg)]{
-    delegate_(std::move(msg), this);
+  boost::asio::post(websocket_.get_executor(), [this, msg = std::move(msg)] {
+    delegate_(msg, this);
   });
 
   websocket_.async_read(

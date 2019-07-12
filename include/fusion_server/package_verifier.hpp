@@ -39,7 +39,7 @@ class PackageVerifier {
    *   returned.
    */
   std::pair<bool, PackageParser::JSON>
-  Verify(std::string raw_package) const noexcept;
+  Verify(const std::string& raw_package) const noexcept;
 
  private:
   /**

@@ -18,18 +18,19 @@ using fusion_server::system_abstractions::Package;
 
 namespace fusion_server {
 
-Game::Game(std::string game_name) noexcept {
+Game::Game(const std::string& game_name) noexcept
+    : next_player_id_{0} {
   std::string logger_name{"game["};
-  logger_name += std::move(game_name);
+  logger_name += game_name;
   logger_name += "]";
   logger_ = system_abstractions::CreateLogger(std::move(logger_name), false);
+
   delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
     DoResponse(src, package);
   };
 }
 
-auto Game::Join(WebSocketSession *session, Team team) noexcept
-    -> join_result_t {
+Game::join_result_t Game::Join(WebSocketSession *session, Team team) noexcept {
   if (IsInGame(session)) {
     logger_->warn("Tryig to join already joined session. ({})",
       session->GetRemoteEndpoint());
@@ -41,8 +42,9 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
     case Team::kFirst: {
       {
         std::lock_guard l{first_team_mtx_};
-        if (first_team_.size() >= kMaxPlayersPerTeam)
+        if (first_team_.size() >= kMaxPlayersPerTeam) {
           return {};
+        }
         player_id = next_player_id_++;
         first_team_.insert({session, std::make_unique<Player>(player_id)});
       }
@@ -52,8 +54,9 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
     case Team::kSecond: {
       {
         std::lock_guard l{second_team_mtx_};
-        if (second_team_.size() >= kMaxPlayersPerTeam)
+        if (second_team_.size() >= kMaxPlayersPerTeam) {
           return {};
+        }
         player_id = next_player_id_++;
         second_team_.insert({session, std::make_unique<Player>(player_id)});
       }
@@ -64,16 +67,18 @@ auto Game::Join(WebSocketSession *session, Team team) noexcept
     default: {
       std::lock_guard lf{first_team_mtx_};
       if (std::lock_guard ls{second_team_mtx_}; first_team_.size() >= second_team_.size()) {
-        if (second_team_.size() >= kMaxPlayersPerTeam)
+        if (second_team_.size() >= kMaxPlayersPerTeam) {
           return {};
+        }
         player_id = next_player_id_++;
         team = Team::kSecond;
         second_team_.insert({session, std::make_unique<Player>(player_id)});
         break;
       }
       // The second team is bigger than the first.
-      if (first_team_.size() >= kMaxPlayersPerTeam)
+      if (first_team_.size() >= kMaxPlayersPerTeam) {
         return {};
+      }
       player_id = next_player_id_++;
       team = Team::kFirst;
       first_team_.insert({session, std::make_unique<Player>(player_id)});
@@ -101,20 +106,22 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 
   if (team_id == Team::kFirst || team_id == Team::kRandom) {
     std::lock_guard l{first_team_mtx_};
-    for (const auto& pair : first_team_)
+    for (const auto& pair : first_team_) {
       if (session == pair.first) {
         first_team_.erase(pair);
         return true;
       }
+    }
   }
 
   if (team_id == Team::kSecond || team_id == Team::kRandom) {
     std::lock_guard l{second_team_mtx_};
-    for (const auto& pair : second_team_)
+    for (const auto& pair : second_team_) {
       if (session == pair.first) {
         second_team_.erase(pair);
         return true;
       }
+    }
   }
 
   return false;
@@ -123,14 +130,16 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 void Game::BroadcastPackage(Package package) noexcept {
   {
     std::lock_guard l{first_team_mtx_};
-    for (auto& pair : first_team_)
+    for (auto& pair : first_team_) {
       pair.first->Write(package);
+    }
   }
 
   {
     std::lock_guard l{second_team_mtx_};
-    for (const auto& pair : second_team_)
+    for (const auto& pair : second_team_) {
       pair.first->Write(package);
+    }
   }
 }
 
@@ -163,20 +172,23 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
 
   {
     std::lock_guard l{rays_mtx_};
-    for (auto& [_, ray] : rays_)
+    for (auto& [_, ray] : rays_) {
       state["rays"].push_back(ray.ToJson());
+    }
   }
 
   {
     std::lock_guard l{first_team_mtx_};
-    for (auto& [_, player_ptr] : first_team_)
+    for (auto& [_, player_ptr] : first_team_) {
       state["players"].push_back(player_ptr->ToJson());
+    }
   }
 
   {
     std::lock_guard l{second_team_mtx_};
-    for (auto& [_, player_ptr] : second_team_)
+    for (auto& [_, player_ptr] : second_team_) {
       state["players"].push_back(player_ptr->ToJson());
+    }
   }
 
   return state;
@@ -212,7 +224,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
       }
     }
 
-    const auto response = [this] {
+    auto response = [this] {
       PackageParser::JSON ret = PackageParser::JSON::object();
       ret["type"] = "update";
       auto state = GetCurrentState();
@@ -230,9 +242,9 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
         session->GetRemoteEndpoint());
       session->Close();
       return;
-    } else {
-      logger_->debug("Session {} left the game.", session->GetRemoteEndpoint());
     }
+
+    logger_->debug("Session {} left the game.", session->GetRemoteEndpoint());
 
     // TODO(nathiss): broadcast the leaving
     session->delegate_ = Server::GetInstance().Register(session);

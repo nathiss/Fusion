@@ -94,9 +94,9 @@ class Game {
    * new logger for this game.
    *
    * @param[in] game_name
-   *   The name of this game. The object takes the ownership of this argument.
+   *   The name of this game.
    */
-  explicit Game(std::string game_name) noexcept;
+  explicit Game(const std::string& game_name) noexcept;
 
   /**
    * This method joins the client to this game and adds its session to the

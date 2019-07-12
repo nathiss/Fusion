@@ -18,12 +18,12 @@
 
 namespace fusion_server {
 
-std::unique_ptr<Server> Server::instance_ = nullptr;
+std::unique_ptr<Server> Server::instance_ = nullptr;  // NOLINT(fuchsia-statically-constructed-objects)
 
 Server& Server::GetInstance() noexcept {
   if (instance_ == nullptr) {
     spdlog::get("server")->info("Creating a new server instance.");
-    instance_.reset(new Server);
+    instance_ = std::unique_ptr<Server>{new Server};
   }
   return *instance_;
 }
@@ -32,18 +32,18 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
   return ioc_;
 }
 
-auto Server::Register(WebSocketSession* session) noexcept
-    -> system_abstractions::IncommingPackageDelegate& {
-    if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
-      logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
-      return unjoined_delegate_;
-    } else {
-      sessions_correlation_[session] = {};
-    }
+system_abstractions::IncommingPackageDelegate&
+Server::Register(WebSocketSession* session) noexcept {
+  if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
+    logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
+    return unjoined_delegate_;
+  }
 
-    unidentified_sessions_mtx_.lock();
-    unidentified_sessions_.insert(session);
-    unidentified_sessions_mtx_.unlock();
+  sessions_correlation_[session] = {};
+
+  unidentified_sessions_mtx_.lock();
+  unidentified_sessions_.insert(session);
+  unidentified_sessions_mtx_.unlock();
 
   logger_->debug("New WebSocket session registered {}.", session->GetRemoteEndpoint());
 
@@ -88,7 +88,7 @@ bool Server::StartAccepting() noexcept {
   logger_->info("Creating a Listener object.");
 
   // TODO(nathiss): read the local endpoint from a config file.
-  return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();
+  return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();  // NOLINT (cppcoreguidelines-avoid-magic-numbers)
 }
 
 void Server::Shutdown() noexcept {
@@ -124,7 +124,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
   };
 
   if (request["type"] == "join") {
-    std::string game_name = std::move(request["game"]);
+    std::string game_name = request["game"];
     games_mtx_.lock();
     auto it = games_.find(game_name);
     if (it == games_.end()) {

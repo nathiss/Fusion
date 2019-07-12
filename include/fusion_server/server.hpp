@@ -129,7 +129,7 @@ class Server {
    *   A response for the given request from a client is returned.
    */
   PackageParser::JSON
-  MakeResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept;
+  MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept;
 
   /**
    * This function object is called by WebSocket sessions from a clients, who

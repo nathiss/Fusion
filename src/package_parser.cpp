@@ -7,16 +7,14 @@
  * Copyright 2019 Kamil Rusin
  */
 
-#include <utility>
-
 #include <fusion_server/package_parser.hpp>
 
 namespace fusion_server {
 
-auto PackageParser::Parse(std::string package) const noexcept
-    -> std::optional<JSON> {
+std::optional<PackageParser::JSON>
+PackageParser::Parse(const std::string& package) const noexcept {
   try {
-    return JSON::parse(std::move(package));
+    return JSON::parse(package, nullptr, true);
   }
   catch(...) {
     return {};
