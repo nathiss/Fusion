@@ -123,7 +123,7 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     if (it == games_.end()) {
       it = games_.emplace(game_name, std::make_shared<Game>(game_name)).first;
     }
-    games_mtx_.lock();
+    games_mtx_.unlock();
     auto join_result = it->second->Join(src);
     if (!join_result) {  // The game is full.
       return std::make_pair(false, make_game_full(request["id"]));

@@ -18,8 +18,11 @@ using fusion_server::system_abstractions::Package;
 
 namespace fusion_server {
 
-Game::Game(const std::string& game_name) noexcept {
-  logger_ = system_abstractions::CreateLogger(game_name, false);
+Game::Game(std::string game_name) noexcept {
+  std::string logger_name{"game["};
+  logger_name += std::move(game_name);
+  logger_name += "]";
+  logger_ = system_abstractions::CreateLogger(std::move(logger_name), false);
   delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
     DoResponse(src, package);
   };
