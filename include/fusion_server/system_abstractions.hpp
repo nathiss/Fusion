@@ -97,7 +97,7 @@ auto CreateLogger(std::string logger_name, bool registrate, Sinks... sinks) noex
 #endif
 
   // TODO: read the path from config file
-  std::string file_name{"log/"};
+  std::string file_name{"logs/"};
   file_name += logger_name + ".log";
 
   auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(file_name, true);
