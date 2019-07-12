@@ -50,7 +50,7 @@ class PackageVerifier {
    *   A JSON object contains an error message for the client informing about
    *   not valid JSON syntax is returned.
    */
-  PackageParser::JSON makeNotValidJSON() const noexcept;
+  PackageParser::JSON MakeNotValidJSON() const noexcept;
 
   /**
    * This method returns a JSON object contains an error message for the client
@@ -60,7 +60,7 @@ class PackageVerifier {
    *   A JSON object contains an error message for the client informing that
    *   "type" field is not present is the received package is returned.
    */
-  PackageParser::JSON makeTypeNotFound() const noexcept;
+  PackageParser::JSON MakeTypeNotFound() const noexcept;
 
   /**
    * This method returns a JSON object contains an error message for the client
@@ -70,7 +70,7 @@ class PackageVerifier {
    *   A JSON object contains an error message for the client informing that
    *   a "JOIN" package was ill-formed is returned.
    */
-  PackageParser::JSON makeNotValidJoin() const noexcept;
+  PackageParser::JSON MakeNotValidJoin() const noexcept;
 
   /**
    * This method returns a JSON object contains an error message for the client
@@ -80,7 +80,7 @@ class PackageVerifier {
    *   A JSON object contains an error message for the client informing that
    *   a "UPDATE" package was ill-formed is returned.
    */
-  PackageParser::JSON makeNotValidUpdate() const noexcept;
+  PackageParser::JSON MakeNotValidUpdate() const noexcept;
 
   /**
    * This method returns a JSON object contains an error message for the client
@@ -90,7 +90,17 @@ class PackageVerifier {
    *   A JSON object contains an error message for the client informing that
    *   a "LEAVE" package was ill-formed is returned.
    */
-  PackageParser::JSON makeNotValidLeave() const noexcept;
+  PackageParser::JSON MakeNotValidLeave() const noexcept;
+
+  /**
+   * This method returns a JSON object contains an error message for the client
+   * informing that a package was unidentified.
+   *
+   * @return
+   *   A JSON object contains an error message for the client informing that
+   *   package was unidentified is returned.
+   */
+  PackageParser::JSON MakeUnidentified() const noexcept;
 
   /**
    * This is a package parser.

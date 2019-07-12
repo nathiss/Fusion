@@ -15,7 +15,7 @@ std::pair<bool, PackageParser::JSON>
 PackageVerifier::Verify(std::string raw_package) const noexcept {
   auto parsed = package_parser_.Parse(std::move(raw_package));
   if (!parsed) {
-    return std::make_pair(false, makeNotValidJSON());
+    return std::make_pair(false, MakeNotValidJSON());
   }
 
   auto json = std::move(parsed.value());
@@ -23,11 +23,10 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
   if (!(json.contains("type") &&
   json["type"].type() == decltype(json)::value_t::string
   )) {
-    return std::make_pair(false, makeTypeNotFound());
+    return std::make_pair(false, MakeTypeNotFound());
   }
 
   if (json["type"] == "join") {
-
     if (!(json.contains("id") &&
     json.contains("nick") &&
     json.contains("game") &&
@@ -36,9 +35,9 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
     json["nick"].type() == decltype(json)::value_t::string &&
     json["game"].type() == decltype(json)::value_t::string
     )) {
-      return std::make_pair(false, makeNotValidJoin());
+      return std::make_pair(false, MakeNotValidJoin());
     }
-
+    return std::make_pair(true, std::move(json));
   }
 
   if (json["type"] == "update") {
@@ -53,20 +52,24 @@ PackageVerifier::Verify(std::string raw_package) const noexcept {
     json["position"][1].type() == decltype(json)::value_t::number_float &&
     json["angle"].type() == decltype(json)::value_t::number_float
     )) {
-      return std::make_pair(false, makeNotValidUpdate());
+      return std::make_pair(false, MakeNotValidUpdate());
     }
+    return std::make_pair(true, std::move(json));
   }
 
   if (json["type"] == "leave") {
     if (json.size() != 1) {
-      return std::make_pair(false, makeNotValidLeave());
+      return std::make_pair(false, MakeNotValidLeave());
     }
+    return std::make_pair(true, std::move(json));
   }
 
-  return std::make_pair(true, std::move(json));
+
+  // Received an undentified package.
+  return std::make_pair(false, MakeUnidentified());
 }
 
-PackageParser::JSON PackageVerifier::makeNotValidJSON() const noexcept {
+PackageParser::JSON PackageVerifier::MakeNotValidJSON() const noexcept {
   PackageParser::JSON ret = PackageParser::JSON::object();
   ret["closed"] = true;
   ret["type"] = "error";
@@ -74,7 +77,7 @@ PackageParser::JSON PackageVerifier::makeNotValidJSON() const noexcept {
   return ret;
 }
 
-PackageParser::JSON PackageVerifier::makeTypeNotFound() const noexcept {
+PackageParser::JSON PackageVerifier::MakeTypeNotFound() const noexcept {
   PackageParser::JSON ret = PackageParser::JSON::object();
   ret["closed"] = true;
   ret["type"] = "error";
@@ -82,7 +85,7 @@ PackageParser::JSON PackageVerifier::makeTypeNotFound() const noexcept {
   return ret;
 }
 
-PackageParser::JSON PackageVerifier::makeNotValidJoin() const noexcept {
+PackageParser::JSON PackageVerifier::MakeNotValidJoin() const noexcept {
   PackageParser::JSON ret = PackageParser::JSON::object();
   ret["closed"] = true;
   ret["type"] = "error";
@@ -90,7 +93,7 @@ PackageParser::JSON PackageVerifier::makeNotValidJoin() const noexcept {
   return ret;
 }
 
-PackageParser::JSON PackageVerifier::makeNotValidUpdate() const noexcept {
+PackageParser::JSON PackageVerifier::MakeNotValidUpdate() const noexcept {
   PackageParser::JSON ret = PackageParser::JSON::object();
   ret["closed"] = true;
   ret["type"] = "error";
@@ -98,11 +101,19 @@ PackageParser::JSON PackageVerifier::makeNotValidUpdate() const noexcept {
   return ret;
 }
 
-PackageParser::JSON PackageVerifier::makeNotValidLeave() const noexcept {
+PackageParser::JSON PackageVerifier::MakeNotValidLeave() const noexcept {
   PackageParser::JSON ret = PackageParser::JSON::object();
   ret["closed"] = true;
   ret["type"] = "error";
   ret["message"] = "A \"LEAVE\" was ill-formed.";
+  return ret;
+}
+
+PackageParser::JSON PackageVerifier::MakeUnidentified() const noexcept {
+  PackageParser::JSON ret = PackageParser::JSON::object();
+  ret["closed"] = true;
+  ret["type"] = "error";
+  ret["message"] = "Cannot identify a packge.";
   return ret;
 }
 
