@@ -104,8 +104,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a67564e1add25dccc4d0f5fc0d048d37a"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">JSON</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d88/classfusion__server_1_1PackageParser.html#a67564e1add25dccc4d0f5fc0d048d37a">Parse</a> (std::string package) const noexcept</td></tr>
-<tr class="separator:a67564e1add25dccc4d0f5fc0d048d37a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1a00bf0075bfd57e5a0c87aa34d4af9"><td class="memItemLeft" align="right" valign="top">std::optional&lt; <a class="el" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">JSON</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ae1a00bf0075bfd57e5a0c87aa34d4af9">Parse</a> (const std::string &amp;package) const noexcept</td></tr>
+<tr class="separator:ae1a00bf0075bfd57e5a0c87aa34d4af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is a JSON parser used to parse incomming messages from the WebSocket sessions. </p>
@@ -130,8 +130,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a67564e1add25dccc4d0f5fc0d048d37a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a67564e1add25dccc4d0f5fc0d048d37a">&#9670;&nbsp;</a></span>Parse()</h2>
+<a id="ae1a00bf0075bfd57e5a0c87aa34d4af9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1a00bf0075bfd57e5a0c87aa34d4af9">&#9670;&nbsp;</a></span>Parse()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -140,9 +140,9 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">auto fusion_server::PackageParser::Parse </td>
+          <td class="memname">std::optional&lt; <a class="el" href="../../d6/d88/classfusion__server_1_1PackageParser.html#ab2c94553552b0005d6608dac222f80d2">PackageParser::JSON</a> &gt; fusion_server::PackageParser::Parse </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>package</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -162,8 +162,8 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The parsed package or no value, if the package cannot be properly parsed. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="../../d6/d79/package__parser_8cpp_source.html#l00016">16</a> of file <a class="el" href="../../d6/d79/package__parser_8cpp_source.html">package_parser.cpp</a>.</p>
-<div class="fragment"><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;                         {</div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keywordflow">try</span> {</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordflow">return</span> JSON::parse(std::move(package));</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  }</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  <span class="keywordflow">catch</span>(...) {</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordflow">return</span> {};</div><div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  }</div><div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div></div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="../../d6/d79/package__parser_8cpp_source.html#l00015">15</a> of file <a class="el" href="../../d6/d79/package__parser_8cpp_source.html">package_parser.cpp</a>.</p>
+<div class="fragment"><div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;                                                            {</div><div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keywordflow">try</span> {</div><div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordflow">return</span> JSON::parse(package, <span class="keyword">nullptr</span>, <span class="keyword">true</span>);</div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  }</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keywordflow">catch</span>(...) {</div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordflow">return</span> {};</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;  }</div><div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div></div><!-- fragment -->
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>

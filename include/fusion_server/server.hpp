@@ -119,7 +119,7 @@ class Server {
   /**
    * This method returns a response for the given request from a client.
    *
-   * @param[in] session
+   * @param[in] src
    *   The WebSocket session connected to the client.
    *
    * @param[in] request
