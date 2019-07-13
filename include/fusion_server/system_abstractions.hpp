@@ -83,7 +83,7 @@ auto CreateLogger(std::string logger_name, bool registrate, Sinks... sinks) noex
 #ifdef DEBUG
   auto console_log_level = spdlog::level::debug;
 #else
-  auto console_log_level = spdlog::level::warn;
+  auto console_log_level = spdlog::level::info;
 #endif
 
   // TODO: read the path from config file
