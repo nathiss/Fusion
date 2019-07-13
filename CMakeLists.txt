@@ -57,7 +57,7 @@ find_package(Threads REQUIRED)
 
 set(CMAKE_LINK_WHAT_YOU_USE TRUE)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-fuchsia-default-arguments,-bugprone-exception-escape")
-set(CMAKE_CXX_CPPLINT "cpplint;--linelength=120;--quiet")
+set(CMAKE_CXX_CPPLINT "cpplint;--linelength=120;--quiet;--filter=-readability/nolint")
 
 add_library(${This} ${Sources} ${Headers})
 

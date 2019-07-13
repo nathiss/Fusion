@@ -38,7 +38,7 @@ WebSocketSession::~WebSocketSession() noexcept {
   Server::GetInstance().Unregister(this);
 };
 
-void WebSocketSession::Write(Package package) noexcept {
+void WebSocketSession::Write(const std::shared_ptr<Package>& package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
 
   if (in_closing_procedure_) {
@@ -109,7 +109,7 @@ void WebSocketSession::Close() noexcept {
   }
 }
 
-void WebSocketSession::Close(Package package) noexcept {
+void WebSocketSession::Close(const std::shared_ptr<Package>& package) noexcept {
   // We lock the mutex first, to ensure that no additional package will be
   // queued, after the closing procedure has started.
   std::lock_guard l{outgoing_queue_mtx_};
@@ -216,7 +216,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   if (!is_valid) {
     logger_->warn("A package from {} was not valid. Closing the connection.",
       GetRemoteEndpoint());
-    Close(system_abstractions::make_Package(msg.dump()));
+    Close(std::make_shared<Package>(msg.dump()));
     return;
   }
 

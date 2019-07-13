@@ -148,7 +148,7 @@ class Game {
    * @param[in] package
    *   The package to be broadcasted.
    */
-  void BroadcastPackage(Package package) noexcept;
+  void BroadcastPackage(const std::shared_ptr<Package>& package) noexcept;
 
   /**
    * This method returns the amount of players in this game.

@@ -112,7 +112,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * @note
    *   This method is thread-safe.
    */
-  void Write(Package package) noexcept;
+  void Write(const std::shared_ptr<Package>& package) noexcept;
 
   /**
    * This method upgrades the connection to the WebSocket Protocol and performs
@@ -145,7 +145,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *   This method is thread safe. It is indended to be called only once.
    *   If it is called more than once the behaviour is undefined.
    */
-  void Close(Package package) noexcept;
+  void Close(const std::shared_ptr<Package>& package) noexcept;
 
   /**
    * This method returns a value that indicates whether or not the socket is
@@ -233,7 +233,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This queue holds all outgoing packages, which have not yet been sent.
    */
-  std::deque<Package> outgoing_queue_;
+  std::deque<std::shared_ptr<Package>> outgoing_queue_;
 
   /**
    * This is the mutex for outgoing queue.

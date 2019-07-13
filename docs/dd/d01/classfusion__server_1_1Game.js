@@ -8,7 +8,7 @@ var classfusion__server_1_1Game =
     ] ],
     [ "Game", "dd/d01/classfusion__server_1_1Game.html#aa0608c8e62ed8247a5d5bdbabcf8fd9a", null ],
     [ "Game", "dd/d01/classfusion__server_1_1Game.html#af98bb629da607b7e97cd47b8138143a0", null ],
-    [ "BroadcastPackage", "dd/d01/classfusion__server_1_1Game.html#a0fe5ab974abced57eab1df7d770f49ec", null ],
+    [ "BroadcastPackage", "dd/d01/classfusion__server_1_1Game.html#a8a08c2ab80d13a1b35b25c9c5d3c553e", null ],
     [ "DoResponse", "dd/d01/classfusion__server_1_1Game.html#ab53501341fa16c6775cef8d8347620cf", null ],
     [ "GetCurrentState", "dd/d01/classfusion__server_1_1Game.html#abab3259402c15963fa863cd2e8e4d354", null ],
     [ "GetPlayersCount", "dd/d01/classfusion__server_1_1Game.html#a4ab15c7af690c965b8b14ef1eaf7af08", null ],

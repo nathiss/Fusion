@@ -102,25 +102,25 @@ Server::Server() noexcept {
   unjoined_delegate_ = [this](const PackageParser::JSON& package, WebSocketSession* src) {
     logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
     auto response = MakeResponse(src, package);
-    src->Write(system_abstractions::make_Package(response.dump()));
+    src->Write(std::make_shared<Package>(response.dump()));
   };
 }
 
 PackageParser::JSON
 Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept {
   const auto make_unidentified = [] {
-    PackageParser::JSON ret = PackageParser::JSON::object();
-    ret["type"] = "warning";
-    ret["message"] = "Received an unidentified package.";
-    ret["closed"] = false;
-    return ret;
+    return PackageParser::JSON({
+      {"type", {"warning"}},
+      {"message", {"Received an unidentified package."}},
+      {"closed", {false}},
+    }, false, PackageParser::JSON::value_t::object);
   };
 
   const auto make_game_full = [](std::size_t id){
-    PackageParser::JSON ret = PackageParser::JSON::object();
-    ret["id"] = id;
-    ret["result"] = "full";
-    return ret;
+    return PackageParser::JSON({
+      {"id", {id}},
+      {"result", {"full"}},
+    }, false, PackageParser::JSON::value_t::object);
   };
 
   if (request["type"] == "join") {
@@ -148,13 +148,13 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     }
 
     auto response = [&request, &join_result] {
-      PackageParser::JSON ret = PackageParser::JSON::object();
-      ret["id"] = request["id"];
-      ret["result"] = "joined";
-      ret["my_id"] = std::get<2>(join_result.value());
-      ret["players"] = std::get<1>(join_result.value())["players"];
-      ret["rays"] = std::get<1>(join_result.value())["rays"];
-      return ret;
+      return PackageParser::JSON({
+        {"id", {request["id"]}},
+        {"result", {"joined"}},
+        {"my_id", {std::get<2>(join_result.value())}},
+        {"players", {std::get<1>(join_result.value())["players"]}},
+        {"rays", {std::get<1>(join_result.value())["rays"]}},
+      }, false, PackageParser::JSON::value_t::object);
     }();
 
     return std::make_pair(false, std::move(response));

@@ -127,7 +127,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
   return false;
 }
 
-void Game::BroadcastPackage(Package package) noexcept {
+void Game::BroadcastPackage(const std::shared_ptr<Package>& package) noexcept {
   {
     std::lock_guard l{first_team_mtx_};
     for (auto& pair : first_team_) {
@@ -164,10 +164,10 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
 
 PackageParser::JSON Game::GetCurrentState() const noexcept {
   auto state = [] {
-    PackageParser::JSON ret = PackageParser::JSON::object();
-    ret["players"] = PackageParser::JSON::array();
-    ret["rays"] = PackageParser::JSON::array();
-    return ret;
+    return PackageParser::JSON({
+      {"players", {PackageParser::JSON::array()}},
+      {"rays", {PackageParser::JSON::array()}},
+    }, false, PackageParser::JSON::value_t::object);
   }();
 
   {
@@ -197,11 +197,11 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
 void
 Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept {
   const auto make_unidentified = [] {
-    PackageParser::JSON ret = PackageParser::JSON::object();
-    ret["type"] = "warning";
-    ret["message"] = "Received an unidentified package.";
-    ret["closed"] = false;
-    return ret;
+    return PackageParser::JSON({
+      {"type", {"warning"}},
+      {"message", {"Received an unidentified package."}},
+      {"closed", {false}},
+    }, false, PackageParser::JSON::value_t::object);
   };
 
   // analysing
@@ -226,14 +226,14 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
 
     auto response = [this] {
       PackageParser::JSON ret = PackageParser::JSON::object();
-      ret["type"] = "update";
       auto state = GetCurrentState();
-      ret["players"] = state["players"];
-      ret["rays"] = state["rays"];
-
-      return ret;
+      return PackageParser::JSON({
+        {"type", {"update"}},
+        {"players", {state["players"]}},
+        {"rays", {state["rays"]}},
+      }, false, PackageParser::JSON::value_t::object);
     }();
-    BroadcastPackage(system_abstractions::make_Package(std::move(response)));
+    BroadcastPackage(std::make_shared<Package>(std::move(response)));
   }  // "update"
 
   if (request["type"] == "leave") {
@@ -252,7 +252,7 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
 
   logger_->warn("Received an unidentified package from {}. [type={}]",
     session->GetRemoteEndpoint(), request["type"].dump());
-  session->Write(system_abstractions::make_Package(make_unidentified()));
+  session->Write(std::make_shared<Package>(make_unidentified()));
 }
 
 }  // namespace fusion_server

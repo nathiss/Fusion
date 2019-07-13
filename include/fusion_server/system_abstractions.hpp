@@ -33,21 +33,7 @@ namespace system_abstractions {
 /**
  * This is the package type used in both WebSocket and HTTP sessions.
  */
-using Package = std::shared_ptr<const std::string>;
-
-/**
- * This function template is a wrapper for creating Package objects.
- *
- * @param[in] args
- *   Arguments passed to the used factory.
- *
- * @return
- *   The created Package object.
- */
-template <typename... Args>
-[[ nodiscard ]] Package make_Package(Args... args) noexcept {
-  return std::make_shared<const std::string>(std::forward<Args>(args)...);
-}
+using Package = const std::string;
 
 /**
  * This type is used to create delegates that will be called by WebSocket
