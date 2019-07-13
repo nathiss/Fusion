@@ -58,6 +58,12 @@ find_package(Threads REQUIRED)
 set(CMAKE_LINK_WHAT_YOU_USE TRUE)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-fuchsia-default-arguments,-bugprone-exception-escape")
 set(CMAKE_CXX_CPPLINT "cpplint;--linelength=120;--quiet;--filter=-readability/nolint")
+set(CMAKE_CXX_CPPCHECK "cppcheck;\
+  --enable=warning,performance,portability,information,missingInclude;\
+  --std=c++11;\
+  --verbose;\
+  --quiet;\
+  --template=\"[{severity}][{id}] {message} {callstack} (On {file}:{line})\"")
 
 add_library(${This} ${Sources} ${Headers})
 
