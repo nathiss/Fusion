@@ -1,5 +1,7 @@
 # Fusion
 
+[![Build Status](https://travis-ci.org/nathiss/Fusion.svg?branch=master)](https://travis-ci.org/nathiss/Fusion)
+
 This is the source code of the server for the **Fusion** game.
 
 ## Third-party libraries
@@ -74,9 +76,8 @@ for.
       "color": [255, 255, 255],
       "health": 100.0,
       "position": [7.6, 87.2],
-      "angle": 67.2 // <0.0; 360.0)
-    },
-    // ...
+      "angle": 67.2
+    }
   ],
   "rays": [
     {
@@ -84,8 +85,7 @@ for.
       "source": [7.6, 87.2],
       "destination": [17.6, 187.2],
       "color": [255, 255, 255]
-    },
-    // ...
+    }
   ]
 }
 ```
@@ -100,7 +100,7 @@ each time when the player either moved, rotated or fired.
   "type": "update",
   "team_id": 0,
   "position": [7.6, 87.2],
-  "angle": 67.2 // <0.0; 360.0)
+  "angle": 67.2
 }
 ```
 
@@ -154,25 +154,23 @@ rays didn't change, the array will be empty, but will not be omitted.
     {
       "player_id": 1,
       "position": [0.0, 0.0],
-      "angle": 67.8, // <0.0; 360.0)
+      "angle": 67.8, 
       "health": 100.0,
-      "joined": true, // only when joined
-      "nick": "<new_nick>", // only when joined
-      "role": "<new_role>", // only when joined
-      "color": [255, 255, 255], // // only when joined
-      "left": true // only when left
-    },
-    // ...
+      "joined": true,
+      "nick": "<new_nick>",
+      "role": "<new_role>",
+      "color": [255, 255, 255],
+      "left": true
+    }
   ],
   "rays": [
     {
       "ray_id": 1,
       "source": [0.0, 0.0],
       "destination": [0.0, 0.0],
-      "new": true, // only when a ray is a new one
-      "remove": true // only when a ray should be removed
-    },
-    // ...
+      "new": true,
+      "remove": true
+    }
   ]
 }
 ```

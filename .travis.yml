@@ -4,7 +4,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t nathiss/fusion_server_tests .
+  - docker build -t nathiss/fusion_server_tests -f Dockerfile.travis .
 
 script:
   - docker run nathiss/fusion_server_tests
