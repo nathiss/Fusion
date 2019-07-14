@@ -18,10 +18,12 @@ RUN pacman -S --noconfirm cmake \
 RUN [ -d /usr/src ] || mkdir /usr/src
 WORKDIR /usr/src
 
-RUN git clone https://github.com/nathiss/Fusion.git .
-RUN git submodule init .
-RUN git submodule update --recursive .
+COPY . .
 
-EXPOSE 80/tcp
+RUN mkdir build
+WORKDIR /usr/src/build
 
-CMD ["/bin/bash"]
+RUN cmake ..
+ && make -j 10
+
+CMD ["/usr/src/build/test/FusionServerTests"]
