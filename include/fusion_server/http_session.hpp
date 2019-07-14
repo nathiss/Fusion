@@ -87,7 +87,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    *   is undefined.
    *
    */
-  HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
+  explicit HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
    * This is the default destructor.
