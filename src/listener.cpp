@@ -81,7 +81,7 @@ std::size_t Listener::GetNumberOfConnections() const noexcept {
   return number_of_connections_;
 }
 
-std::size_t Listener::GetMaxListenConnections() const noexcept {
+constexpr std::size_t Listener::GetMaxListenConnections() const noexcept {
   return decltype(acceptor_)::max_listen_connections;
 }
 
