@@ -5,7 +5,6 @@ var classfusion__server_1_1HTTPSession =
     [ "HTTPSession", "df/d9c/classfusion__server_1_1HTTPSession.html#a182c4112993596662000c21e60525443", null ],
     [ "HTTPSession", "df/d9c/classfusion__server_1_1HTTPSession.html#a20637955605c3f1529c796aa21025209", null ],
     [ "HTTPSession", "df/d9c/classfusion__server_1_1HTTPSession.html#a4b23f5d27711573733ecfa3c8cdfefb4", null ],
-    [ "~HTTPSession", "df/d9c/classfusion__server_1_1HTTPSession.html#ae1769223ec600a3f27dfedb54583ad20", null ],
     [ "Close", "df/d9c/classfusion__server_1_1HTTPSession.html#a5fb0e765bf5604b8e03fa048149f2481", null ],
     [ "HandleRead", "df/d9c/classfusion__server_1_1HTTPSession.html#aa813ce90624987f38b45f46708078506", null ],
     [ "HandleWrite", "df/d9c/classfusion__server_1_1HTTPSession.html#af1926ae945a8fd047a707378d6b98590", null ],
