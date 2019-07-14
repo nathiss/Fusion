@@ -1,3 +1,12 @@
+/**
+ * @file listener_test.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the unit tests for the Listener class.
+ *
+ * Copyright 2019 Kamil Rusin
+ */
+
 #include <memory>
 #include <vector>
 

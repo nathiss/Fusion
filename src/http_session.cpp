@@ -26,9 +26,10 @@ HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
   logger_ = spdlog::get("http");
 }
 
-HTTPSession::~HTTPSession() noexcept = default;
-
 void HTTPSession::Run() noexcept {
+  if (!(*this)) {
+    return;
+  }
   boost::beast::http::async_read(
     socket_,
     buffer_,
@@ -49,7 +50,7 @@ void HTTPSession::Close() noexcept {
   socket_.close(ec);
 
   if (ec) {
-    logger_->warn("An error occured during closing the connection to {}", endpoint);
+    logger_->warn("An error occurred during closing the connection to {}", endpoint);
     // We do nothing, because
     // https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/close/overload1.html
     // [Set on failure. Note that, even if the function indicates an error, the underlying descriptor is closed.]
@@ -84,7 +85,7 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
   }
 
   if (ec) {
-    logger_->error("An error occured during reading. [Boost:{}]", ec.message());
+    logger_->error("An error occurred during reading. [Boost:{}]", ec.message());
     return;
   }
 
@@ -103,7 +104,7 @@ void HTTPSession::HandleWrite(const boost::system::error_code& ec,
     socket_.remote_endpoint());
 
   if (ec) {
-    logger_->error("An error occured during writing to {}. [Boost:{}]",
+    logger_->error("An error occurred during writing to {}. [Boost:{}]",
       socket_.remote_endpoint(), ec.message());
     return;
   }

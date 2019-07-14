@@ -5,6 +5,7 @@ set(This FusionServerTests)
 unset(Headers)
 
 set(Sources
+  src/http_session_test.cpp
   src/listener_test.cpp
 )
 

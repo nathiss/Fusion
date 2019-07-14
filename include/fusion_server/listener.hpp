@@ -186,7 +186,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * @see
    *   [basic_stream_socket::max_listen_connections](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/max_listen_connections.html)
    */
-  constexpr std::size_t GetMaxListenConnections() const noexcept;
+  std::size_t GetMaxListenConnections() const noexcept;
 
   /**
    * This is the callback to asynchronous accept of a new connection.

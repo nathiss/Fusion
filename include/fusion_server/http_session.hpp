@@ -44,7 +44,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   HTTPSession(const HTTPSession& other) = delete;
 
   /**
-   * @brief Explitly deleted move constructor.
+   * @brief Explicitly deleted move constructor.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -66,7 +66,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   HTTPSession& operator=(const HTTPSession& other) = delete;
 
   /**
-   * @brief Explitly deleted move operator.
+   * @brief Explicitly deleted move operator.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -79,7 +79,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   HTTPSession& operator=(HTTPSession&& other) = delete;
 
   /**
-   * This constructor takes the overship of the socket connected to a client.
+   * This constructor takes the ownership of the socket connected to a client.
    *
    * @param[in] socket
    *   @brief A socket connected to a client.
@@ -90,14 +90,13 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
   explicit HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
-   * This is the default destructor.
-   */
-  ~HTTPSession() noexcept;
-
-  /**
-   * This method starts the loop of asynchronous reads. It is indended to be
+   * This method starts the loop of asynchronous reads. It is intended to be
    * called only once. If it is called more than once the behaviour is
    * undefined.
+   *
+   * @note
+   *   If the underlying socket is not connected or it's corrupted, this method
+   *   does nothing.
    */
   void Run() noexcept;
 
@@ -131,7 +130,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
 
   /**
    * This method is the callback to asynchronous writing to the client.
-   * After checking if an error occured it performs asynchronous reading from
+   * After checking if an error occurred it performs asynchronous reading from
    * the client.
    *
    * @param[in] ec
