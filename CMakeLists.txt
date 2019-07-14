@@ -67,13 +67,13 @@ if (Analyse)
     --template=\"[{severity}][{id}] {message} {callstack} (On {file}:{line})\"")
 endif()
 
-add_library(${This} ${Sources} ${Headers})
+add_library(${This} STATIC ${Sources} ${Headers})
 
 target_link_libraries(${This}
   PUBLIC nlohmann_json::nlohmann_json
+  PUBLIC spdlog::spdlog
   PRIVATE ${Boost_LIBRARIES}
   PRIVATE Threads::Threads
-  PUBLIC spdlog::spdlog
 )
 target_include_directories(${This}
   PUBLIC include
