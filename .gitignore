@@ -6,4 +6,5 @@ build/
 .vscode/
 .idea/
 cmake-build-debug/
+cmake-build-release/
 workspace.code-workspace
