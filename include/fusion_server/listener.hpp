@@ -21,7 +21,7 @@
 namespace fusion_server {
 
 /**
- * This class represends the local endpoint used to accept new connections
+ * This class represents the local endpoint used to accept new connections
  * from the clients.
  */
 class Listener : public std::enable_shared_from_this<Listener> {
@@ -36,7 +36,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
   Listener(const Listener& other) = delete;
 
   /**
-   * @brief Explitly deleted move constructor.
+   * @brief Explicitly deleted move constructor.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -58,7 +58,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
   Listener& operator=(const Listener& other) = delete;
 
   /**
-   * @brief Explitly deleted move operator.
+   * @brief Explicitly deleted move operator.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -71,48 +71,84 @@ class Listener : public std::enable_shared_from_this<Listener> {
   Listener& operator=(Listener&& other) = delete;
 
   /**
-   * This constructor may be used for accepting connections on a specific
-   * local interace.
+   * @brief Sets the used I/O context object.
+   * This constructor sets the used I/O context to the given one.
    *
-   * @param[in] ioc
-   *   The context for providing core I/O functionality.
-   *
-   * @param[in] ip_address
-   *   The ip address of a local interface.
-   *
-   * @param[in] port_numer
-   *   A port numer.
+   * @param ioc[in]
+   *   Reference to the I/O context used in all asynchronous operations.
    */
-  Listener(boost::asio::io_context& ioc, std::string_view ip_address, std::uint16_t port_numer) noexcept;
+  explicit Listener(boost::asio::io_context &ioc) noexcept;
 
   /**
-   * This constructor may be used for accepting connections on the given
-   * endpoint.
+   * @brief Sets the logger of this instance.
+   * This method sets the logger of this instance to the given one.
    *
-   * @param[in] ioc
-   *   The context for providing core I/O functionality.
+   * @param logger[in]
+   *   The given logger.
    *
-   * @param[in] endpoint
-   *   A local endpoint.
+   * @return
+   *   A shared pointer to `this` object.
    */
-  Listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::endpoint endpoint) noexcept;
+  std::shared_ptr<Listener> SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
 
   /**
-   * This constructor may be used for accepting connection on any local
-   * interface.
+   * @brief Returns this instance's logger.
+   * This method returns the logger of this instance.
    *
-   * @param[in] ioc
-   *   The context for providing core I/O functionality.
-   *
-   * @param[in] port_number
-   *   A port numer.
+   * @return
+   *   The logger of this instance is returned. If the logger has not been set
+   *   this method returns @ref nullptr.
    */
-  Listener(boost::asio::io_context& ioc, std::uint16_t port_number) noexcept;
+  std::shared_ptr<spdlog::logger> GetLogger() const noexcept;
 
   /**
-   * This is the default destructor.
+   * @brief Binds the Listener to the given endpoint.
+   *
+   * @param endpoint
+   *   The endpoint to bind to.
+   *
+   * @return
+   *   An indication whether or not the binding was successful.
    */
-  ~Listener() noexcept;
+  bool Bind(boost::asio::ip::tcp::endpoint endpoint) noexcept;
+
+  /**
+   * @brief Binds the Listener to the given address and port.
+   *
+   * @param address
+   *   The IP address of a local interface.
+   *
+   * @param port
+   *   The port number.
+   *
+   * @return
+   *   An indication whether or not the assignment was successful.
+   */
+  bool Bind(std::string_view address_str, std::uint16_t port) noexcept;
+
+  /**
+   * @brief Binds the Listener to all local interfaces and the given port.
+   *
+   * @param port
+   *   The port number.
+   *
+   * @return
+   *   An indication whether or not the binding was successful.
+   */
+  bool Bind(std::uint16_t port) noexcept;
+
+  /**
+   * @brief Returns endpoint.
+   * This method returns the endpoint currently set in this object.
+   *
+   * @return
+   *   The endpoint currently set in this object.
+   *
+   * @note
+   *   If the endpoint has not been set, the returned endpoint is default
+   *   constructed.
+   */
+  const boost::asio::ip::tcp::endpoint &GetEndpoint() const noexcept;
 
   /**
    * This method starts the asynchronous accepting loop on the specified
@@ -123,7 +159,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   Started the asynchronous accepting loop.
    *
    * @return false
-   *   A critical error occured. Operation has failed.
+   *   A critical error occurred. Operation failed.
    *
    * @note
    *   If the acceptor binding has not been successful (@ref is_open_ is set to
@@ -132,16 +168,45 @@ class Listener : public std::enable_shared_from_this<Listener> {
   bool Run() noexcept;
 
   /**
-   * This is the callback to asynchronous accept of a new connection.
+   * @brief Returns total number of connections.
+   * This method returns the number of all connections accepted by this object.
+   *
+   * @return
+   *   The number of all connections accepted by this object is returned.
    */
-  void HandleAccept(const boost::system::error_code&) noexcept;
+  std::size_t GetNumberOfConnections() const noexcept;
+
+  /**
+   * @brief Returns maximum number of pending connections.
+   * This method returns maximum number of pending connections on this object.
+   *
+   * @return
+   *   Maximum number of pending connections on this object is returned.
+   *
+   * @see
+   *   [basic_stream_socket::max_listen_connections](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/max_listen_connections.html)
+   */
+  constexpr std::size_t GetMaxListenConnections() const noexcept;
+
+  /**
+   * This is the callback to asynchronous accept of a new connection.
+   *
+   * @param[in]
+   *   The Boost error code.
+   *
+   * @see [Boost 1.67 AcceptHandler](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/AcceptHandler.html)
+   */
+  void HandleAccept(const boost::system::error_code &ec) noexcept;
 
  private:
 
   /**
    * This method opens the acceptor & binds it to the endpoint.
+   *
+   * @return
+   *   An indication whether or not the binding was successful.
    */
-  void OpenAcceptor() noexcept;
+  bool InitAcceptor() noexcept;
 
   /**
    * The context for providing core I/O functionality.
@@ -153,7 +218,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
   boost::asio::ip::tcp::acceptor acceptor_;
 
   /**
-   * This is the socket used to handle a new incomming connection.
+   * This is the socket used to handle a new incoming connection.
    */
   boost::asio::ip::tcp::socket socket_;
 
@@ -167,6 +232,11 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * to the endpoint.
    */
   bool is_open_;
+
+  /**
+   * This value is a total number of all connection accepted by this object.
+   */
+  std::size_t number_of_connections_;
 
   /**
    * @brief Listener's logger.

@@ -88,7 +88,10 @@ bool Server::StartAccepting() noexcept {
   logger_->info("Creating a Listener object.");
 
   // TODO(nathiss): read the local endpoint from a config file.
-  return std::make_shared<Listener>(ioc_, "127.0.0.1", 8080)->Run();  // NOLINT (cppcoreguidelines-avoid-magic-numbers)
+  auto listener = std::make_shared<Listener>(ioc_);
+  listener->SetLogger(spdlog::get("listener"));
+  listener->Bind("127.0.0.1", 8080);
+  return listener->Run();
 }
 
 void Server::Shutdown() noexcept {

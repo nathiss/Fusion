@@ -5,7 +5,7 @@ set(This FusionServerTests)
 unset(Headers)
 
 set(Sources
-  src/main.cpp
+  src/listener_test.cpp
 )
 
 add_executable(${This} ${Sources} ${Headers})
