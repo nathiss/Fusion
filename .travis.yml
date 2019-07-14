@@ -7,4 +7,4 @@ before_install:
   - docker build -t nathiss/fusion_server_tests .
 
 script:
-  - docker run
+  - docker run nathiss/fusion_server_tests
