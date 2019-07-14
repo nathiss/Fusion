@@ -74,16 +74,16 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * @brief Sets the used I/O context object.
    * This constructor sets the used I/O context to the given one.
    *
-   * @param ioc[in]
+   * @param ioc [in]
    *   Reference to the I/O context used in all asynchronous operations.
    */
-  explicit Listener(boost::asio::io_context &ioc) noexcept;
+  explicit Listener(boost::asio::io_context& ioc) noexcept;
 
   /**
    * @brief Sets the logger of this instance.
    * This method sets the logger of this instance to the given one.
    *
-   * @param logger[in]
+   * @param logger [in]
    *   The given logger.
    *
    * @return
@@ -97,7 +97,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *
    * @return
    *   The logger of this instance is returned. If the logger has not been set
-   *   this method returns @ref nullptr.
+   *   this method returns std::nullptr.
    */
   std::shared_ptr<spdlog::logger> GetLogger() const noexcept;
 
@@ -115,7 +115,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
   /**
    * @brief Binds the Listener to the given address and port.
    *
-   * @param address
+   * @param address_str
    *   The IP address of a local interface.
    *
    * @param port
@@ -148,7 +148,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   If the endpoint has not been set, the returned endpoint is default
    *   constructed.
    */
-  const boost::asio::ip::tcp::endpoint &GetEndpoint() const noexcept;
+  const boost::asio::ip::tcp::endpoint& GetEndpoint() const noexcept;
 
   /**
    * This method starts the asynchronous accepting loop on the specified
@@ -191,12 +191,12 @@ class Listener : public std::enable_shared_from_this<Listener> {
   /**
    * This is the callback to asynchronous accept of a new connection.
    *
-   * @param[in]
+   * @param ec [in]
    *   The Boost error code.
    *
    * @see [Boost 1.67 AcceptHandler](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/AcceptHandler.html)
    */
-  void HandleAccept(const boost::system::error_code &ec) noexcept;
+  void HandleAccept(const boost::system::error_code& ec) noexcept;
 
  private:
 

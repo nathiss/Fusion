@@ -184,10 +184,42 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../.
 
 <p class="definition">Definition at line <a class="el" href="../../df/d0a/main_8cpp_source.html#l00037">37</a> of file <a class="el" href="../../df/d0a/main_8cpp_source.html">main.cpp</a>.</p>
 
-<p class="reference">References <a class="el" href="../../df/dd7/server_8cpp_source.html#l00023">fusion_server::Server::GetInstance()</a>, and <a class="el" href="../../df/dd7/server_8cpp_source.html#l00094">fusion_server::Server::Shutdown()</a>.</p>
+    <p class="reference">References <a class="el" href="../../df/dd7/server_8cpp_source.html#l00023">fusion_server::Server::GetInstance()</a>,
+        and <a class="el" href="../../df/dd7/server_8cpp_source.html#l00097">fusion_server::Server::Shutdown()</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="../../df/d0a/main_8cpp_source.html#l00078">main()</a>.</p>
-<div class="fragment"><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                                                        {</div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;  <span class="keywordflow">if</span> (ec) {</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    spdlog::get(<span class="stringliteral">&quot;server&quot;</span>)-&gt;error(<span class="stringliteral">&quot;An error occured during signal handling. [Boost: {}]&quot;</span>,</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      ec.message());</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;  }</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  spdlog::get(<span class="stringliteral">&quot;server&quot;</span>)-&gt;warn(<span class="stringliteral">&quot;Received a signal ({}). Stoping the I/O context.&quot;</span>,</div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    strsignal(signal));</div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  ioc.stop();</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;  <a class="code" href="../../d4/d1d/classfusion__server_1_1Server.html#ab13ecc30acdc4c9a80aac01c2a62a5de">fusion_server::Server::GetInstance</a>().<a class="code" href="../../d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45">Shutdown</a>();</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div><div class="ttc" id="classfusion__server_1_1Server_html_a6db7a3282d6b43ef7e313dcc36bc2c45"><div class="ttname"><a href="../../d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45">fusion_server::Server::Shutdown</a></div><div class="ttdeci">void Shutdown() noexcept</div><div class="ttdoc">Closes all server&amp;#39;s connections. This method closes all connection stored in this server...</div><div class="ttdef"><b>Definition:</b> <a href="../../df/dd7/server_8cpp_source.html#l00094">server.cpp:94</a></div></div>
+    <div class="fragment">
+        <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; {</div>
+        <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; <span
+                class="keywordflow">if</span> (ec) {
+        </div>
+        <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; spdlog::get(<span
+                class="stringliteral">&quot;server&quot;</span>)-&gt;error(<span class="stringliteral">&quot;An error occured during signal handling. [Boost: {}]&quot;</span>,
+        </div>
+        <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; ec.message());</div>
+        <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; }</div>
+        <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; spdlog::get(<span
+                class="stringliteral">&quot;server&quot;</span>)-&gt;warn(<span class="stringliteral">&quot;Received a signal ({}). Stoping the I/O context.&quot;</span>,
+        </div>
+        <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; strsignal(signal));</div>
+        <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+        <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; ioc.stop();</div>
+        <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; <a class="code"
+                                                                                          href="../../d4/d1d/classfusion__server_1_1Server.html#ab13ecc30acdc4c9a80aac01c2a62a5de">fusion_server::Server::GetInstance</a>().<a
+                class="code" href="../../d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45">Shutdown</a>();
+        </div>
+        <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;}</div>
+        <div class="ttc" id="classfusion__server_1_1Server_html_a6db7a3282d6b43ef7e313dcc36bc2c45">
+            <div class="ttname"><a
+                    href="../../d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45">fusion_server::Server::Shutdown</a>
+            </div>
+            <div class="ttdeci">void Shutdown() noexcept</div>
+            <div class="ttdoc">Closes all server&amp;#39;s connections. This method closes all connection stored in this
+                server...
+            </div>
+            <div class="ttdef"><b>Definition:</b> <a
+                    href="../../df/dd7/server_8cpp_source.html#l00097">server.cpp:97</a></div>
+        </div>
 <div class="ttc" id="classfusion__server_1_1Server_html_ab13ecc30acdc4c9a80aac01c2a62a5de"><div class="ttname"><a href="../../d4/d1d/classfusion__server_1_1Server.html#ab13ecc30acdc4c9a80aac01c2a62a5de">fusion_server::Server::GetInstance</a></div><div class="ttdeci">static Server &amp; GetInstance() noexcept</div><div class="ttdef"><b>Definition:</b> <a href="../../df/dd7/server_8cpp_source.html#l00023">server.cpp:23</a></div></div>
 </div><!-- fragment -->
 </div>
