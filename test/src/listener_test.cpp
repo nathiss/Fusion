@@ -69,20 +69,13 @@ TEST_F(ListenerTest, BindToValidEndpoint) {
 TEST_F(ListenerTest, BindToNotValidEndpoint) {
   // Arrange
   auto listener1 = std::make_shared<fusion_server::Listener>(*ioc_);
-  auto listener2 = std::make_shared<fusion_server::Listener>(*ioc_);
-  auto listener3 = std::make_shared<fusion_server::Listener>(*ioc_);
   auto endpoint = boost::asio::ip::tcp::endpoint{
     boost::asio::ip::make_address_v4("8.8.8.8"), 1337};
-
-  auto listener4 = std::make_shared<fusion_server::Listener>(*ioc_);
-  ASSERT_TRUE(listener4->Bind(2121));
 
   // Act
 
   // Assert
   EXPECT_FALSE(listener1->Bind(std::move(endpoint)));
-  EXPECT_FALSE(listener2->Bind("0.0.0.0", 21));
-  EXPECT_FALSE(listener3->Bind(2121));
 }
 
 TEST_F(ListenerTest, GetEndpoint) {
@@ -108,30 +101,32 @@ TEST_F(ListenerTest, GetEndpoint) {
   EXPECT_EQ(endpoint3, listener3->GetEndpoint());
 }
 
-TEST_F(ListenerTest, DoSuccessfulRun) {
+TEST_F(ListenerTest, BindSuccessfully) {
   // Arrange
   auto listener = std::make_shared<fusion_server::Listener>(*ioc_);
   auto endpoint = boost::asio::ip::tcp::endpoint{
     boost::asio::ip::make_address_v4("127.0.0.1"), 2121};
 
   // Act
-  listener->Bind(std::move(endpoint));
 
   // Assert
-  ASSERT_TRUE(listener->Run());
+  EXPECT_TRUE(listener->Bind(std::move(endpoint)));
+  EXPECT_TRUE(listener->Run());
 }
 
-TEST_F(ListenerTest, DoFailureRun) {
+TEST_F(ListenerTest, BindUnsuccessfullyAddressInUse) {
   // Arrange
-  auto listener = std::make_shared<fusion_server::Listener>(*ioc_);
+  auto listener1 = std::make_shared<fusion_server::Listener>(*ioc_);
+  auto listener2 = std::make_shared<fusion_server::Listener>(*ioc_);
   auto endpoint = boost::asio::ip::tcp::endpoint{
     boost::asio::ip::make_address_v4("127.0.0.1"), 21};
 
   // Act
-  listener->Bind(std::move(endpoint));
+  listener1->Bind(endpoint);
 
   // Assert
-  ASSERT_FALSE(listener->Run());
+  EXPECT_FALSE(listener2->Bind(endpoint));
+  EXPECT_FALSE(listener2->Run());
 }
 
 TEST_F(ListenerTest, AcceptConnection) {
@@ -141,14 +136,14 @@ TEST_F(ListenerTest, AcceptConnection) {
   auto socket = boost::asio::ip::tcp::socket{*ioc_};
 
   // Act
-  ASSERT_TRUE(listener2->Bind("127.0.0.1", 9001));
-  ASSERT_TRUE(listener2->Run());
+  EXPECT_TRUE(listener2->Bind("127.0.0.1", 9001));
+  EXPECT_TRUE(listener2->Run());
   socket.connect(listener2->GetEndpoint());
   ioc_->run_one();
 
   // Assert
-  ASSERT_EQ(0, listener1->GetNumberOfConnections());
-  ASSERT_EQ(1, listener2->GetNumberOfConnections());
+  EXPECT_EQ(0, listener1->GetNumberOfConnections());
+  EXPECT_EQ(1, listener2->GetNumberOfConnections());
 }
 
 TEST_F(ListenerTest, AcceptConnectionFromBeforeRun) {
@@ -158,14 +153,14 @@ TEST_F(ListenerTest, AcceptConnectionFromBeforeRun) {
   auto socket = boost::asio::ip::tcp::socket{*ioc_};
 
   // Act
-  ASSERT_TRUE(listener2->Bind("127.0.0.1", 9001));
+  EXPECT_TRUE(listener2->Bind("127.0.0.1", 9001));
   socket.connect(listener2->GetEndpoint());
-  ASSERT_TRUE(listener2->Run());
+  EXPECT_TRUE(listener2->Run());
   ioc_->run_one();
 
   // Assert
-  ASSERT_EQ(0, listener1->GetNumberOfConnections());
-  ASSERT_EQ(1, listener2->GetNumberOfConnections());
+  EXPECT_EQ(0, listener1->GetNumberOfConnections());
+  EXPECT_EQ(1, listener2->GetNumberOfConnections());
 }
 
 TEST_F(ListenerTest, AcceptMaxConnections) {
