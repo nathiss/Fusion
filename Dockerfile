@@ -23,7 +23,7 @@ COPY . .
 RUN mkdir build
 WORKDIR /usr/src/build
 
-RUN cmake ..
+RUN cmake .. \
  && make -j 10
 
 CMD ["/usr/src/build/test/FusionServerTests"]
