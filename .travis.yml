@@ -1,0 +1,20 @@
+language: cpp
+sudo: required
+dist: xenial
+compiler:
+  - clang
+os:
+  - linux
+branches:
+  only:
+    - master
+notifications:
+  email: false
+before_install:
+  - sudo apt-get install -y libboost-all-dev
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./build/test/FusionServerTests
