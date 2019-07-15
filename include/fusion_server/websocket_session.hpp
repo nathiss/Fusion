@@ -90,7 +90,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *
    * @see [boost::asio::ip::tcp::socket](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/ip__tcp/socket.html)
    */
-  WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
+  explicit WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept;
 
   /**
    * This destructor unregisters this session from the server.
@@ -166,7 +166,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *   returned.
    *
    * @note
-   *   This method is unsed for debugging and logging only.
+   *   This method has been created for debugging and logging only.
    */
   const boost::asio::ip::tcp::socket::endpoint_type&
   GetRemoteEndpoint() const noexcept;
@@ -204,7 +204,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This delegate is called each time when a new package arrives.
    */
-  system_abstractions::IncommingPackageDelegate delegate_;
+  system_abstractions::IncommingPackageDelegate delegate_; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
  private:
 
@@ -220,7 +220,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   decltype(websocket_)::next_layer_type::endpoint_type remote_endpoint_;
 
   /**
-   * This is the buffer for the incomming packages.
+   * This is the buffer for the incoming packages.
    */
   boost::beast::multi_buffer buffer_;
 
