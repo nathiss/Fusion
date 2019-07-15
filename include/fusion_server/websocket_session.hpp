@@ -47,7 +47,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession(const WebSocketSession& other) = delete;
 
   /**
-   * @brief Explitly deleted move constructor.
+   * @brief Explicitly deleted move constructor.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -69,7 +69,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession& operator=(const WebSocketSession& other) = delete;
 
   /**
-   * @brief Explitly deleted move operator.
+   * @brief Explicitly deleted move operator.
    * It's deleted just because it's not used. Although it could be dangerous,
    * due to asynchronous operations are made on this object.
    *
@@ -82,8 +82,8 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   WebSocketSession& operator=(WebSocketSession&& other) = delete;
 
   /**
-   * This constructor takes the overship of the socket connected to a client and
-   * registers this session to the server.
+   * This constructor takes the ownership of the socket connected to a client
+   * and registers this session to the server.
    *
    * @param[in] socket
    *   The socket connected to a client.
@@ -128,7 +128,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * the connection. After its called no writing should be performed.
    *
    * @note
-   *   This method is thread safe. It is indended to be called only once.
+   *   This method is thread safe. It is intended to be called only once.
    *   If it is called more than once the behaviour is undefined.
    */
   void Close() noexcept;
@@ -141,7 +141,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *   The package to be send to the client.
    *
    * @note
-   *   This method is thread safe. It is indended to be called only once.
+   *   This method is thread safe. It is intended to be called only once.
    *   If it is called more than once the behaviour is undefined.
    */
   void Close(const std::shared_ptr<Package>& package) noexcept;
@@ -204,7 +204,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This delegate is called each time when a new package arrives.
    */
-  system_abstractions::IncommingPackageDelegate delegate_; // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+  system_abstractions::IncommingPackageDelegate delegate_;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
  private:
 

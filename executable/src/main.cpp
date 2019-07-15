@@ -29,7 +29,7 @@
  *   The I/O context used in the program.
  *
  * @param ec
- *   The Boost's error code that incicates whether or not an error occured.
+ *   The Boost's error code that indicates whether or not an error occurred.
  *
  * @param signal
  *   The signal code of the received signal.
@@ -37,10 +37,10 @@
 void HandleSignal(boost::asio::io_context& ioc,
   const boost::system::error_code& ec, int signal) noexcept {
   if (ec) {
-    spdlog::get("server")->error("An error occured during signal handling. [Boost: {}]",
+    spdlog::get("server")->error("An error occurred during signal handling. [Boost: {}]",
       ec.message());
   }
-  spdlog::get("server")->warn("Received a signal ({}). Stoping the I/O context.",
+  spdlog::get("server")->warn("Received a signal ({}). Stopping the I/O context.",
     strsignal(signal));
 
   ioc.stop();
@@ -67,10 +67,10 @@ void InitLogger() noexcept {
 /**
  * @brief The program's entry point.
  * This function is the program's entry point. It creates the server instance,
- * registers handled singnals and creates worker threads.
+ * registers handled signals and creates worker threads.
  *
  * @return 0
- *   No error occured.
+ *   No error occurred.
  *
  * @return
  *   A error number.
