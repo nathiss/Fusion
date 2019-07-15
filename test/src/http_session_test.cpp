@@ -104,6 +104,27 @@ struct HTTPClient {
   Response_t response;
 };
 
+
+TEST_F(HttpSessionTest, SetLoggerCheck) {
+  // Arrange
+  auto socket = boost::asio::ip::tcp::socket{*ioc_};
+  auto http1 = std::make_shared<fusion_server::HTTPSession>(std::move(socket));
+  auto http2 = std::make_shared<fusion_server::HTTPSession>(std::move(socket)); // NOLINT(bugprone-use-after-move)
+  auto http3 = std::make_shared<fusion_server::HTTPSession>(std::move(socket)); // NOLINT(bugprone-use-after-move)
+  auto logger = std::make_shared<spdlog::logger>("test_logger");
+
+  // Act
+  http2->SetLogger(logger);
+  http3->SetLogger(logger);
+  http3->SetLogger(nullptr);
+
+
+  // Assert
+  EXPECT_EQ(spdlog::default_logger(), http1->GetLogger());
+  EXPECT_EQ(logger, http2->GetLogger());
+  EXPECT_EQ(nullptr, http3->GetLogger());
+}
+
 TEST_F(HttpSessionTest, SocketNotConnected) {  // NOLINT
   // Arrange
   auto socket = boost::asio::ip::tcp::socket(*ioc_);
