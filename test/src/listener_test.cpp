@@ -169,7 +169,7 @@ TEST_F(ListenerTest, AcceptMaxConnections) {
   auto endpoint = boost::asio::ip::tcp::endpoint{
     boost::asio::ip::make_address_v4("127.0.0.1"), 9001
   };
-  auto max_connections = listener->GetMaxListenConnections();
+  auto max_connections = listener->GetMaxQueuedConnections();
   listener->Bind(endpoint);
   listener->Run();
   std::vector<boost::asio::ip::tcp::socket> sockets;

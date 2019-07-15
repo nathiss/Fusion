@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It declares the HTTPSession class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -15,7 +15,8 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
-#include <spdlog/spdlog.h>
+
+#include <fusion_server/logger_manager.hpp>
 
 namespace fusion_server {
 
@@ -89,7 +90,6 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    */
   explicit HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
-
   /**
    * @brief Sets the logger of this instance.
    * This method sets the logger of this instance to the given one.
@@ -97,7 +97,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    * @param logger [in]
    *   The given logger.
    */
-  void SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
+  void SetLogger(LoggerManager::Logger logger) noexcept;
 
   /**
    * @brief Returns this instance's logger.
@@ -107,7 +107,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    *   The logger of this instance is returned. If the logger has not been set
    *   this method returns std::nullptr.
    */
-  std::shared_ptr<spdlog::logger> GetLogger() const noexcept;
+  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;
 
   /**
    * This method starts the loop of asynchronous reads. It is intended to be
@@ -255,7 +255,7 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    * @brief HTTPSession's logger.
    * This is a pointer to the logger used in HTTPSession class.
    */
-  std::shared_ptr<spdlog::logger> logger_;
+  LoggerManager::Logger logger_;
 };
 
 }  // namespace fusion_server

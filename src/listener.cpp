@@ -17,21 +17,69 @@
 
 #include <fusion_server/http_session.hpp>
 #include <fusion_server/listener.hpp>
-#include <fusion_server/logger_types.hpp>
 
 namespace fusion_server {
 
 Listener::Listener(boost::asio::io_context &ioc) noexcept
-  : ioc_{ioc}, acceptor_{ioc}, socket_{ioc_}, is_open_{false},
-    number_of_connections_{0}, logger_{spdlog::default_logger()} {}
+  : ioc_{ioc}, acceptor_{ioc}, socket_{ioc_}, is_open_{false}, number_of_connections_{0},
+  max_queued_connections_{boost::asio::socket_base::max_listen_connections},
+  logger_{LoggerManager::Get()} {}
 
 
-void Listener::SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept {
+bool Listener::Configure(const json::JSON& config) noexcept {
+  if (!config.contains("max_queued_connections")) {
+    logger_->critical("[Config::Listener] A config object must have \"max_queued_connections\" field.");
+    return false;
+  }
+  if (!config["max_queued_connections"].is_number_integer()) {
+    logger_->critical("[Config::Listener] A value of \"max_queued_connections\" must be an integer.");
+    return false;
+  }
+  max_queued_connections_ = config["max_queued_connections"];
+
+  if (!config.contains("interface")) {
+    logger_->critical("[Config::Listener] A config object must have \"interface\" field.");
+    return false;
+  }
+  if (!config["interface"].is_string()) {
+    logger_->critical("[Config::Listener] A value of \"interface\" must be a string.");
+    return false;
+  }
+
+  if (!config.contains("port")) {
+    logger_->critical("[Config::Listener] A config object must have \"port\" field.");
+    return false;
+  }
+  if (!config["port"].is_number_unsigned()) {
+    logger_->critical("[Config::Listener] A value of \"port\" must be an unsigned.");
+    return false;
+  }
+
+  boost::system::error_code ec;
+  endpoint_ = {
+    boost::asio::ip::make_address(config["interface"], ec),
+    config["port"]
+  };
+
+  if (ec) {
+    logger_->critical("[Config::Listener] A value of \"interface\" is not a valid interface. [Boost: {}]",
+      ec.message());
+    return false;
+  }
+
+  return true;
+}
+
+void Listener::SetLogger(LoggerManager::Logger logger) noexcept {
   logger_ = std::move(logger);
 }
 
-std::shared_ptr<spdlog::logger> Listener::GetLogger() const noexcept {
+LoggerManager::Logger Listener::GetLogger() const noexcept {
   return logger_;
+}
+
+bool Listener::Bind() noexcept {
+  return InitAcceptor();
 }
 
 bool Listener::Bind(boost::asio::ip::tcp::endpoint endpoint) noexcept {
@@ -80,7 +128,7 @@ std::size_t Listener::GetNumberOfConnections() const noexcept {
   return number_of_connections_;
 }
 
-std::size_t Listener::GetMaxListenConnections() const noexcept {
+std::size_t Listener::GetMaxQueuedConnections() const noexcept {
   return decltype(acceptor_)::max_listen_connections;
 }
 
@@ -131,13 +179,11 @@ bool Listener::InitAcceptor() noexcept {
 
   acceptor_.bind(endpoint_, ec);
   if (ec == boost::asio::error::access_denied) {
-    // This means we don't have permission to bind acceptor to the this endpoint.
     logger_->error("Cannot bind acceptor to {} (permission denied).",
       endpoint_);
     return false;
   }
   if (ec == boost::asio::error::address_in_use) {
-    // This means the endpoint is already is use.
     logger_->error("Cannot bind acceptor to {} (address in use).",
       endpoint_);
     return false;
@@ -147,7 +193,7 @@ bool Listener::InitAcceptor() noexcept {
     return false;
   }
 
-  acceptor_.listen(boost::asio::socket_base::max_listen_connections, ec);
+  acceptor_.listen(max_queued_connections_, ec);
   if (ec) {
     logger_->error("Listen: {}", ec.message());
     return false;

@@ -17,7 +17,6 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
-#include <fusion_server/logger_types.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
@@ -211,7 +210,7 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
   auto package = boost::beast::buffers_to_string(buffer_.data());
   buffer_.consume(buffer_.size());
 
-  auto[is_valid, msg] = VerifyJSON(package);
+  auto[is_valid, msg] = json::Verify(package);
 
   if (!is_valid) {
     logger_->warn("A package from {} was not valid. Closing the connection.",

@@ -11,7 +11,6 @@
 #include <tuple>
 #include <utility>
 
-#include <fusion_server/logger_types.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
@@ -22,10 +21,51 @@ std::unique_ptr<Server> Server::instance_ = nullptr;  // NOLINT(fuchsia-statical
 
 Server& Server::GetInstance() noexcept {
   if (instance_ == nullptr) {
-    spdlog::get("server")->info("Creating a new server instance.");
     instance_ = std::unique_ptr<Server>{new Server};
+    instance_->GetLogger()->info("Creating a new server instance.");
   }
   return *instance_;
+}
+
+bool Server::Configure(json::JSON config) noexcept {
+  config_ = std::move(config);
+
+  if (config_.contains("logger")) {
+    if (!config_["logger"].is_object()) {
+      logger_->critical("[Config] Field \"logger\" is not an object.");
+      return false;
+    }
+    if (!logger_manager_.Configure(config_["logger"])) {
+       logger_->error("[Config::Logger] Config was ill-formed.");
+    } else {
+      logger_ = logger_manager_.CreateLogger<true>("server");
+    }
+  }
+
+  if (!config_.contains("listener")) {
+    logger_->critical("[Config::Listener] Configuration for the Listener in mandatory.");
+    return false;
+  } else {
+    if (!config_["listener"].is_object()) {
+      logger_->critical("[Config] Field \"listener\" is not an object.");
+      return false;
+    }
+    listener_ = std::make_shared<Listener>(ioc_);
+    listener_->SetLogger(logger_manager_.CreateLogger<false>("listener"));
+    if (!listener_->Configure(config_["listener"])) return false;
+  }
+
+  // TODO(nathiss): complete configuration.
+
+  return true;
+}
+
+void Server::SetLogger(LoggerManager::Logger logger) noexcept {
+  logger_ = std::move(logger);
+}
+
+LoggerManager::Logger Server::GetLogger() const noexcept {
+  return logger_;
 }
 
 boost::asio::io_context& Server::GetIOContext() noexcept {
@@ -86,12 +126,8 @@ void Server::Unregister(WebSocketSession* session) noexcept {
 
 bool Server::StartAccepting() noexcept {
   logger_->info("Creating a Listener object.");
-
-  // TODO(nathiss): read the local endpoint from a config file.
-  auto listener = std::make_shared<Listener>(ioc_);
-  listener->SetLogger(spdlog::get("listener"));
-  listener->Bind("127.0.0.1", 8080);
-  return listener->Run();
+  listener_->Bind();
+  return listener_->Run();
 }
 
 void Server::Shutdown() noexcept {
@@ -99,30 +135,30 @@ void Server::Shutdown() noexcept {
 }
 
 Server::Server() noexcept {
-  logger_ = spdlog::get("server");
+  logger_ = LoggerManager::Get();
   has_stopped_ = false;
 
-  unjoined_delegate_ = [this](const JSON& package, WebSocketSession* src) {
+  unjoined_delegate_ = [this](const json::JSON& package, WebSocketSession* src) {
     logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
     auto response = MakeResponse(src, package);
     src->Write(std::make_shared<Package>(response.dump()));
   };
 }
 
-JSON Server::MakeResponse(WebSocketSession* src, const JSON& request) noexcept {
+json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request) noexcept {
   const auto make_unidentified = [] {
-    return JSON({
+    return json::JSON({
       {"type", {"warning"}},
       {"message", {"Received an unidentified package."}},
       {"closed", {false}},
-    }, false, JSON::value_t::object);
+    }, false, json::JSON::value_t::object);
   };
 
   const auto make_game_full = [](std::size_t id){
-    return JSON({
+    return json::JSON({
       {"id", {id}},
       {"result", {"full"}},
-    }, false, JSON::value_t::object);
+    }, false, json::JSON::value_t::object);
   };
 
   if (request["type"] == "join") {
@@ -130,10 +166,12 @@ JSON Server::MakeResponse(WebSocketSession* src, const JSON& request) noexcept {
     games_mtx_.lock();
     auto it = games_.find(game_name);
     if (it == games_.end()) {
-      it = games_.emplace(game_name, std::make_shared<Game>(game_name)).first;
+      it = games_.emplace(game_name, std::make_shared<Game>()).first;
+      // TODO(nathiss): set logger
+      it->second->SetLogger(nullptr);
     }
-    games_mtx_.unlock();
     auto join_result = it->second->Join(src);
+    games_mtx_.unlock();
     if (!join_result) {  // The game is full.
       return std::make_pair(false, make_game_full(request["id"]));
     }
@@ -150,13 +188,13 @@ JSON Server::MakeResponse(WebSocketSession* src, const JSON& request) noexcept {
     }
 
     auto response = [&request, &join_result] {
-      return JSON({
+      return json::JSON({
         {"id", {request["id"]}},
         {"result", {"joined"}},
         {"my_id", {std::get<2>(join_result.value())}},
         {"players", {std::get<1>(join_result.value())["players"]}},
         {"rays", {std::get<1>(join_result.value())["rays"]}},
-      }, false, JSON::value_t::object);
+      }, false, json::JSON::value_t::object);
     }();
 
     return std::make_pair(false, std::move(response));

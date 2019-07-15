@@ -17,7 +17,6 @@ set(Headers
   ${HeadersBase}/game.hpp
   ${HeadersBase}/http_session.hpp
   ${HeadersBase}/listener.hpp
-  ${HeadersBase}/logger_types.hpp
   ${HeadersBase}/player.hpp
   ${HeadersBase}/server.hpp
   ${HeadersBase}/system_abstractions.hpp

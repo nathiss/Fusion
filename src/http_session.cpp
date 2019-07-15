@@ -16,22 +16,20 @@
 #include <boost/beast.hpp>
 
 #include <fusion_server/http_session.hpp>
-#include <fusion_server/logger_types.hpp>
 #include <fusion_server/websocket_session.hpp>
 
 namespace fusion_server {
 
 HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
-    : socket_{std::move(socket)}, strand_{socket_.get_executor()} {
-  logger_ = spdlog::default_logger();
-}
+    : socket_{std::move(socket)}, strand_{socket_.get_executor()},
+    logger_{LoggerManager::Get()} {}
 
 
-void HTTPSession::SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept {
+void HTTPSession::SetLogger(LoggerManager::Logger logger) noexcept {
   logger_ = std::move(logger);
 }
 
-std::shared_ptr<spdlog::logger> HTTPSession::GetLogger() const noexcept {
+LoggerManager::Logger HTTPSession::GetLogger() const noexcept {
   return logger_;
 }
 

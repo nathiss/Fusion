@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It declares the JSON type and free functions used to parse from range types.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -14,7 +14,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace fusion_server {
+namespace fusion_server::json {
 
 /**
  * This is the JSON type used in the program.
@@ -41,7 +41,7 @@ using JSON = nlohmann::json;
  *   returns an "invalid-state" object.
  */
 template <typename It1, typename It2>
-std::optional<JSON> ParseJSON(It1&& it1, It2&& it2) noexcept {
+std::optional<JSON> Parse(It1&& it1, It2&& it2) noexcept {
   try {
     return JSON::parse(std::forward<It1>(it1), std::forward<It2>(it2));
   }
@@ -64,6 +64,6 @@ std::optional<JSON> ParseJSON(It1&& it1, It2&& it2) noexcept {
  *   returned.
  */
 std::pair<bool, JSON>
-VerifyJSON(const std::string& raw_package) noexcept;
+Verify(const std::string& raw_package) noexcept;
 
-}  // namespace fusion_server
+}  // namespace fusion_server::json

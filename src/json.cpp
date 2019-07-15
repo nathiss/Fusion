@@ -1,6 +1,6 @@
 #include <fusion_server/json.hpp>
 
-namespace fusion_server {
+namespace fusion_server::json {
 
 namespace {
 
@@ -102,8 +102,8 @@ JSON MakeUnidentified() noexcept {
 
 }  // namespace
 
-std::pair<bool, JSON>  VerifyJSON(const std::string& raw_package) noexcept {
-  auto parsed = ParseJSON(raw_package.begin(), raw_package.end());
+std::pair<bool, JSON>  Verify(const std::string& raw_package) noexcept {
+  auto parsed = Parse(raw_package.begin(), raw_package.end());
   if (!parsed) {
     return std::make_pair(false, MakeNotValidJSON());
   }
@@ -156,4 +156,4 @@ std::pair<bool, JSON>  VerifyJSON(const std::string& raw_package) noexcept {
   return std::make_pair(false, MakeUnidentified());
 }
 
-}  // namespace fusion_server
+}  // namespace fusion_server::json

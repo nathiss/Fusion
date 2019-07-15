@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It contains the implementation of main function.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #include <cstring>
@@ -18,11 +18,13 @@
 #include <optional>
 
 #include <boost/asio.hpp>
-#include <spdlog/sinks/basic_file_sink.h>
 
 #include <fusion_server/server.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/logger_manager.hpp>
+
+using namespace fusion_server;
 
 /**
  * @brief Asynchronous signal handler.
@@ -39,32 +41,17 @@
  */
 void HandleSignal(boost::asio::io_context& ioc,
   const boost::system::error_code& ec, int signal) noexcept {
+  auto& server = Server::GetInstance();
+  auto logger = server.GetLogger();
   if (ec) {
-    spdlog::get("server")->error("An error occurred during signal handling. [Boost: {}]",
+    logger->error("An error occurred during signal handling. [Boost: {}]",
       ec.message());
   }
-  spdlog::get("server")->warn("Received a signal ({}). Stopping the I/O context.",
+  logger->warn("Received a signal ({}). Stopping the I/O context.",
     strsignal(signal));
 
   ioc.stop();
-  fusion_server::Server::GetInstance().Shutdown();
-}
-
-/**
- * @brief Initialises loggers.
- * This function initialises loggers for main modules of the program.
- */
-void InitLogger() noexcept {
-  namespace fs = fusion_server::system_abstractions;
-
-  // TODO: read the path from config file
-  auto all_file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/all.log", true);
-  all_file_sink->set_pattern(fs::kLoggerPattern);
-
-  fs::CreateLogger("server", true, all_file_sink);
-  fs::CreateLogger("listener", true, all_file_sink);
-  fs::CreateLogger("http", true, all_file_sink);
-  fs::CreateLogger("websocket", true, all_file_sink);
+  server.Shutdown();
 }
 
 /**
@@ -78,15 +65,19 @@ void InitLogger() noexcept {
  *   If the parsing was successful it returns the parsed object, otherwise it
  *   returns an "invalid-state" object.
  */
-std::optional<fusion_server::JSON> ReadConfig(const char* file_name) noexcept {
+std::optional<json::JSON> ReadConfig(const char* file_name) noexcept {
   std::ifstream file{file_name};
+  std::string content{
+    std::istreambuf_iterator<char>{file},
+    std::istreambuf_iterator<char>{}
+  };
   if (!file) {
     return {};
   }
-  return fusion_server::ParseJSON(
-    std::istreambuf_iterator<char>{file},
-    std::istreambuf_iterator<char>{}
-    );
+  return json::Parse(
+    content.begin(),
+    content.end()
+  );
 }
 
 /**
@@ -108,48 +99,63 @@ std::optional<fusion_server::JSON> ReadConfig(const char* file_name) noexcept {
  */
 int main(int argc, char** argv) {
   if (argc != 2) {
-    spdlog::default_logger()->error("Usage: ./FusionServer /path/to/config");
+    LoggerManager::Get()->error("Usage: ./FusionServer /path/to/config");
     return EXIT_FAILURE;
   }
+
   auto config = ReadConfig(argv[1]);
   if (!config) {
-    spdlog::default_logger()->error("The config file was ill-formed.");
+    LoggerManager::Get()->error("The config file was ill-formed.");
     return EXIT_FAILURE;
   }
-  InitLogger();
 
-  auto& server = fusion_server::Server::GetInstance();
+  std::size_t number_of_workers = std::thread::hardware_concurrency() - 1;
+  auto& server = Server::GetInstance();
+
+  if (!config.value().contains("number_of_additional_threads")) {
+    server.GetLogger()->critical("[Config] Field \"number_of_additional_threads\" is required.");
+    return EXIT_FAILURE;
+  }
+
+  if (!config.value()["number_of_additional_threads"].is_number_integer()) {
+    server.GetLogger()->critical("[Config] A value of \"number_of_additional_threads\" field must be an integer.");
+    return EXIT_FAILURE;
+  }
+
+  if (config.value()["number_of_additional_threads"] >= 0) {
+    number_of_workers = config.value()["number_of_additional_threads"];
+  }
+
+  if (!server.Configure(std::move(config.value()))) {
+    return EXIT_FAILURE;
+  }
+
   if (!server.StartAccepting()) {
     return EXIT_FAILURE;
   }
 
   auto& ioc = server.GetIOContext();
-
   boost::asio::signal_set signals{ioc, SIGINT, SIGTERM};
   signals.async_wait(
     [&ioc] (const boost::system::error_code& ec, int signal) {
       HandleSignal(ioc, ec, signal);
     }
   );
+  server.GetLogger()->info("Registered the signal handler.");
 
-  // TODO: read from config file
-  auto number_of_workers = std::thread::hardware_concurrency() - 1;
   std::vector<std::thread> workers;
   workers.reserve(number_of_workers);
-
   for (std::size_t i = 0; i < number_of_workers; i++)
     workers.emplace_back([&ioc]{ ioc.run(); });
-
-  spdlog::get("server")->info("Created {} threads.", number_of_workers);
+  server.GetLogger()->info("Created {} threads.", number_of_workers);
 
   ioc.run();
 
-  spdlog::get("server")->info("No more tasks. Waiting for threads to join.");
-
+  server.GetLogger()->info("No more tasks. Waiting for threads to join.");
   for (auto& worker : workers) {
     auto id = worker.native_handle();
     worker.join();
-    spdlog::get("server")->info("Worker {} has joined.", id);
+    server.GetLogger()->info("Worker {} has joined.", id);
   }
 
   return EXIT_SUCCESS;

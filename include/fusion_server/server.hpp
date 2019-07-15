@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It declares the Server class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -17,7 +17,6 @@
 #include <string>
 
 #include <boost/asio.hpp>
-#include <spdlog/spdlog.h>
 
 #include <fusion_server/game.hpp>
 #include <fusion_server/listener.hpp>
@@ -45,6 +44,39 @@ class Server {
    *   The only instance of this class is returned.
    */
   static Server& GetInstance() noexcept;
+
+  /**
+   * @brief Configures the server.
+   * This method configures the server using the given JSON object.
+   * If it returns false, a unrecoverable error occurred and the program should
+   * exit immediately.
+   *
+   * @param config
+   *   A JSON object containing configuration for the server.
+   *
+   * @return
+   *   An indication, whether or not the operation was successful is returned.
+   */
+  bool Configure(json::JSON config) noexcept;
+
+  /**
+   * @brief Sets the logger of this instance.
+   * This method sets the logger of this instance to the given one.
+   *
+   * @param logger [in]
+   *   The given logger.
+   */
+  void SetLogger(LoggerManager::Logger logger) noexcept;
+
+  /**
+   * @brief Returns this instance's logger.
+   * This method returns the logger of this instance.
+   *
+   * @return
+   *   The logger of this instance is returned. If the logger has not been set
+   *   this method returns std::nullptr.
+   */
+  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;
 
   /**
    * This method returns the reference to the I/O context used in this server.
@@ -129,7 +161,12 @@ class Server {
    * @return
    *   A response for the given request from a client is returned.
    */
-  JSON MakeResponse(WebSocketSession* src, const JSON& request) noexcept;
+  json::JSON MakeResponse(WebSocketSession* src, const json::JSON& request) noexcept;
+
+  /**
+   * This object is used to accept new connections.
+   */
+  std::shared_ptr<Listener> listener_;
 
   /**
    * This function object is called by WebSocket sessions from a clients, who
@@ -183,10 +220,22 @@ class Server {
   std::mutex sessions_correlation_mtx_;
 
   /**
+   * This object contains configuration for the server.
+   */
+  json::JSON config_;
+
+  /**
+   * @brief App's logger manager.
+   * This is a logger manager used to configure and create all logger used in
+   * the program.
+   */
+  LoggerManager logger_manager_;
+
+  /**
    * @brief Server's logger.
    * This is a pointer to the logger used in Server class.
    */
-  std::shared_ptr<spdlog::logger> logger_;
+  LoggerManager::Logger logger_;
 
   /**
    * This flag indicates whether or not this server has stopped.

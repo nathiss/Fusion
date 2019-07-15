@@ -6,7 +6,7 @@
  *
  * @see fusion_server::WebSocketSession
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -21,9 +21,9 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
-#include <spdlog/spdlog.h>
 
 #include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/logger_manager.hpp>
 
 using fusion_server::system_abstractions::Package;
 
@@ -254,7 +254,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * @brief WebSocketSession's logger.
    * This is a pointer to the logger used in WebSocketSession class.
    */
-  std::shared_ptr<spdlog::logger> logger_;
+  LoggerManager::Logger logger_;
 };
 
 template <typename Body, typename Allocator>

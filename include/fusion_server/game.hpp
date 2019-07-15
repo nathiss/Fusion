@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It declares the Game class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -22,11 +22,10 @@
 #include <utility>
 #include <variant>
 
-#include <spdlog/spdlog.h>
-
 #include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/json.hpp>
+#include <fusion_server/logger_manager.hpp>
 
 using fusion_server::system_abstractions::Package;
 
@@ -67,7 +66,7 @@ class Game {
    * This is the return type of the Join method.
    */
   using join_result_t =
-  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, JSON, std::size_t>>;
+  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, json::JSON, std::size_t>>;
 
   /**
    * @brief Explicitly deleted copy constructor.
@@ -91,18 +90,33 @@ class Game {
   Game& operator=(const Game& other) noexcept = delete;
 
   /**
-   * This constructor creates the asynchronous reading delegate and creates a
-   * new logger for this game.
-   *
-   * @param[in] game_name
-   *   The name of this game.
+   * This constructor creates the asynchronous reading delegate.
    */
-  explicit Game(const std::string& game_name) noexcept;
+  Game() noexcept;
+
+  /**
+   * @brief Sets the logger of this instance.
+   * This method sets the logger of this instance to the given one.
+   *
+   * @param logger [in]
+   *   The given logger.
+   */
+  void SetLogger(LoggerManager::Logger logger) noexcept;
+
+  /**
+   * @brief Returns this instance's logger.
+   * This method returns the logger of this instance.
+   *
+   * @return
+   *   The logger of this instance is returned. If the logger has not been set
+   *   this method returns std::nullptr.
+   */
+  LoggerManager::Logger GetLogger() const noexcept;
 
   /**
    * This method joins the client to this game and adds its session to the
    * proper team. If the joining was successful it returns a pair of a new
-   * incomming package delegate and a JSON object containing information about
+   * incoming package delegate and a JSON object containing information about
    * the current state of the game, otherwise the returned object is in its
    * invalid state.
    *
@@ -186,7 +200,7 @@ class Game {
    * @return
    *   A JSON object containg an encoded current state of this game is returned.
    */
-  JSON GetCurrentState() const noexcept;
+  json::JSON GetCurrentState() const noexcept;
 
   /**
    * This method prepairs a response for the given request and either sends it
@@ -199,7 +213,7 @@ class Game {
    *   This is a client's request.
    */
   void
-  DoResponse(WebSocketSession* session, const JSON& request) noexcept;
+  DoResponse(WebSocketSession* session, const json::JSON& request) noexcept;
 
   /**
    * This set contains the pairs of WebSocket sessions and their roles in the
@@ -265,7 +279,7 @@ class Game {
    * @brief Game's logger.
    * This is a pointer to the logger used in Game class.
    */
-  std::shared_ptr<spdlog::logger> logger_;
+  LoggerManager::Logger logger_;
 };
 
 }  // namespace fusion_server

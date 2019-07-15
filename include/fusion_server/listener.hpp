@@ -4,7 +4,7 @@
  * This module is a part of Fusion Server project.
  * It declares the Listener class.
  *
- * (c) 2019 by Kamil Rusin
+ * Copyright 2019 Kamil Rusin
  */
 
 #pragma once
@@ -16,7 +16,8 @@
 
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
-#include <spdlog/spdlog.h>
+
+#include <fusion_server/logger_manager.hpp>
 
 namespace fusion_server {
 
@@ -80,13 +81,27 @@ class Listener : public std::enable_shared_from_this<Listener> {
   explicit Listener(boost::asio::io_context& ioc) noexcept;
 
   /**
+   * @brief Configures the listener.
+   * This method configures the listener using the given JSON object.
+   * If it returns false, a unrecoverable error occurred and the program should
+   * exit immediately.
+   *
+   * @param config
+   *   A JSON object containing configuration for the listener.
+   *
+   * @return
+   *   An indication, whether or not the operation was successful is returned.
+   */
+  bool Configure(const json::JSON& config) noexcept;
+
+  /**
    * @brief Sets the logger of this instance.
    * This method sets the logger of this instance to the given one.
    *
    * @param logger [in]
    *   The given logger.
    */
-  void SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
+  void SetLogger(LoggerManager::Logger logger) noexcept;
 
   /**
    * @brief Returns this instance's logger.
@@ -96,7 +111,21 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   The logger of this instance is returned. If the logger has not been set
    *   this method returns std::nullptr.
    */
-  std::shared_ptr<spdlog::logger> GetLogger() const noexcept;
+  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;\
+
+  /**
+   * @brief Binds the listener.
+   * This method binds the listener to the endpoint configured by Configure
+   * method.
+   *
+   * @return
+   *   An indication whether or not the binding was successful.
+   *
+   * @note
+   *   If this method is called before an successful call of Configure, the
+   *   behaviour is undefined.
+   */
+  bool Bind() noexcept;
 
   /**
    * @brief Binds the Listener to the given endpoint.
@@ -183,7 +212,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    * @see
    *   [basic_stream_socket::max_listen_connections](https://www.boost.org/doc/libs/1_67_0/doc/html/boost_asio/reference/basic_stream_socket/max_listen_connections.html)
    */
-  std::size_t GetMaxListenConnections() const noexcept;
+  std::size_t GetMaxQueuedConnections() const noexcept;
 
   /**
    * This is the callback to asynchronous accept of a new connection.
@@ -236,10 +265,15 @@ class Listener : public std::enable_shared_from_this<Listener> {
   std::size_t number_of_connections_;
 
   /**
+   * This value is a maximum number of queued incoming
+   */
+  std::size_t max_queued_connections_;
+
+  /**
    * @brief Listener's logger.
    * This is a pointer to the logger used in Listener class.
    */
-  std::shared_ptr<spdlog::logger> logger_;
+  LoggerManager::Logger logger_;
 
 };
 
