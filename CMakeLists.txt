@@ -42,28 +42,24 @@ set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(third_party/nlohmann_json)
 
-add_subdirectory(third_party/googletest)
-add_subdirectory(executable)
-add_subdirectory(test)
 
-enable_testing()
+if (TARGET FusionServerExecutable)
+  add_subdirectory(executable)
+elseif(TARGET FusionServerTests)
+  add_subdirectory(third_party/googletest)
+  add_subdirectory(test)
+  enable_testing()
+else()
+  add_subdirectory(executable)
+  add_subdirectory(third_party/googletest)
+  add_subdirectory(test)
+  enable_testing()
+endif()
 
 find_package(Boost 1.67 COMPONENTS REQUIRED)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-
-if (Analyse)
-  set(CMAKE_LINK_WHAT_YOU_USE TRUE)
-  set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=*,-fuchsia-default-arguments,-bugprone-exception-escape")
-  set(CMAKE_CXX_CPPLINT "cpplint;--linelength=120;--quiet;--filter=-readability/nolint")
-  set(CMAKE_CXX_CPPCHECK "cppcheck;\
-    --enable=warning,performance,portability,information,missingInclude;\
-    --std=c++11;\
-    --verbose;\
-    --quiet;\
-    --template=\"[{severity}][{id}] {message} {callstack} (On {file}:{line})\"")
-endif()
 
 add_library(${This} STATIC ${Sources} ${Headers})
 
