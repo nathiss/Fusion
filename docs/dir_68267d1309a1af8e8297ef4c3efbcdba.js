@@ -1,9 +1,0 @@
-var dir_68267d1309a1af8e8297ef4c3efbcdba =
-[
-    [ "game.cpp", "df/dd9/game_8cpp.html", null ],
-    [ "http_session.cpp", "d7/db4/http__session_8cpp.html", null ],
-    [ "json.cpp", "dd/d55/json_8cpp_source.html", null ],
-    [ "listener.cpp", "dd/d8b/listener_8cpp.html", null ],
-    [ "server.cpp", "df/dd7/server_8cpp.html", null ],
-    [ "websocket_session.cpp", "de/def/websocket__session_8cpp.html", null ]
-];

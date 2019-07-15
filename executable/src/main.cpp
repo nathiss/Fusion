@@ -10,15 +10,18 @@
 #include <cstring>
 
 #include <chrono>
+#include <fstream>
 #include <functional>
 #include <memory>
 #include <thread>
 #include <vector>
+#include <optional>
 
 #include <boost/asio.hpp>
 #include <spdlog/sinks/basic_file_sink.h>
 
 #include <fusion_server/server.hpp>
+#include <fusion_server/json.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
 /**
@@ -65,17 +68,54 @@ void InitLogger() noexcept {
 }
 
 /**
+ * @brief Reads the config.
+ * This method read the config file and parses its content to a JSON object.
+ *
+ * @param file_name
+ *   A path to the config file.
+ *
+ * @return
+ *   If the parsing was successful it returns the parsed object, otherwise it
+ *   returns an "invalid-state" object.
+ */
+std::optional<fusion_server::JSON> ReadConfig(const char* file_name) noexcept {
+  std::ifstream file{file_name};
+  if (!file) {
+    return {};
+  }
+  return fusion_server::ParseJSON(
+    std::istreambuf_iterator<char>{file},
+    std::istreambuf_iterator<char>{}
+    );
+}
+
+/**
  * @brief The program's entry point.
  * This function is the program's entry point. It creates the server instance,
  * registers handled signals and creates worker threads.
+ *
+ * @param[in] argc
+ *   The amount of command-line arguments.
+ *
+ * @param[in] argv
+ *   The array of command-line arguments.
  *
  * @return 0
  *   No error occurred.
  *
  * @return
- *   A error number.
+ *   An error number.
  */
-int main() {
+int main(int argc, char** argv) {
+  if (argc != 2) {
+    spdlog::default_logger()->error("Usage: ./FusionServer /path/to/config");
+    return EXIT_FAILURE;
+  }
+  auto config = ReadConfig(argv[1]);
+  if (!config) {
+    spdlog::default_logger()->error("The config file was ill-formed.");
+    return EXIT_FAILURE;
+  }
   InitLogger();
 
   auto& server = fusion_server::Server::GetInstance();

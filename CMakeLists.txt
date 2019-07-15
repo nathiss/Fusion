@@ -23,6 +23,7 @@ set(Headers
   ${HeadersBase}/system_abstractions.hpp
   ${HeadersBase}/websocket_session.hpp
   ${HeadersBase}/json.hpp
+  ${HeadersBase}/logger_manager.hpp
 )
 
 set(SourcesBase "src")
@@ -34,6 +35,7 @@ set(Sources
   ${SourcesBase}/server.cpp
   ${SourcesBase}/websocket_session.cpp
   ${SourcesBase}/json.cpp
+  ${SourcesBase}/logger_manager.cpp
 )
 
 add_subdirectory(third_party/spdlog)
