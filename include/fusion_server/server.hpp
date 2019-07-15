@@ -22,11 +22,12 @@
 #include <fusion_server/game.hpp>
 #include <fusion_server/listener.hpp>
 #include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/json.hpp>
 
 namespace fusion_server {
 
 /**
- * This is the forwadrd declaration of the WebSocketSession class.
+ * This is the forward declaration of the WebSocketSession class.
  */
 class WebSocketSession;
 
@@ -93,7 +94,7 @@ class Server {
    *   is returned.
    *
    * @note
-   *   This method is indended to be called only once.
+   *   This method is indented to be called only once.
    *   If it is called more than once the behaviour is undefined.
    *
    * @see [class Listener](@ref Listener)
@@ -128,8 +129,7 @@ class Server {
    * @return
    *   A response for the given request from a client is returned.
    */
-  PackageParser::JSON
-  MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept;
+  JSON MakeResponse(WebSocketSession* src, const JSON& request) noexcept;
 
   /**
    * This function object is called by WebSocket sessions from a clients, who

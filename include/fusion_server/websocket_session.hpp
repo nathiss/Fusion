@@ -23,7 +23,6 @@
 #include <boost/beast.hpp>
 #include <spdlog/spdlog.h>
 
-#include <fusion_server/package_verifier.hpp>
 #include <fusion_server/system_abstractions.hpp>
 
 using fusion_server::system_abstractions::Package;
@@ -250,12 +249,6 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * If it's true, no writing to the
    */
   std::atomic<bool> in_closing_procedure_;
-
-  /**
-   * This is a package verifier used to parse a read package and verify if it's
-   * properly formed.
-   */
-  PackageVerifier package_verifier_;
 
   /**
    * @brief WebSocketSession's logger.

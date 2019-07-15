@@ -12,7 +12,7 @@
 #include <utility>
 
 #include <fusion_server/logger_types.hpp>
-#include <fusion_server/package_parser.hpp>
+#include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/websocket_session.hpp>
 
@@ -102,28 +102,27 @@ Server::Server() noexcept {
   logger_ = spdlog::get("server");
   has_stopped_ = false;
 
-  unjoined_delegate_ = [this](const PackageParser::JSON& package, WebSocketSession* src) {
+  unjoined_delegate_ = [this](const JSON& package, WebSocketSession* src) {
     logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
     auto response = MakeResponse(src, package);
     src->Write(std::make_shared<Package>(response.dump()));
   };
 }
 
-PackageParser::JSON
-Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) noexcept {
+JSON Server::MakeResponse(WebSocketSession* src, const JSON& request) noexcept {
   const auto make_unidentified = [] {
-    return PackageParser::JSON({
+    return JSON({
       {"type", {"warning"}},
       {"message", {"Received an unidentified package."}},
       {"closed", {false}},
-    }, false, PackageParser::JSON::value_t::object);
+    }, false, JSON::value_t::object);
   };
 
   const auto make_game_full = [](std::size_t id){
-    return PackageParser::JSON({
+    return JSON({
       {"id", {id}},
       {"result", {"full"}},
-    }, false, PackageParser::JSON::value_t::object);
+    }, false, JSON::value_t::object);
   };
 
   if (request["type"] == "join") {
@@ -151,13 +150,13 @@ Server::MakeResponse(WebSocketSession* src, const PackageParser::JSON& request) 
     }
 
     auto response = [&request, &join_result] {
-      return PackageParser::JSON({
+      return JSON({
         {"id", {request["id"]}},
         {"result", {"joined"}},
         {"my_id", {std::get<2>(join_result.value())}},
         {"players", {std::get<1>(join_result.value())["players"]}},
         {"rays", {std::get<1>(join_result.value())["rays"]}},
-      }, false, PackageParser::JSON::value_t::object);
+      }, false, JSON::value_t::object);
     }();
 
     return std::make_pair(false, std::move(response));

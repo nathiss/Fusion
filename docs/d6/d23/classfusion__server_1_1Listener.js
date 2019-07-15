@@ -15,7 +15,7 @@ var classfusion__server_1_1Listener =
     [ "operator=", "d6/d23/classfusion__server_1_1Listener.html#af3ddfa9e0dd2fa9ef7cfc4de5836ad6e", null ],
     [ "operator=", "d6/d23/classfusion__server_1_1Listener.html#a540d9913eac0ecd33fa9ac68a9789572", null ],
     [ "Run", "d6/d23/classfusion__server_1_1Listener.html#a24217bf29b9ab4667092561c1e01b03b", null ],
-    [ "SetLogger", "d6/d23/classfusion__server_1_1Listener.html#a84b4f1a0525232ddc566bf60f3ba8053", null ],
+    [ "SetLogger", "d6/d23/classfusion__server_1_1Listener.html#add7b5afdeaf73f00278609da2b3f4f2e", null ],
     [ "acceptor_", "d6/d23/classfusion__server_1_1Listener.html#a50bf0012f578e560fb8440880b278d40", null ],
     [ "endpoint_", "d6/d23/classfusion__server_1_1Listener.html#ad73254139a30cb722156b4d5a7012fa8", null ],
     [ "ioc_", "d6/d23/classfusion__server_1_1Listener.html#a09fb1facba8c40846cffe48a3fbd4c6b", null ],

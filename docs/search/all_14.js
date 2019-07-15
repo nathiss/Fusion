@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['verify',['Verify',['../d7/d92/classfusion__server_1_1PackageVerifier.html#ab776d79f5b24cceb3219e3cec84140a3',1,'fusion_server::PackageVerifier']]]
+  ['verifyjson',['VerifyJSON',['../d5/db8/json_8hpp.html#a2fea394e063cc7617a7927c01276c2dc',1,'fusion_server']]]
 ];

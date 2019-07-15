@@ -26,6 +26,7 @@
 
 #include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/json.hpp>
 
 using fusion_server::system_abstractions::Package;
 
@@ -66,7 +67,7 @@ class Game {
    * This is the return type of the Join method.
    */
   using join_result_t =
-  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, PackageParser::JSON, std::size_t>>;
+  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, JSON, std::size_t>>;
 
   /**
    * @brief Explicitly deleted copy constructor.
@@ -185,7 +186,7 @@ class Game {
    * @return
    *   A JSON object containg an encoded current state of this game is returned.
    */
-  PackageParser::JSON GetCurrentState() const noexcept;
+  JSON GetCurrentState() const noexcept;
 
   /**
    * This method prepairs a response for the given request and either sends it
@@ -198,7 +199,7 @@ class Game {
    *   This is a client's request.
    */
   void
-  DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept;
+  DoResponse(WebSocketSession* session, const JSON& request) noexcept;
 
   /**
    * This set contains the pairs of WebSocket sessions and their roles in the
@@ -258,7 +259,7 @@ class Game {
    * This callable object is used as a callback to the asynchronous reading of
    * all clients in this game.
    */
-  system_abstractions::IncommingPackageDelegate delegete_;
+  system_abstractions::IncommingPackageDelegate delegate_;
 
   /**
    * @brief Game's logger.

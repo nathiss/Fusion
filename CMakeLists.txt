@@ -18,12 +18,11 @@ set(Headers
   ${HeadersBase}/http_session.hpp
   ${HeadersBase}/listener.hpp
   ${HeadersBase}/logger_types.hpp
-  ${HeadersBase}/package_parser.hpp
-  ${HeadersBase}/package_verifier.hpp
   ${HeadersBase}/player.hpp
   ${HeadersBase}/server.hpp
   ${HeadersBase}/system_abstractions.hpp
   ${HeadersBase}/websocket_session.hpp
+  ${HeadersBase}/json.hpp
 )
 
 set(SourcesBase "src")
@@ -32,10 +31,9 @@ set(Sources
   ${SourcesBase}/game.cpp
   ${SourcesBase}/http_session.cpp
   ${SourcesBase}/listener.cpp
-  ${SourcesBase}/package_parser.cpp
-  ${SourcesBase}/package_verifier.cpp
   ${SourcesBase}/server.cpp
   ${SourcesBase}/websocket_session.cpp
+  ${SourcesBase}/json.cpp
 )
 
 add_subdirectory(third_party/spdlog)

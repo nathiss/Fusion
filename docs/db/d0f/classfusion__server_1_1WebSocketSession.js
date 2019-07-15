@@ -22,7 +22,6 @@ var classfusion__server_1_1WebSocketSession =
     [ "logger_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a49f1154e3dd4506fa819074631e5cbc7", null ],
     [ "outgoing_queue_", "db/d0f/classfusion__server_1_1WebSocketSession.html#abfa92489124969de2a3aa6db6e9b9271", null ],
     [ "outgoing_queue_mtx_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aee639aad52ed0bcf377ba26aeafbb60b", null ],
-    [ "package_verifier_", "db/d0f/classfusion__server_1_1WebSocketSession.html#a8e6be47039c711b7cc2db566ee870e95", null ],
     [ "remote_endpoint_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa7e95999bf1fd1a2584c2f43d0ddfa2a", null ],
     [ "strand_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa96c7fc70ae7d74a97e4a19ccd471528", null ],
     [ "websocket_", "db/d0f/classfusion__server_1_1WebSocketSession.html#aa533f100506622253f93d196738ef8d3", null ]

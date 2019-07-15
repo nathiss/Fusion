@@ -1,6 +1,6 @@
 var classfusion__server_1_1Ray =
 [
-    [ "ToJson", "df/dcd/classfusion__server_1_1Ray.html#a48519f3977223ff2f4e391b3ef643ddd", null ],
+    [ "ToJson", "df/dcd/classfusion__server_1_1Ray.html#a291ede56ad1b0899a1707491234c64f9", null ],
     [ "color_", "df/dcd/classfusion__server_1_1Ray.html#a0e63547386b7b823eac31197559b7fe2", null ],
     [ "dst_", "df/dcd/classfusion__server_1_1Ray.html#a22a6f7d7dadc9aa44ecc656b893682ad", null ],
     [ "gradient_", "df/dcd/classfusion__server_1_1Ray.html#a98623b1568a08e08b128ab2ea15207db", null ],

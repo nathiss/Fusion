@@ -2,7 +2,7 @@ var classfusion__server_1_1Player =
 [
     [ "Player", "d5/d95/classfusion__server_1_1Player.html#a8e92d48945ef815dc930ce1888e08b53", null ],
     [ "Player", "d5/d95/classfusion__server_1_1Player.html#ab9a9990530b83845a1bb0df2f3fdf4c8", null ],
-    [ "ToJson", "d5/d95/classfusion__server_1_1Player.html#a7e67598002532d45cf16779e598d3785", null ],
+    [ "ToJson", "d5/d95/classfusion__server_1_1Player.html#a8cd5a84cd087e8ec1775283006844aaa", null ],
     [ "angle_", "d5/d95/classfusion__server_1_1Player.html#a96991638a461104defa5abacc9cd2968", null ],
     [ "color_", "d5/d95/classfusion__server_1_1Player.html#a36da980a9e5f07882cdaa271a8a04028", null ],
     [ "health_", "d5/d95/classfusion__server_1_1Player.html#aab1898183f5402deb163dbd07748ba7b", null ],

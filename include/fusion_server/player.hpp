@@ -14,7 +14,7 @@
 #include <optional>
 #include <string>
 
-#include <fusion_server/package_parser.hpp>
+#include <fusion_server/json.hpp>
 
 namespace fusion_server {
 
@@ -43,8 +43,8 @@ struct Color {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  PackageParser::JSON ToJson() const noexcept {
-    PackageParser::JSON ret = PackageParser::JSON::array();
+  JSON ToJson() const noexcept {
+    JSON ret = JSON::array();
     ret.push_back(r);
     ret.push_back(g);
     ret.push_back(b);
@@ -77,7 +77,7 @@ struct Point {
    * @return
    *   Reference to this object is returned.
    */
-  Point& operator=(const PackageParser::JSON& array) noexcept {
+  Point& operator=(const JSON& array) noexcept {
     x = array[0];
     y = array[1];
     return *this;
@@ -89,8 +89,8 @@ struct Point {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  PackageParser::JSON ToJson() const noexcept {
-    PackageParser::JSON ret = PackageParser::JSON::array();
+  JSON ToJson() const noexcept {
+    JSON ret = JSON::array();
     ret.push_back(x);
     ret.push_back(y);
     return ret;
@@ -138,8 +138,8 @@ class Ray {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  PackageParser::JSON ToJson() const noexcept {
-    PackageParser::JSON ret = PackageParser::JSON::object();
+  JSON ToJson() const noexcept {
+    JSON ret = JSON::object();
     ret["id"] = id_;
     ret["source"] = src_.ToJson();
     ret["destination"] = dst_.ToJson();
@@ -212,8 +212,8 @@ class Player {
    * @return
    *  A dump of this object encoded as JSON is returned.
    */
-  PackageParser::JSON ToJson() const noexcept {
-    PackageParser::JSON ret = PackageParser::JSON::object();
+  JSON ToJson() const noexcept {
+    JSON ret = JSON::object();
     ret["player_id"] = id_;
     ret["team_id"] = team_id_;
     ret["nick"] = nick_;

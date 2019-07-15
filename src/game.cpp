@@ -9,7 +9,7 @@
 
 #include <fusion_server/game.hpp>
 #include <fusion_server/logger_types.hpp>
-#include <fusion_server/package_parser.hpp>
+#include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
 #include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/websocket_session.hpp>
@@ -25,7 +25,7 @@ Game::Game(const std::string& game_name) noexcept
   logger_name += "]";
   logger_ = system_abstractions::CreateLogger(std::move(logger_name), false);
 
-  delegete_ = [this](const PackageParser::JSON& package, WebSocketSession* src){
+  delegate_ = [this](const JSON& package, WebSocketSession* src){
     DoResponse(src, package);
   };
 }
@@ -91,7 +91,7 @@ Game::join_result_t Game::Join(WebSocketSession *session, Team team) noexcept {
     std::lock_guard l{players_cache_mtx_};
     players_cache_[session] = team;
   }
-  return std::make_optional<join_result_t::value_type>(delegete_, GetCurrentState(), player_id);
+  return std::make_optional<join_result_t::value_type>(delegate_, GetCurrentState(), player_id);
 }
 
 bool Game::Leave(WebSocketSession* session) noexcept {
@@ -162,12 +162,12 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
   return players_cache_.count(session) != 0;
 }
 
-PackageParser::JSON Game::GetCurrentState() const noexcept {
+JSON Game::GetCurrentState() const noexcept {
   auto state = [] {
-    return PackageParser::JSON({
-      {"players", {PackageParser::JSON::array()}},
-      {"rays", {PackageParser::JSON::array()}},
-    }, false, PackageParser::JSON::value_t::object);
+    return JSON({
+      {"players", {JSON::array()}},
+      {"rays", {JSON::array()}},
+    }, false, JSON::value_t::object);
   }();
 
   {
@@ -195,13 +195,13 @@ PackageParser::JSON Game::GetCurrentState() const noexcept {
 }
 
 void
-Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) noexcept {
+Game::DoResponse(WebSocketSession* session, const JSON& request) noexcept {
   const auto make_unidentified = [] {
-    return PackageParser::JSON({
+    return JSON({
       {"type", {"warning"}},
       {"message", {"Received an unidentified package."}},
       {"closed", {false}},
-    }, false, PackageParser::JSON::value_t::object);
+    }, false, JSON::value_t::object);
   };
 
   // analysing
@@ -225,13 +225,13 @@ Game::DoResponse(WebSocketSession* session, const PackageParser::JSON& request) 
     }
 
     auto response = [this] {
-      PackageParser::JSON ret = PackageParser::JSON::object();
+      JSON ret = JSON::object();
       auto state = GetCurrentState();
-      return PackageParser::JSON({
+      return JSON({
         {"type", {"update"}},
         {"players", {state["players"]}},
         {"rays", {state["rays"]}},
-      }, false, PackageParser::JSON::value_t::object);
+      }, false, JSON::value_t::object);
     }();
     BroadcastPackage(std::make_shared<Package>(std::move(response)));
   }  // "update"

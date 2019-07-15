@@ -7,7 +7,7 @@ var searchData=
   ['server_2ehpp',['server.hpp',['../df/d0a/server_8hpp.html',1,'']]],
   ['sessions_5fcorrelation_5f',['sessions_correlation_',['../d4/d1d/classfusion__server_1_1Server.html#a5adec400761d49c49af961492e2d8fc1',1,'fusion_server::Server']]],
   ['sessions_5fcorrelation_5fmtx_5f',['sessions_correlation_mtx_',['../d4/d1d/classfusion__server_1_1Server.html#a6ce33501f3175adf8b570be2454c12ed',1,'fusion_server::Server']]],
-  ['setlogger',['SetLogger',['../d6/d23/classfusion__server_1_1Listener.html#a84b4f1a0525232ddc566bf60f3ba8053',1,'fusion_server::Listener']]],
+  ['setlogger',['SetLogger',['../df/d9c/classfusion__server_1_1HTTPSession.html#a770a96a4f27980a5e0123b24061206d0',1,'fusion_server::HTTPSession::SetLogger()'],['../d6/d23/classfusion__server_1_1Listener.html#add7b5afdeaf73f00278609da2b3f4f2e',1,'fusion_server::Listener::SetLogger()']]],
   ['shutdown',['Shutdown',['../d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45',1,'fusion_server::Server']]],
   ['socket_5f',['socket_',['../df/d9c/classfusion__server_1_1HTTPSession.html#aaf1b76b472d8549254f8b76df0ebd6f2',1,'fusion_server::HTTPSession::socket_()'],['../d6/d23/classfusion__server_1_1Listener.html#a0b752059908ec7165a4f4776a7c9c3a4',1,'fusion_server::Listener::socket_()']]],
   ['src_5f',['src_',['../df/dcd/classfusion__server_1_1Ray.html#abacf4f163c62066589980d899cd9eea7',1,'fusion_server::Ray']]],

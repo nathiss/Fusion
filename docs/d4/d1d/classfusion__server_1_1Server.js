@@ -3,7 +3,7 @@ var classfusion__server_1_1Server =
     [ "Server", "d4/d1d/classfusion__server_1_1Server.html#a173ca05d64aba33c6afe1f069d312e07", null ],
     [ "GetInstance", "d4/d1d/classfusion__server_1_1Server.html#ab13ecc30acdc4c9a80aac01c2a62a5de", null ],
     [ "GetIOContext", "d4/d1d/classfusion__server_1_1Server.html#abb74983799e8f78c3ae24906d2e4835c", null ],
-    [ "MakeResponse", "d4/d1d/classfusion__server_1_1Server.html#af079bc3b035a911827f3dccf4ae23552", null ],
+    [ "MakeResponse", "d4/d1d/classfusion__server_1_1Server.html#ad579b4247dd31c49738bcd37d546edfa", null ],
     [ "Register", "d4/d1d/classfusion__server_1_1Server.html#a8351e8daca0fab4c436f6d4512144eda", null ],
     [ "Shutdown", "d4/d1d/classfusion__server_1_1Server.html#a6db7a3282d6b43ef7e313dcc36bc2c45", null ],
     [ "StartAccepting", "d4/d1d/classfusion__server_1_1Server.html#aecfcada9e5faf3165e959a4bd4aa06a5", null ],

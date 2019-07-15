@@ -19,7 +19,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-#include <fusion_server/package_parser.hpp>
+#include <fusion_server/json.hpp>
 
 namespace fusion_server {
 
@@ -45,7 +45,7 @@ using Package = const std::string;
  * @param[in] session
  *   The session connected to the client.
  */
-using IncommingPackageDelegate = std::function< void(const PackageParser::JSON&  package, WebSocketSession* session) >;
+using IncommingPackageDelegate = std::function< void(const JSON&  package, WebSocketSession* session) >;
 
 /**
  * @brief Logging pattern.
