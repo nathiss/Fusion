@@ -93,6 +93,12 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
     return;
   }
 
+  if (request_.version() == 11 &&
+    request_.find(boost::beast::http::field::host) == request_.end()) {
+    PerformAsyncWrite(MakeBadRequest());
+    return;
+  }
+
   if (ec) {
     logger_->error("An error occurred during reading. [Boost:{}]", ec.message());
     return;
@@ -176,7 +182,7 @@ HTTPSession::Response_t  HTTPSession::MakeBadRequest() const noexcept {
   };
   res.set(boost::beast::http::field::server, BOOST_BEAST_VERSION_STRING);
   res.set(boost::beast::http::field::content_type, "text/html; charset=utf-8");
-  res.keep_alive(false);
+  res.keep_alive(request_.keep_alive());
   res.body() = "<html><body><h1>400 Bad Request</h1></body></html>";
   res.prepare_payload();
   return res;
