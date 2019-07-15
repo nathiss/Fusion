@@ -23,7 +23,16 @@ namespace fusion_server {
 
 HTTPSession::HTTPSession(boost::asio::ip::tcp::socket socket) noexcept
     : socket_{std::move(socket)}, strand_{socket_.get_executor()} {
-  logger_ = spdlog::get("http");
+  logger_ = spdlog::default_logger();
+}
+
+
+void HTTPSession::SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept {
+  logger_ = std::move(logger);
+}
+
+std::shared_ptr<spdlog::logger> HTTPSession::GetLogger() const noexcept {
+  return logger_;
 }
 
 void HTTPSession::Run() noexcept {

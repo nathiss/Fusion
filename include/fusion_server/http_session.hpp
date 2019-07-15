@@ -89,6 +89,26 @@ class HTTPSession : public std::enable_shared_from_this<HTTPSession> {
    */
   explicit HTTPSession(boost::asio::ip::tcp::socket socket) noexcept;
 
+
+  /**
+   * @brief Sets the logger of this instance.
+   * This method sets the logger of this instance to the given one.
+   *
+   * @param logger [in]
+   *   The given logger.
+   */
+  void SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
+
+  /**
+   * @brief Returns this instance's logger.
+   * This method returns the logger of this instance.
+   *
+   * @return
+   *   The logger of this instance is returned. If the logger has not been set
+   *   this method returns std::nullptr.
+   */
+  std::shared_ptr<spdlog::logger> GetLogger() const noexcept;
+
   /**
    * This method starts the loop of asynchronous reads. It is intended to be
    * called only once. If it is called more than once the behaviour is

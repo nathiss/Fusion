@@ -85,11 +85,8 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *
    * @param logger [in]
    *   The given logger.
-   *
-   * @return
-   *   A shared pointer to `this` object.
    */
-  std::shared_ptr<Listener> SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
+  void SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept;
 
   /**
    * @brief Returns this instance's logger.

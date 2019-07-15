@@ -26,9 +26,8 @@ Listener::Listener(boost::asio::io_context &ioc) noexcept
     number_of_connections_{0}, logger_{spdlog::default_logger()} {}
 
 
-std::shared_ptr<Listener> Listener::SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept {
+void Listener::SetLogger(std::shared_ptr<spdlog::logger> logger) noexcept {
   logger_ = std::move(logger);
-  return shared_from_this();
 }
 
 std::shared_ptr<spdlog::logger> Listener::GetLogger() const noexcept {
