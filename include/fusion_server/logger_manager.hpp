@@ -197,43 +197,29 @@ class LoggerManager {
   bool register_by_default_;
 };
 
-namespace {
-
-/**
- * This free function converts the given log level to a level of the used
- * logging library.
- *
- * @param[in] level
- *   A logging level.
- *
- * @return
- *   A logging level of the native logging library.
- */
-spdlog::level::level_enum LogLevelToNative(LoggerManager::Level level) noexcept {
-  switch (level) {
-    case decltype(level)::trace:
-      return spdlog::level::trace;
-    case decltype(level)::debug:
-      return spdlog::level::debug;
-    case decltype(level)::info:
-      return spdlog::level::info;
-    case decltype(level)::warn:
-      return spdlog::level::warn;
-    case decltype(level)::error:
-      return spdlog::level::err;
-    case decltype(level)::critical:
-      return spdlog::level::critical;
-    default:
-      return spdlog::level::off;
-  }
-}
-
-}
-
 template <bool MakeThreadSafe>
 std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
   const std::string& name, LoggerManager::Level level,
   boost::logic::tribool register_as_global , const std::string& pattern) noexcept {
+  const auto LogLevelToNative = [](LoggerManager::Level level) -> spdlog::level::level_enum {
+    switch (level) {
+      case decltype(level)::trace:
+        return spdlog::level::trace;
+      case decltype(level)::debug:
+        return spdlog::level::debug;
+      case decltype(level)::info:
+        return spdlog::level::info;
+      case decltype(level)::warn:
+        return spdlog::level::warn;
+      case decltype(level)::error:
+        return spdlog::level::err;
+      case decltype(level)::critical:
+        return spdlog::level::critical;
+      default:
+        return spdlog::level::off;
+    }
+  };
+
   auto filename = LoggerManager::AssembleFileName(name);
 
   if constexpr (MakeThreadSafe) {
@@ -257,10 +243,11 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
       level == decltype(level)::none ? LogLevelToNative(level_) :
     LogLevelToNative(level));
 
-    if ((register_as_global == boost::logic::tribool::indeterminate_value ?
-         register_by_default_ : register_as_global)) {
-      spdlog::register_logger(logger);
-  }
+    if (boost::logic::indeterminate(register_as_global)) {
+      if (register_by_default_) spdlog::register_logger(logger);
+    } else {
+      if (register_as_global) spdlog::register_logger(logger);
+    }
 
   return logger;
   } else {
@@ -284,9 +271,10 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
       level == decltype(level)::none ? LogLevelToNative(level_) :
       LogLevelToNative(level));
 
-    if ((register_as_global == boost::logic::tribool::indeterminate_value ?
-        register_by_default_ : register_as_global)) {
-      spdlog::register_logger(logger);
+    if (boost::logic::indeterminate(register_as_global)) {
+      if (register_by_default_) spdlog::register_logger(logger);
+    } else {
+      if (register_as_global) spdlog::register_logger(logger);
     }
 
     return logger;

@@ -14,9 +14,9 @@ namespace {
  */
 JSON MakeNotValidJSON() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"One of the packages didn't contain a valid JSON."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "One of the packages didn't contain a valid JSON."}
     }, false, JSON::value_t::object);
 }
 
@@ -30,9 +30,9 @@ JSON MakeNotValidJSON() noexcept {
  */
 JSON MakeTypeNotFound() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"One of the packages didn't have a \"type\" field."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "One of the packages didn't have a \"type\" field."}
     }, false, JSON::value_t::object);
 }
 
@@ -46,9 +46,9 @@ JSON MakeTypeNotFound() noexcept {
  */
 JSON MakeNotValidJoin() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"A \"JOIN\" was ill-formed.."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "A \"JOIN\" was ill-formed.."}
     }, false, JSON::value_t::object);
 }
 
@@ -62,9 +62,9 @@ JSON MakeNotValidJoin() noexcept {
  */
 JSON MakeNotValidUpdate() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"A \"UPDATE\" was ill-formed."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "A \"UPDATE\" was ill-formed."}
     }, false, JSON::value_t::object);
 }
 
@@ -78,9 +78,9 @@ JSON MakeNotValidUpdate() noexcept {
  */
 JSON MakeNotValidLeave() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"A \"LEAVE\" was ill-formed."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "A \"LEAVE\" was ill-formed."}
     }, false, JSON::value_t::object);
 }
 
@@ -94,9 +94,9 @@ JSON MakeNotValidLeave() noexcept {
  */
 JSON MakeUnidentified() noexcept {
   return JSON({
-    {"closed", {true}},
-    {"type", {"error"}},
-    {"message", {"Cannot identify a package."}}
+    {"closed", true},
+    {"type", "error"},
+    {"message", "Cannot identify a package."}
     }, false, JSON::value_t::object);
 }
 

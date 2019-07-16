@@ -57,14 +57,11 @@ bool Server::Configure(json::JSON config) noexcept {
 
   // TODO(nathiss): complete configuration.
 
-  auto ws = logger_manager_.CreateLogger<true>("websocket", LoggerManager::Level::none,
+  logger_manager_.CreateLogger<true>("websocket", LoggerManager::Level::none,
     true);
-  auto game = logger_manager_.CreateLogger<true>("game", LoggerManager::Level::none,
+  logger_manager_.CreateLogger<true>("game", LoggerManager::Level::none,
     true);
 
-  // FIXME(nathiss): *HACK* remove this ugly hack
-  spdlog::register_logger(ws);
-  spdlog::register_logger(game);
   return true;
 }
 
@@ -156,16 +153,16 @@ Server::Server() noexcept {
 json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request) noexcept {
   const auto make_unidentified = [] {
     return json::JSON({
-      {"type", {"warning"}},
-      {"message", {"Received an unidentified package."}},
-      {"closed", {false}},
+      {"type", "warning"},
+      {"message", "Received an unidentified package."},
+      {"closed", false},
     }, false, json::JSON::value_t::object);
   };
 
   const auto make_game_full = [](std::size_t id){
     return json::JSON({
-      {"id", {id}},
-      {"result", {"full"}},
+      {"id", id},
+      {"result", "full"},
     }, false, json::JSON::value_t::object);
   };
 
@@ -180,7 +177,7 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
     auto join_result = it->second->Join(src);
     games_mtx_.unlock();
     if (!join_result) {  // The game is full.
-      return std::make_pair(false, make_game_full(request["id"]));
+      return make_game_full(request["id"]);
     }
     // If we're here it means the join was successful.
     src->delegate_ = std::get<0>(join_result.value());
@@ -196,21 +193,20 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
 
     auto response = [&request, &join_result] {
       return json::JSON({
-        {"id", {request["id"]}},
-        {"result", {"joined"}},
-        {"my_id", {std::get<2>(join_result.value())}},
-        {"players", {std::get<1>(join_result.value())["players"]}},
-        {"rays", {std::get<1>(join_result.value())["rays"]}},
+        {"id", request["id"]},
+        {"result", "joined"},
+        {"my_id", std::get<2>(join_result.value())},
+        {"players", std::get<1>(join_result.value())["players"]},
+        {"rays", std::get<1>(join_result.value())["rays"]},
       }, false, json::JSON::value_t::object);
     }();
-
-    return std::make_pair(false, std::move(response));
+    return response;
   }  // "join"
 
   // If we're here it means we've received an unidentified package.
   logger_->warn("Received an unidentified package from {}. [type={}]",
     src->GetRemoteEndpoint(), request["type"].dump());
-  return std::make_pair(false, make_unidentified());
+  return make_unidentified();
 }
 
 }  // namespace fusion_server

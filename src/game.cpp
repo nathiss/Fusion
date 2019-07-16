@@ -167,8 +167,8 @@ bool Game::IsInGame(WebSocketSession *session) const noexcept {
 json::JSON Game::GetCurrentState() const noexcept {
   auto state = [] {
     return json::JSON({
-      {"players", {json::JSON::array()}},
-      {"rays", {json::JSON::array()}},
+      {"players", json::JSON::array()},
+      {"rays", json::JSON::array()},
     }, false, json::JSON::value_t::object);
   }();
 
@@ -200,9 +200,9 @@ void
 Game::DoResponse(WebSocketSession* session, const json::JSON& request) noexcept {
   const auto make_unidentified = [] {
     return json::JSON({
-      {"type", {"warning"}},
-      {"message", {"Received an unidentified package."}},
-      {"closed", {false}},
+      {"type", "warning"},
+      {"message", "Received an unidentified package."},
+      {"closed", false},
     }, false, json::JSON::value_t::object);
   };
 
@@ -230,9 +230,9 @@ Game::DoResponse(WebSocketSession* session, const json::JSON& request) noexcept 
       json::JSON ret = json::JSON::object();
       auto state = GetCurrentState();
       return json::JSON({
-        {"type", {"update"}},
-        {"players", {state["players"]}},
-        {"rays", {state["rays"]}},
+        {"type", "update"},
+        {"players", state["players"]},
+        {"rays", state["rays"]},
       }, false, json::JSON::value_t::object);
     }();
     BroadcastPackage(std::make_shared<Package>(std::move(response)));
