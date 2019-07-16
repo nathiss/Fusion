@@ -11,13 +11,15 @@ This is the source code of the server for the **Fusion** game.
 * [nlohmann/json](https://github.com/nlohmann/json) - JSON for Modern C++.
 * [Google Test](https://github.com/google/googletest) - Google's C++ test framework.
 * [Boost](https://www.boost.org/) - free peer-reviewed portable C++ source libraries
-  (requires [Boost 1.67](https://www.boost.org/users/history/version_1_67_0.html) installed on the system).
+  (requires [1.67](https://www.boost.org/users/history/version_1_67_0.html) or
+  higher version of Boost installed on the system).
 
 ## Build
 
 You can build the server by yourself or build a docker image that contains the
-server. Either way please **edit**  respectively `docker-config.json` or
-`config.json` file. Section below describes all fields of the configuration file.
+server. Either way please **edit**  respectively `config.json` or
+`docker-config.json` file. Section below describes all fields of the configuration
+file.
 
 1. Clone the repo and go to its root directory.
 ```bash
@@ -27,12 +29,12 @@ server. Either way please **edit**  respectively `docker-config.json` or
 
 2. Build the docker image.
 ```bash
-  $ docker build --tag nathiss/fusion_server:latest .
+  $ docker build --tag nathiss/fusion_server .
 ```
 
 3. After its successfully build run the image container.
 ```bash
-  $ # Attached to a console.
+  $ # Attached to console.
   $ docker run -it -p <host_port>:<port_config> -v <host_dir>:<log_dir_cofnig> nathiss/fusion_server
   $
   $ # Detached
@@ -68,8 +70,8 @@ A valid config file needs to meet these requirements:
             * `"error"`
             * `"critical"`
     * `"pattern"` field is *optional* and its value must be a string.
-        * See [spdlog: Custom formatting](https://github.com/gabime/spdlog/wiki/3.-Custom-formatting)
-          for more information.
+        * *See [spdlog: Custom formatting](https://github.com/gabime/spdlog/wiki/3.-Custom-formatting)
+          for more information.*
     * `"register_by_default"` is *optional* and its value must be a boolean.
 
 ## Protocol
@@ -91,8 +93,8 @@ This section describes packages send by a client.
 #### JOIN package
 
 This package is a join request to the server. A Client can be only in one game
-at a time. If this packge was sent and the client has already joined to a game,
-the server will close the connection imediately.
+at a time. If this package was sent and the client has already joined to a game,
+the server will close the connection immediately.
 
 ```json
 {
@@ -172,7 +174,7 @@ server, which will be broadcasted to all players.
 #### LEAVE package
 
 This package is used to leave the current game. This request to the server is
-always successful, therefore the server won't repond to it. The `leave` field
+always successful, therefore the server won't respond to it. The `leave` field
 can have any value.
 
 ```json
@@ -204,7 +206,7 @@ The `rays` array contains rays objects of the game.
 The values of `new` and `remove` fields have no meaning and should not be
 checked. If a ray object has neither `new` nor `remove` field it means that, an
 existing ray has been changed. If the game doesn't have any rays or the existing
-rays didn't change, the array will be empty, but will not be omitted.
+rays did not change, the array will be empty, but will not be omitted.
 
 ```json
 {

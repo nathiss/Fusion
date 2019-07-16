@@ -198,7 +198,8 @@ class Game {
    * game.
    *
    * @return
-   *   A JSON object containg an encoded current state of this game is returned.
+   *   A JSON object containing an encoded current state of this game is
+   *   returned.
    */
   json::JSON GetCurrentState() const noexcept;
 
