@@ -1,13 +1,13 @@
 {
   "logger": {
-    "root": "/tmp/fusion_log",
+    "root": "/tmp/log/",
     "extension": ".log",
     "level": "debug",
     "pattern": "[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v",
     "register_by_default": false
   },
   "listener": {
-    "interface": "0.0.0.0",
+    "interface": "127.0.0.1",
     "port": 8080,
     "max_queued_connections": 128
   },

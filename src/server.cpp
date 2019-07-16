@@ -57,6 +57,14 @@ bool Server::Configure(json::JSON config) noexcept {
 
   // TODO(nathiss): complete configuration.
 
+  auto ws = logger_manager_.CreateLogger<true>("websocket", LoggerManager::Level::none,
+    true);
+  auto game = logger_manager_.CreateLogger<true>("game", LoggerManager::Level::none,
+    true);
+
+  // FIXME(nathiss): *HACK* remove this ugly hack
+  spdlog::register_logger(ws);
+  spdlog::register_logger(game);
   return true;
 }
 
@@ -167,8 +175,7 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
     auto it = games_.find(game_name);
     if (it == games_.end()) {
       it = games_.emplace(game_name, std::make_shared<Game>()).first;
-      // TODO(nathiss): set logger
-      it->second->SetLogger(nullptr);
+      it->second->SetLogger(LoggerManager::Get("game"));
     }
     auto join_result = it->second->Join(src);
     games_mtx_.unlock();

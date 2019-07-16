@@ -111,7 +111,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   The logger of this instance is returned. If the logger has not been set
    *   this method returns std::nullptr.
    */
-  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;\
+  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;
 
   /**
    * @brief Binds the listener.
@@ -122,7 +122,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   An indication whether or not the binding was successful.
    *
    * @note
-   *   If this method is called before an successful call of Configure, the
+   *   If this method is called before a successful call of Configure, the
    *   behaviour is undefined.
    */
   bool Bind() noexcept;

@@ -104,7 +104,9 @@ void HTTPSession::HandleRead(const boost::system::error_code& ec, std::size_t by
 
   if (boost::beast::websocket::is_upgrade(request_)) {
     logger_->debug("Received an upgrade request from {}.", socket_.remote_endpoint());
-    std::make_shared<WebSocketSession>(std::move(socket_))->Run(std::move(request_));
+    auto ws = std::make_shared<WebSocketSession>(std::move(socket_));
+    ws->SetLogger(LoggerManager::Get("websocket"));
+    ws->Run(std::move(request_));
     return;
   }
 

@@ -29,19 +29,27 @@ WebSocketSession::WebSocketSession(boost::asio::ip::tcp::socket socket) noexcept
       strand_{websocket_.get_executor()},
       handshake_complete_{false},
       in_closing_procedure_{false},
-      logger_{spdlog::get("websocket")} {
+      logger_{LoggerManager::Get()} {
   delegate_ = Server::GetInstance().Register(this);
 }
 
 WebSocketSession::~WebSocketSession() noexcept {
   Server::GetInstance().Unregister(this);
-};
+}
+
+void WebSocketSession::SetLogger(LoggerManager::Logger logger) noexcept {
+  logger_ = std::move(logger);
+}
+
+LoggerManager::Logger WebSocketSession::GetLogger() const noexcept {
+  return logger_;
+}
 
 void WebSocketSession::Write(const std::shared_ptr<Package>& package) noexcept {
   std::lock_guard l{outgoing_queue_mtx_};
 
   if (in_closing_procedure_) {
-    logger_->warn("Trying to write to {} while in closing procedue.", GetRemoteEndpoint());
+    logger_->warn("Trying to write to {} while in closing procedure.", GetRemoteEndpoint());
     // We're not allowed to queued any package, when the closing procedure has
     // started.
     return;
@@ -99,7 +107,7 @@ void WebSocketSession::Close() noexcept {
     // error.
 
   if (ec) {
-    logger_->warn("An error occured during closing a websocket. [Boost: {}]",
+    logger_->warn("An error occurred during closing a websocket. [Boost: {}]",
       ec.message());
     // TODO(nathiss): Find out if the comment below applies to the WebSocket connections.
     // We do nothing, because
@@ -133,7 +141,7 @@ void WebSocketSession::Close(const std::shared_ptr<Package>& package) noexcept {
   boost::system::error_code ec;
   websocket_.write(boost::asio::buffer(*package), ec);
   if (ec) {
-    logger_->error("An error occured during sync writing the closing message. [Boost:{}]",
+    logger_->error("An error occurred during sync writing the closing message. [Boost:{}]",
       ec.message());
   }
   Close();
@@ -150,7 +158,7 @@ WebSocketSession::GetRemoteEndpoint() const noexcept {
 
 void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noexcept {
   if (ec) {
-    logger_->error("An error occured during handshake. Closing the session to {}. [Boost: {}]",
+    logger_->error("An error occurred during handshake. Closing the session to {}. [Boost: {}]",
       GetRemoteEndpoint(), ec.message());
     return;
   }

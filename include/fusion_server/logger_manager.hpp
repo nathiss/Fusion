@@ -10,6 +10,9 @@
 
 #pragma once
 
+#include <memory>
+#include <string>
+
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/logic/tribool.hpp>
 #include <spdlog/spdlog.h>
@@ -191,7 +194,7 @@ class LoggerManager {
    * This flag indicates whether or not new logger should be registered in the
    * global registry by default.
    */
-  bool register_by_default_ ;
+  bool register_by_default_;
 };
 
 namespace {
@@ -254,8 +257,8 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
       level == decltype(level)::none ? LogLevelToNative(level_) :
     LogLevelToNative(level));
 
-    if (register_as_global == decltype(register_as_global)::indeterminate_value ?
-    register_by_default_ : register_as_global) {
+    if ((register_as_global == boost::logic::tribool::indeterminate_value ?
+         register_by_default_ : register_as_global)) {
       spdlog::register_logger(logger);
   }
 
@@ -281,8 +284,8 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
       level == decltype(level)::none ? LogLevelToNative(level_) :
       LogLevelToNative(level));
 
-    if (register_as_global == decltype(register_as_global)::indeterminate_value ?
-        register_by_default_ : register_as_global) {
+    if ((register_as_global == boost::logic::tribool::indeterminate_value ?
+        register_by_default_ : register_as_global)) {
       spdlog::register_logger(logger);
     }
 

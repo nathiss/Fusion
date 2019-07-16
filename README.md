@@ -13,9 +13,68 @@ This is the source code of the server for the **Fusion** game.
 * [Boost](https://www.boost.org/) - free peer-reviewed portable C++ source libraries
   (requires [Boost 1.67](https://www.boost.org/users/history/version_1_67_0.html) installed on the system).
 
+## Build
+
+You can build the server by yourself or build a docker image that contains the
+server. Either way please **edit**  respectively `docker-config.json` or
+`config.json` file. Section below describes all fields of the configuration file.
+
+1. Clone the repo and go to its root directory.
+```bash
+  $ git clone https://github.com/nathiss/Fusion.git
+  $ cd Fusion
+```
+
+2. Build the docker image.
+```bash
+  $ docker build --tag nathiss/fusion_server:latest .
+```
+
+3. After its successfully build run the image container.
+```bash
+  $ # Attached to a console.
+  $ docker run -it -p <host_port>:<port_config> -v <host_dir>:<log_dir_cofnig> nathiss/fusion_server
+  $
+  $ # Detached
+  $ docker run -d -p <host_port>:<port_config> -v <host_dir>:<log_dir_cofnig> nathiss/fusion_server
+```
+
+## Configuration
+
+[JSON](https://tools.ietf.org/html/rfc7159) format is used in configuration file.
+The file can created anywhere, but remember to change the path in `Dockerfile`.
+
+A valid config file needs to meet these requirements:
+
+* The root of the config file has to be an object.
+* `"listener"` field is required and its value must be an object.
+    * `"interface"` field is required and its value must be a string.
+        * *Value `"0.0.0.0"` means server will listen on all interfaces.*
+    * `"port"` field is required and its value must be an unsigned number.
+    * `"max_ququed_connections"` field is required and its value must be an unsigned number.
+* `"number_of_additional_threads"` field is required and its value must be a number.
+    * *Value `0` means no additional threads.*
+    * *Value `-1` means server will create `std::thread::hardware_concurrency() - 1` threads.*
+* `"logger"` field is *optional* and its value must be an object.
+    * `"root"` field is *optional* and its value must be a string.
+    * `"extension"` field is optional and its value must be a string.
+        * *Value **should** begin with `"."`.*
+    * `"level"` field is *optional* and its value must be a string.
+        * Possible values of this field:
+            * `"trace"`
+            * `"debug"`
+            * `"info"`
+            * `"warn"`
+            * `"error"`
+            * `"critical"`
+    * `"pattern"` field is *optional* and its value must be a string.
+        * See [spdlog: Custom formatting](https://github.com/gabime/spdlog/wiki/3.-Custom-formatting)
+          for more information.
+    * `"register_by_default"` is *optional* and its value must be a boolean.
+
 ## Protocol
 
-This section describes the protocol used in the connunication between the server
+This section describes the protocol used in the communication between the server
 and its clients.
 
 

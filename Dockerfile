@@ -3,37 +3,31 @@
 #
 # This file is a part of Fusion Server project.
 #
-# Build:
-# $ docker build --tag nathiss/fusion_server:0.1 .
-#
-# Run:
-# $ docker run -it -p 8080:80 nathiss/fusion_server:0.1
-#
 FROM archlinux/base:latest
 
 LABEL Name=FusionServer Version=0.1
 
 RUN pacman -Syu --noconfirm
 RUN pacman -S --noconfirm cmake \
-                          git \
                           clang \
                           boost \
                           boost-libs \
                           make
 
-RUN [ -d /usr/src ] || mkdir /usr/src
-WORKDIR /usr/src
+RUN mkdir -p /app/src \
+ && mkdir -p /app/build \
+ && mkdir -p /app/log
 
-RUN git clone "https://github.com/nathiss/Fusion.git" . \
- && git submodule init . \
- && git submodule update --recursive
+COPY . /app/src
 
-RUN mkdir build
-WORKDIR /usr/src/build
+WORKDIR /app/build
+RUN cmake /app/src \
+ && cmake --build . --config Release --target FusionServerExecutable -j 10
 
-RUN cmake .. \
- && make -j 10
+RUN mv /app/src/docker-config.json /config.json \
+ && mv /app/build/executable/FusionServerExecutable /Server
 
 EXPOSE 80/tcp
+VOLUME /app/log
 
-CMD ["/usr/src/build/executable/FusionServerExecutable"]
+CMD ["/Server", "/config.json"]

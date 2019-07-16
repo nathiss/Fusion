@@ -98,6 +98,25 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   ~WebSocketSession() noexcept;
 
   /**
+   * @brief Sets the logger of this instance.
+   * This method sets the logger of this instance to the given one.
+   *
+   * @param logger [in]
+   *   The given logger.
+   */
+  void SetLogger(LoggerManager::Logger logger) noexcept;
+
+  /**
+   * @brief Returns this instance's logger.
+   * This method returns the logger of this instance.
+   *
+   * @return
+   *   The logger of this instance is returned. If the logger has not been set
+   *   this method returns std::nullptr.
+   */
+  [[nodiscard]] LoggerManager::Logger GetLogger() const noexcept;
+
+  /**
    * This method delegates the write operation to the client.
    * Since Boost::Beast allows only one writing at a time, the packages is
    * always queued and if no writing is taking place the asynchronous write

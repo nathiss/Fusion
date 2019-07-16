@@ -43,7 +43,6 @@ set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
 set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(third_party/nlohmann_json)
 
-
 if (TARGET FusionServerExecutable)
   add_subdirectory(executable)
 elseif(TARGET FusionServerTests)
