@@ -235,7 +235,7 @@ Game::DoResponse(WebSocketSession* session, const json::JSON& request) noexcept 
         {"rays", state["rays"]},
       }, false, json::JSON::value_t::object);
     }();
-    BroadcastPackage(std::make_shared<Package>(std::move(response)));
+    BroadcastPackage(std::make_shared<Package>(response.dump()));
   }  // "update"
 
   if (request["type"] == "leave") {
@@ -254,7 +254,7 @@ Game::DoResponse(WebSocketSession* session, const json::JSON& request) noexcept 
 
   logger_->warn("Received an unidentified package from {}. [type={}]",
     session->GetRemoteEndpoint(), request["type"].dump());
-  session->Write(std::make_shared<Package>(make_unidentified()));
+  session->Write(std::make_shared<Package>(make_unidentified().dump()));
 }
 
 }  // namespace fusion_server
