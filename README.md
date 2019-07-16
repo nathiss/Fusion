@@ -50,18 +50,21 @@ A valid config file needs to meet these requirements:
 
 * The root of the config file has to be an object.
 * `"listener"` field is required and its value must be an object.
-    * `"interface"` field is required and its value must be a string.
+    * `"interface"` - an interface on which server will listen for connections (**required**).
         * *Value `"0.0.0.0"` means server will listen on all interfaces.*
-    * `"port"` field is required and its value must be an unsigned number.
-    * `"max_ququed_connections"` field is required and its value must be an unsigned number.
-* `"number_of_additional_threads"` field is required and its value must be a number.
+    * `"port"` - a port on which server will listen for connections (**required**).
+    * `"max_ququed_connections"` - a maximum number of queued connections (**required**).
+        * *Value `128` is recommended.*
+
+* `"number_of_additional_threads"` - a number of additional threads (**required**).
     * *Value `0` means no additional threads.*
     * *Value `-1` means server will create `std::thread::hardware_concurrency() - 1` threads.*
-* `"logger"` field is *optional* and its value must be an object.
-    * `"root"` field is *optional* and its value must be a string.
-    * `"extension"` field is optional and its value must be a string.
-        * *Value **should** begin with `"."`.*
-    * `"level"` field is *optional* and its value must be a string.
+
+* `"logger"` field is optional and its value must be an object.
+    * `"root"` - path to log directory (**optional**).
+    * `"extension"` - extension for log files (**optional**).
+        * *Value **have to** begin with `"."`.*
+    * `"level"` - the default log level (**optional**).
         * Possible values of this field:
             * `"trace"`
             * `"debug"`
@@ -69,10 +72,11 @@ A valid config file needs to meet these requirements:
             * `"warn"`
             * `"error"`
             * `"critical"`
-    * `"pattern"` field is *optional* and its value must be a string.
+    * `"pattern"` - a pattern for log messages (**optional**).
         * *See [spdlog: Custom formatting](https://github.com/gabime/spdlog/wiki/3.-Custom-formatting)
           for more information.*
-    * `"register_by_default"` is *optional* and its value must be a boolean.
+    * `"register_by_default"` - an indication whether of not new logger should
+    be registered in global registry (**optional**).
 
 ## Protocol
 
@@ -81,9 +85,9 @@ and its clients.
 
 
 ### Common part
-Each package CAN have the `id` field. This is a random number to identify this
-package in the session. The other side of the connection can send a packge with
-the same `id` to indicate, that it's a response to the previous one.
+Each package **CAN** have the `id` field. This is a random number to identify
+this package in the session. The other side of the connection can send a package
+with the same `id` to indicate, that it's a response to the previous one.
 
 
 ### Client -> Server
@@ -110,7 +114,7 @@ the server will close the connection immediately.
 The `result` field can have to values. `joined` means that, the player has
 joined to the game. `full` value means that the requested game is full and
 joining to it is not possible. The `players` field is an array of objects. Each
-object describes one player. The `rays` field is an array of light rays presnt
+object describes one player. The `rays` field is an array of light rays present
 in the game at the current moment. It can be empty if there are no rays.
 
 * The client HAS TO save the values of `player_id` fields, all further updates
