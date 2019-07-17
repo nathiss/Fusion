@@ -144,6 +144,15 @@ class LoggerManager {
   bool Configure(const json::JSON& config) noexcept;
 
   /**
+   * @brief Returns configuration.
+   * This method returns the configuration of this instance.
+   *
+   * @return
+   *   The configuration of this instance is returned.
+   */
+  const Configuration& GetConfiguration() const noexcept;
+
+  /**
    * @brief Creates a new logger.
    * This method creates a new logger. Each new logger has two sinks: a console
    * and a file.

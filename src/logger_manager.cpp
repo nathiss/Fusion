@@ -49,7 +49,11 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
     else if (config["level"] == "warn") configuration_.level_ = Level::warn;
     else if (config["level"] == "error") configuration_.level_ = Level::error;
     else if (config["level"] == "critical") configuration_.level_ = Level::critical;
-    else configuration_.level_ = Level::none;
+    else if (config["level"] == "none") configuration_.level_ = Level::none;
+    else {
+      SetDefault();
+      return false;
+    }
   }
 
   if (config.contains("pattern")) {
@@ -69,8 +73,11 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
   }
 
   if (config.contains("flush_every")) {
-    if (!config["flush_every"].is_number_float()) {
+    if (!config["flush_every"].is_number()) {
       SetDefault();
+      return false;
+    }
+    if (config["flush_every"] < 0) {
       return false;
     }
     configuration_.flush_every_default_ = std::chrono::seconds(
@@ -79,6 +86,10 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
   }
 
   return true;
+}
+
+auto LoggerManager::GetConfiguration() const noexcept -> const Configuration& {
+  return configuration_;
 }
 
 auto LoggerManager::Get(const std::string& name) noexcept -> LoggerManager::Logger {
