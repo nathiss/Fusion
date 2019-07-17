@@ -203,12 +203,12 @@ void WebSocketSession::HandleRead(const boost::system::error_code& ec,
     return;
   }
   if (ec == boost::asio::error::operation_aborted) {
-    logger_->debug("The read operation from {} was abroted.", GetRemoteEndpoint());
+    logger_->debug("The read operation from {} was aborted.", GetRemoteEndpoint());
     return;
   }
 
   if (ec) {
-    logger_->error("An error occured during reading from {}. [Boost: {}]",
+    logger_->error("An error occurred during reading from {}. [Boost: {}]",
       GetRemoteEndpoint(), ec.message());
     // We assume what the session cannot be fixed.
     // TODO(nathiss): Find out if that's true.

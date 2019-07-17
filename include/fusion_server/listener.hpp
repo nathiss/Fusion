@@ -111,7 +111,7 @@ class Listener : public std::enable_shared_from_this<Listener> {
    *   A JSON object containing configuration for the listener.
    *
    * @return
-   *   An indication, whether or not the operation was successful is returned.
+   *   An indication of whether or not the operation was successful is returned.
    */
   bool Configure(const json::JSON& config) noexcept;
 
