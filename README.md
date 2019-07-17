@@ -137,22 +137,13 @@ for.
   "my_id": 1337,
   "players": [
     {
-      "player_id": 0,
+      "player_id": 9001,
       "team_id": 0,
       "nick": "<player's nick>",
-      "role": "<player's role>",
       "color": [255, 255, 255],
       "health": 100.0,
       "position": [7.6, 87.2],
       "angle": 67.2
-    }
-  ],
-  "rays": [
-    {
-      "ray_id": 0,
-      "source": [7.6, 87.2],
-      "destination": [17.6, 187.2],
-      "color": [255, 255, 255]
     }
   ]
 }
@@ -161,22 +152,21 @@ for.
 #### UPDATE package
 
 This package is used to update the position of the player. It should be sent
-each time when the player either moved, rotated or fired.
+each time when the player move or rotate.
 
 ```json
 {
   "type": "update",
-  "team_id": 0,
-  "position": [7.6, 87.2],
-  "angle": 67.2
+  "direction": 12,
+  "angle": 67.8
 }
 ```
 
 ##### Server's Response
 
 There is no "response" from the server, however the client should not perform
-any updates on its own sprite, until it receives an UPDATE package from the
-server, which will be broadcasted to all players.
+any updates on its own, until it receives an UPDATE package from the server,
+which will be broadcasted to all players.
 
 #### LEAVE package
 
@@ -195,7 +185,8 @@ can have any value.
 **Note**: There is no server's response for this request.
 
 
-### Server -> Client
+
+### (THIS SECTION IS OUTDATED) Server -> Client
 
 This section describes the packages send by the server.
 

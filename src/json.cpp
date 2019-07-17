@@ -129,15 +129,10 @@ std::pair<bool, JSON>  Verify(const std::string& raw_package) noexcept {
   }
 
   if (json["type"] == "update") {
-    if (!(json.contains("team_id") &&
-          json.contains("position") &&
+    if (!(json.contains("direction") &&
           json.contains("angle") &&
-          json.size() ==  3 + 1 &&
-          json["team_id"].type() == decltype(json)::value_t::number_unsigned &&
-          json["position"].type() == decltype(json)::value_t::array &&
-          json["position"].size() == 2 &&
-          json["position"][0].type() == decltype(json)::value_t::number_float &&
-          json["position"][1].type() == decltype(json)::value_t::number_float &&
+          json.size() ==  2 + 1 &&
+          json["direction"].type() == decltype(json)::value_t::number_unsigned &&
           json["angle"].type() == decltype(json)::value_t::number_float)) {
       return std::make_pair(false, MakeNotValidUpdate());
     }

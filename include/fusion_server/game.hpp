@@ -22,10 +22,11 @@
 #include <utility>
 #include <variant>
 
-#include <fusion_server/player.hpp>
 #include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/logger_manager.hpp>
+#include <fusion_server/ui/player.hpp>
+#include <fusion_server/ui/player_factory.hpp>
 
 using fusion_server::system_abstractions::Package;
 
@@ -45,21 +46,21 @@ class Game {
   /**
    * This enum contains the teams' identifiers.
    */
-  enum class Team {
+  enum Team {
+    /**
+     * This indicates that a WebSocketSession should be assigned to a random team.
+     */
+    kRandom = 0,
+
     /**
      * This identifies the first team in the game.
      */
-    kFirst,
+    kFirst = 1,
 
     /**
      * This identifies the second team in the game.
      */
-    kSecond,
-
-    /**
-     * This indicates that a WebSocketSession should be assigned to a random team.
-     */
-    kRandom,
+    kSecond = 2,
   };
 
   /**
@@ -123,13 +124,16 @@ class Game {
    * @param[in] session
    *   This is the WebSocket session connected to a client.
    *
+   * @param[in] nick
+   *   This is the nick of the new player.
+   *
    * @param[in] team
    *   This identifies the team, to which the client will be assigned.
    *   The default value indicates that the client will be assigned to a random
    *   team.
    *
    * @return
-   *   If the joining was successful pair of a new incomming package delegate
+   *   If the joining was successful pair of a new incoming package delegate
    *   and a JSON object containing information about the current state of the
    *   game is returned, otherwise the returned object is in its invalid state.
    *
@@ -138,7 +142,7 @@ class Game {
    *   returns an invalid state object.
    */
   [[ nodiscard ]] join_result_t
-  Join(WebSocketSession *session, Team team = Team::kRandom) noexcept;
+  Join(WebSocketSession *session, const std::string& nick, Team team = Team::kRandom) noexcept;
 
   /**
    * This method removes the given session from this game.
@@ -194,7 +198,7 @@ class Game {
   bool IsInGame(WebSocketSession *session) const noexcept;
 
   /**
-   * This method returns a JSON object containg an encoded current state of this
+   * This method returns a JSON object containing an encoded current state of this
    * game.
    *
    * @return
@@ -204,7 +208,7 @@ class Game {
   json::JSON GetCurrentState() const noexcept;
 
   /**
-   * This method prepairs a response for the given request and either sends it
+   * This method preparis a response for the given request and either sends it
    * or broadcasts it.
    *
    * @param[in] session
@@ -220,7 +224,7 @@ class Game {
    * This set contains the pairs of WebSocket sessions and their roles in the
    * game of the first team.
    */
-  std::set<std::pair<WebSocketSession*, std::unique_ptr<Player>>> first_team_;
+  std::set<std::pair<WebSocketSession*, std::shared_ptr<ui::Player>>> first_team_;
 
   /**
    * This mutex is used to synchronise all oprations done on the collection
@@ -232,10 +236,10 @@ class Game {
    * This set contains the pairs of WebSocket sessions and their roles in the
    * game of the second team.
    */
-  std::set<std::pair<WebSocketSession*, std::unique_ptr<Player>>> second_team_;
+  std::set<std::pair<WebSocketSession*, std::shared_ptr<ui::Player>>> second_team_;
 
   /**
-   * This mutex is used to synchronise all oprations done on the collection
+   * This mutex is used to synchronise all operations done on the collection
    * containing the second team.
    */
   mutable std::mutex second_team_mtx_;
@@ -248,33 +252,21 @@ class Game {
   std::map<WebSocketSession*, Team> players_cache_;
 
    /**
-   * This mutex is used to synchronise all oprations done on the map
+   * This mutex is used to synchronise all operations done on the map
    * of WebSocket sessions and their players' team identifiers.
    */
   mutable std::mutex players_cache_mtx_;
-
-  /**
-   * This is used to set the id of the next player. It holds the next free id.
-   */
-  std::atomic<std::size_t> next_player_id_;
-
-  /**
-   * This map contains all rays in the game. The key is the ray's parent which
-   * is either a player or another ray.
-   */
-  std::map <std::variant<Ray*, Player*>, Ray> rays_;
-
-  /**
-   * This mutex is used to synchronise all oprations done on the map
-   * containing the rays.
-   */
-  mutable std::mutex rays_mtx_;
 
   /**
    * This callable object is used as a callback to the asynchronous reading of
    * all clients in this game.
    */
   system_abstractions::IncommingPackageDelegate delegate_;
+
+  /**
+   * This is the factory which is used to create new player in this game.
+   */
+  ui::PlayerFactory player_factory_;
 
   /**
    * @brief Game's logger.

@@ -174,7 +174,7 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
       it = games_.emplace(game_name, std::make_shared<Game>()).first;
       it->second->SetLogger(LoggerManager::Get("game"));
     }
-    auto join_result = it->second->Join(src);
+    auto join_result = it->second->Join(src, request["nick"]);
     games_mtx_.unlock();
     if (!join_result) {  // The game is full.
       return make_game_full(request["id"]);
@@ -197,7 +197,6 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
         {"result", "joined"},
         {"my_id", std::get<2>(join_result.value())},
         {"players", std::get<1>(join_result.value())["players"]},
-        {"rays", std::get<1>(join_result.value())["rays"]},
       }, false, json::JSON::value_t::object);
     }();
     return response;
