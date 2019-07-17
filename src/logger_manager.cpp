@@ -85,7 +85,7 @@ auto LoggerManager::Get(const std::string& name) noexcept -> LoggerManager::Logg
   if (name.empty()) return spdlog::default_logger();
   if (registered_names_ == nullptr) return nullptr;
 
-  if (auto it = registered_names_->find(name); it == registered_names_.end()) {
+  if (auto it = registered_names_->find(name); it == registered_names_->end()) {
     return nullptr;
   }
   return spdlog::get(name);
