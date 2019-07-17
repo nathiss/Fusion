@@ -21,9 +21,10 @@
 namespace fusion_server {
 
 Listener::Listener(boost::asio::io_context &ioc) noexcept
-  : ioc_{ioc}, acceptor_{ioc}, socket_{ioc_}, is_open_{false}, number_of_connections_{0},
-  max_queued_connections_{boost::asio::socket_base::max_listen_connections},
-  logger_{LoggerManager::Get()} {}
+  : ioc_{ioc}, acceptor_{ioc}, socket_{ioc_}, is_open_{false}, logger_{LoggerManager::Get()} {
+  configuration_.number_of_connections_ = 0;
+  configuration_.max_queued_connections_ = boost::asio::socket_base::max_listen_connections;
+}
 
 
 bool Listener::Configure(const json::JSON& config) noexcept {
@@ -35,7 +36,7 @@ bool Listener::Configure(const json::JSON& config) noexcept {
     logger_->critical("[Config::Listener] A value of \"max_queued_connections\" must be an integer.");
     return false;
   }
-  max_queued_connections_ = config["max_queued_connections"];
+  configuration_.max_queued_connections_ = config["max_queued_connections"];
 
   if (!config.contains("interface")) {
     logger_->critical("[Config::Listener] A config object must have \"interface\" field.");
@@ -56,7 +57,7 @@ bool Listener::Configure(const json::JSON& config) noexcept {
   }
 
   boost::system::error_code ec;
-  endpoint_ = {
+  configuration_.endpoint_ = {
     boost::asio::ip::make_address(config["interface"], ec),
     config["port"]
   };
@@ -83,7 +84,7 @@ bool Listener::Bind() noexcept {
 }
 
 bool Listener::Bind(boost::asio::ip::tcp::endpoint endpoint) noexcept {
-  endpoint_ = std::move(endpoint);
+  configuration_.endpoint_ = std::move(endpoint);
   return InitAcceptor();
 }
 
@@ -96,18 +97,18 @@ bool Listener::Bind(std::string_view address_str, std::uint16_t port) noexcept {
     return false;
   }
 
-  endpoint_ = {std::move(address), port};
+  configuration_.endpoint_ = {std::move(address), port};
   return InitAcceptor();
 }
 
 bool Listener::Bind(std::uint16_t port) noexcept {
-  endpoint_ = {boost::asio::ip::tcp::v4(), port};
+  configuration_.endpoint_ = {boost::asio::ip::tcp::v4(), port};
   return InitAcceptor();
 }
 
 
 const boost::asio::ip::tcp::endpoint &Listener::GetEndpoint() const noexcept {
-  return endpoint_;
+  return configuration_.endpoint_;
 }
 
 bool Listener::Run() noexcept {
@@ -115,7 +116,7 @@ bool Listener::Run() noexcept {
     return false;
   }
 
-  logger_->info("Starting asynchronous accepting on {}.", endpoint_);
+  logger_->info("Starting asynchronous accepting on {}.", configuration_.endpoint_);
   acceptor_.async_accept(
     socket_,
     [self = shared_from_this()](const boost::system::error_code &ec) {
@@ -125,7 +126,7 @@ bool Listener::Run() noexcept {
 }
 
 std::size_t Listener::GetNumberOfConnections() const noexcept {
-  return number_of_connections_;
+  return configuration_.number_of_connections_;
 }
 
 std::size_t Listener::GetMaxQueuedConnections() const noexcept {
@@ -151,7 +152,7 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
     // TODO(nathiss): find out if any other error can cause the listener to stop working.
   } else {
     logger_->debug("Accepted a new connection from {}.", socket_.remote_endpoint());
-    number_of_connections_++;
+    configuration_.number_of_connections_++;
     std::make_shared<HTTPSession>(std::move(socket_))->Run();
   }
 
@@ -165,7 +166,7 @@ void Listener::HandleAccept(const boost::system::error_code& ec) noexcept {
 bool Listener::InitAcceptor() noexcept {
   boost::system::error_code ec;
 
-  acceptor_.open(endpoint_.protocol(), ec);
+  acceptor_.open(configuration_.endpoint_.protocol(), ec);
   if (ec) {
     logger_->error("Open: {}", ec.message());
     return false;
@@ -177,15 +178,15 @@ bool Listener::InitAcceptor() noexcept {
     return false;
   }
 
-  acceptor_.bind(endpoint_, ec);
+  acceptor_.bind(configuration_.endpoint_, ec);
   if (ec == boost::asio::error::access_denied) {
     logger_->error("Cannot bind acceptor to {} (permission denied).",
-      endpoint_);
+                   configuration_.endpoint_);
     return false;
   }
   if (ec == boost::asio::error::address_in_use) {
     logger_->error("Cannot bind acceptor to {} (address in use).",
-      endpoint_);
+                   configuration_.endpoint_);
     return false;
   }
   if (ec) {
@@ -193,14 +194,14 @@ bool Listener::InitAcceptor() noexcept {
     return false;
   }
 
-  acceptor_.listen(max_queued_connections_, ec);
+  acceptor_.listen(configuration_.max_queued_connections_, ec);
   if (ec) {
     logger_->error("Listen: {}", ec.message());
     return false;
   }
 
   is_open_ = true;
-  logger_->info("Acceptor is bind to {}.", endpoint_);
+  logger_->info("Acceptor is bind to {}.", configuration_.endpoint_);
   return true;
 }
 

@@ -77,6 +77,39 @@ class LoggerManager {
   };
 
   /**
+   * This structure holds the configuration of an instance of LoggerManager
+   * class.
+   */
+  struct Configuration {
+    /**
+     * The path to the directory where logs will be stored.
+     */
+    std::string root_;
+
+    /**
+     * @brief Logging pattern.
+     * This is the default pattern for log lines, both in files and consoles.
+     */
+    std::string logger_pattern_;
+
+    /**
+     * This is the default extension for all log files.
+     */
+    std::string extension_;
+
+    /**
+     * This is the default level of logging for all new loggers.
+     */
+    Level level_;
+
+    /**
+     * This flag indicates whether or not new logger should be registered in the
+     * global registry by default.
+     */
+    bool register_by_default_;
+  };
+
+  /**
    * This constructor initialises the options to the default values.
    */
   LoggerManager() noexcept;
@@ -170,31 +203,9 @@ class LoggerManager {
   [[nodiscard]] std::string AssembleFileName(std::string file_name) const noexcept;
 
   /**
-   * The path to the directory where logs will be stored.
+   * This holds the configuration of this object.
    */
-  std::string root_;
-
-  /**
- * @brief Logging pattern.
- * This is the default pattern for log lines, both in files and consoles.
- */
-  std::string logger_pattern_;
-
-  /**
-   * This is the default extension for all log files.
-   */
-  std::string extension_;
-
-  /**
-   * This is the default level of logging for all new loggers.
-   */
-  Level level_;
-
-  /**
-   * This flag indicates whether or not new logger should be registered in the
-   * global registry by default.
-   */
-  bool register_by_default_;
+  Configuration configuration_;
 };
 
 template <bool MakeThreadSafe>
@@ -227,24 +238,24 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 
     file_sink->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
     LogLevelToNative(level));
-    file_sink->set_pattern(pattern.empty() ? logger_pattern_ : pattern);
+    file_sink->set_pattern(pattern.empty() ? configuration_.logger_pattern_ : pattern);
 
     console_sink->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
     LogLevelToNative(level));
-    console_sink->set_pattern(pattern.empty() ? logger_pattern_ : pattern);
+    console_sink->set_pattern(pattern.empty() ? configuration_.logger_pattern_ : pattern);
 
     spdlog::sinks_init_list sinks_list{file_sink, console_sink};
 
     auto logger = std::make_shared<spdlog::logger>(name, sinks_list);
     logger->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
     LogLevelToNative(level));
 
     if (boost::logic::indeterminate(register_as_global)) {
-      if (register_by_default_) spdlog::register_logger(logger);
+      if (configuration_.register_by_default_) spdlog::register_logger(logger);
     } else {
       if (register_as_global) spdlog::register_logger(logger);
     }
@@ -255,24 +266,24 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
     auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
 
     file_sink->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
       LogLevelToNative(level));
-    file_sink->set_pattern(pattern.empty() ? logger_pattern_ : pattern);
+    file_sink->set_pattern(pattern.empty() ? configuration_.logger_pattern_ : pattern);
 
     console_sink->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
       LogLevelToNative(level));
-    console_sink->set_pattern(pattern.empty() ? logger_pattern_ : pattern);
+    console_sink->set_pattern(pattern.empty() ? configuration_.logger_pattern_ : pattern);
 
     spdlog::sinks_init_list sinks_list{file_sink, console_sink};
 
     auto logger = std::make_shared<spdlog::logger>(name, sinks_list);
     logger->set_level(
-      level == decltype(level)::none ? LogLevelToNative(level_) :
+      level == decltype(level)::none ? LogLevelToNative(configuration_.level_) :
       LogLevelToNative(level));
 
     if (boost::logic::indeterminate(register_as_global)) {
-      if (register_by_default_) spdlog::register_logger(logger);
+      if (configuration_.register_by_default_) spdlog::register_logger(logger);
     } else {
       if (register_as_global) spdlog::register_logger(logger);
     }

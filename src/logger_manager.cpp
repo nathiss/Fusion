@@ -25,7 +25,7 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
     if (!config["root"].is_string()) {
       return false;
     }
-    root_ = config["root"];
+    configuration_.root_ = config["root"];
   }
 
   if (config.contains("extension")) {
@@ -33,7 +33,7 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
       SetDefault();
       return false;
     }
-    extension_ = config["extension"];
+    configuration_.extension_ = config["extension"];
   }
 
   if (config.contains("level")) {
@@ -41,13 +41,13 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
       SetDefault();
       return false;
     }
-    if (config["level"] == "trace") level_ = Level::trace;
-    else if (config["level"] == "debug") level_ = Level::debug;
-    else if (config["level"] == "info") level_ = Level::info;
-    else if (config["level"] == "warn") level_ = Level::warn;
-    else if (config["level"] == "error") level_ = Level::error;
-    else if (config["level"] == "critical") level_ = Level::critical;
-    else level_ = Level::none;
+    if (config["level"] == "trace") configuration_.level_ = Level::trace;
+    else if (config["level"] == "debug") configuration_.level_ = Level::debug;
+    else if (config["level"] == "info") configuration_.level_ = Level::info;
+    else if (config["level"] == "warn") configuration_.level_ = Level::warn;
+    else if (config["level"] == "error") configuration_.level_ = Level::error;
+    else if (config["level"] == "critical") configuration_.level_ = Level::critical;
+    else configuration_.level_ = Level::none;
   }
 
   if (config.contains("pattern")) {
@@ -55,7 +55,7 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
       SetDefault();
       return false;
     }
-    logger_pattern_ = config["pattern"];
+    configuration_.logger_pattern_ = config["pattern"];
   }
 
   if (config.contains("register_by_default")) {
@@ -63,7 +63,7 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
       SetDefault();
       return false;
     }
-    register_by_default_ = config["register_by_default"];
+    configuration_.register_by_default_ = config["register_by_default"];
   }
 
   return true;
@@ -77,15 +77,15 @@ std::shared_ptr<spdlog::logger> LoggerManager::Get(const std::string& name) noex
 }
 
 void LoggerManager::SetDefault() noexcept {
-  root_ = "/";
-  logger_pattern_ = "[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v";
-  extension_ = ".log";
-  level_ = Level::warn;
-  register_by_default_ = false;
+  configuration_.root_ = "/";
+  configuration_.logger_pattern_ = "[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v";
+  configuration_.extension_ = ".log";
+  configuration_.level_ = Level::warn;
+  configuration_.register_by_default_ = false;
 }
 
 std::string LoggerManager::AssembleFileName(std::string file_name) const noexcept {
-  return root_ + std::move(file_name) + extension_;
+  return configuration_.root_ + std::move(file_name) + configuration_.extension_;
 }
 
 }  // namespace fusion_server

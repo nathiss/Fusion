@@ -28,6 +28,27 @@ namespace fusion_server {
 class Listener : public std::enable_shared_from_this<Listener> {
  public:
   /**
+   * This structure holds the configuration of an instance of Listener class.
+   */
+  struct Configuration {
+    /**
+     * This is the local endpoint on which new connections will be accepted.
+     */
+    boost::asio::ip::tcp::endpoint endpoint_;
+
+    /**
+     * This value is a total number of all connection accepted by this object.
+     */
+    std::size_t number_of_connections_;
+
+    /**
+     * This value is a maximum number of queued incoming
+     */
+    std::size_t max_queued_connections_;
+
+  };
+
+  /**
    * @brief Explicitly deleted copy constructor.
    * It's deleted due to presence of boost::asio's socket.
    *
@@ -249,25 +270,15 @@ class Listener : public std::enable_shared_from_this<Listener> {
   boost::asio::ip::tcp::socket socket_;
 
   /**
-   * This is the local endpoint on which new connections will be accepted.
-   */
-  boost::asio::ip::tcp::endpoint endpoint_;
-
-  /**
    * This is an indication whether or not this listener has been properly bind
    * to the endpoint.
    */
   bool is_open_;
 
   /**
-   * This value is a total number of all connection accepted by this object.
+   * This holds the configuration of this object.
    */
-  std::size_t number_of_connections_;
-
-  /**
-   * This value is a maximum number of queued incoming
-   */
-  std::size_t max_queued_connections_;
+  Configuration configuration_;
 
   /**
    * @brief Listener's logger.
