@@ -10,8 +10,11 @@
 
 #pragma once
 
+#include <chrono>
 #include <memory>
+#include <set>
 #include <string>
+#include <utility>
 
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/logic/tribool.hpp>
@@ -107,6 +110,11 @@ class LoggerManager {
      * global registry by default.
      */
     bool register_by_default_;
+
+    /**
+     * This is the amount of seconds after which logger would be flushed.
+     */
+    std::chrono::seconds flush_every_default_;
   };
 
   /**
@@ -162,7 +170,7 @@ class LoggerManager {
    *   A new logger is returned.
    */
   template <bool MakeThreadSafe = false>
-  std::shared_ptr<spdlog::logger> CreateLogger(
+  Logger CreateLogger(
     const std::string& name,
     Level level = Level::none,
     boost::logic::tribool register_as_global = boost::logic::tribool::indeterminate_value,
@@ -172,16 +180,32 @@ class LoggerManager {
   /**
    * @brief Returns requested logger from the global registry.
    * This method returns the requested logger from the global registry. If no
-   * name is specified, it returns the default logger. If a logger cannot be
+   * name is specified, it returns the default logger. If the logger cannot be
    * found it returns nullptr.
    *
    * @param name
-   *   A name of the requested logger.
+   *   The name of the requested logger.
    *
    * @return
-   *   A requested logger.
+   *   The requested logger.
    */
-  static std::shared_ptr<spdlog::logger> Get(const std::string& name = {}) noexcept;
+  static Logger Get(const std::string& name = {}) noexcept;
+
+  /**
+   * @brief Registers the given logger in the global register.
+   * This method registers @p logger in the global register. It returns a pair
+   * of indication of whether or not the registration took place and logger
+   * object, which is either the registered logger, if the method succeeded or
+   * the logger which prevented registration.
+   *
+   * @param logger
+   *   The logger to be registered.
+   *
+   * @return
+   *   A pair of indication of whether or not the registration took place and
+   *   logger object is returned.
+   */
+  static std::pair<bool, Logger> Register(Logger logger) noexcept;
 
  private:
   /**
@@ -206,6 +230,11 @@ class LoggerManager {
    * This holds the configuration of this object.
    */
   Configuration configuration_;
+
+  /**
+   * This set holds the names of all globally registered loggers.
+   */
+  static std::unique_ptr<std::set<std::string>> registered_names_;
 };
 
 template <bool MakeThreadSafe>
@@ -255,9 +284,9 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
     LogLevelToNative(level));
 
     if (boost::logic::indeterminate(register_as_global)) {
-      if (configuration_.register_by_default_) spdlog::register_logger(logger);
+      if (configuration_.register_by_default_) Register(logger);
     } else {
-      if (register_as_global) spdlog::register_logger(logger);
+      if (register_as_global) Register(logger);
     }
 
   return logger;
@@ -283,9 +312,9 @@ std::shared_ptr<spdlog::logger> LoggerManager::CreateLogger(
       LogLevelToNative(level));
 
     if (boost::logic::indeterminate(register_as_global)) {
-      if (configuration_.register_by_default_) spdlog::register_logger(logger);
+      if (configuration_.register_by_default_) Register(logger);
     } else {
-      if (register_as_global) spdlog::register_logger(logger);
+      if (register_as_global) Register(logger);
     }
 
     return logger;

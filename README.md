@@ -77,6 +77,9 @@ A valid config file needs to meet these requirements:
           for more information.*
     * `"register_by_default"` - an indication whether of not new logger should
     be registered in global registry (**optional**).
+    * `"flush_every"` - an amount of seconds after all logger would be flushed
+    (**optional**).
+        * *Note that this value applies to all registers globally.*
 
 ## Protocol
 

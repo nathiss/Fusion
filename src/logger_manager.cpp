@@ -16,6 +16,8 @@
 
 namespace fusion_server {
 
+std::unique_ptr<std::set<std::string>> LoggerManager::registered_names_ = nullptr;
+
 LoggerManager::LoggerManager() noexcept {
   SetDefault();
 }
@@ -66,14 +68,35 @@ bool LoggerManager::Configure(const json::JSON& config) noexcept {
     configuration_.register_by_default_ = config["register_by_default"];
   }
 
+  if (config.contains("flush_every")) {
+    if (!config["flush_every"].is_number_float()) {
+      SetDefault();
+      return false;
+    }
+    configuration_.flush_every_default_ = std::chrono::seconds(
+      config["flush_every"]);
+    spdlog::flush_every(configuration_.flush_every_default_);
+  }
+
   return true;
 }
 
-std::shared_ptr<spdlog::logger> LoggerManager::Get(const std::string& name) noexcept {
-  if (name.empty()) {
-    return spdlog::default_logger();
+auto LoggerManager::Get(const std::string& name) noexcept -> LoggerManager::Logger {
+  if (name.empty()) return spdlog::default_logger();
+  if (registered_names_ == nullptr) return nullptr;
+
+  if (auto it = registered_names_->find(name); it == registered_names_.end()) {
+    return nullptr;
   }
   return spdlog::get(name);
+}
+
+auto LoggerManager::Register(Logger logger) noexcept -> std::pair<bool, Logger> {
+  if (registered_names_ == nullptr) {
+    registered_names_ = std::make_unique<std::set<std::string>>();
+  }
+  auto [it, took_place] = registered_names_->insert(logger->name());
+  return std::make_pair(took_place, spdlog::get(*it));
 }
 
 void LoggerManager::SetDefault() noexcept {
@@ -82,6 +105,7 @@ void LoggerManager::SetDefault() noexcept {
   configuration_.extension_ = ".log";
   configuration_.level_ = Level::warn;
   configuration_.register_by_default_ = false;
+  configuration_.flush_every_default_ = std::chrono::seconds(30);
 }
 
 std::string LoggerManager::AssembleFileName(std::string file_name) const noexcept {

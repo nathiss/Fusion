@@ -4,7 +4,8 @@
     "extension": ".log",
     "level": "debug",
     "pattern": "[%H:%M:%S:%e] [thread %t] [%^%l@%n%$] %v",
-    "register_by_default": false
+    "register_by_default": false,
+    "flush_every": 3.0
   },
   "listener": {
     "interface": "0.0.0.0",
