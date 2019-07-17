@@ -7,7 +7,6 @@ FROM archlinux/base:latest
 
 LABEL Name=FusionServer Version=0.1
 
-RUN pacman -Syu --noconfirm
 RUN pacman -S --noconfirm cmake \
                           clang \
                           boost \
