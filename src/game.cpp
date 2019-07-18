@@ -10,10 +10,8 @@
 #include <fusion_server/game.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
-#include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/system/package.hpp>
 #include <fusion_server/websocket_session.hpp>
-
-using fusion_server::system_abstractions::Package;
 
 namespace fusion_server {
 
@@ -130,7 +128,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
   return false;
 }
 
-void Game::BroadcastPackage(const std::shared_ptr<Package>& package) noexcept {
+void Game::BroadcastPackage(const std::shared_ptr<system::Package>& package) noexcept {
   {
     std::lock_guard l{first_team_mtx_};
     for (auto& pair : first_team_) {
@@ -221,7 +219,7 @@ Game::DoResponse(WebSocketSession* session, const json::JSON& request) noexcept 
 
   logger_->warn("Received an unidentified package from {}. [type={}]",
     session->GetRemoteEndpoint(), request["type"].dump());
-  session->Write(std::make_shared<Package>(make_unidentified().dump()));
+  session->Write(std::make_shared<system::Package>(make_unidentified().dump()));
 }
 
 }  // namespace fusion_server

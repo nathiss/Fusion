@@ -22,13 +22,11 @@
 #include <utility>
 #include <variant>
 
-#include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/logger_manager.hpp>
 #include <fusion_server/ui/player.hpp>
 #include <fusion_server/ui/player_factory.hpp>
-
-using fusion_server::system_abstractions::Package;
+#include <fusion_server/system/package.hpp>
 
 namespace fusion_server {
 
@@ -67,7 +65,7 @@ class Game {
    * This is the return type of the Join method.
    */
   using join_result_t =
-  std::optional<std::tuple<system_abstractions::IncommingPackageDelegate&, json::JSON, std::size_t>>;
+  std::optional<std::tuple<system::IncommingPackageDelegate&, json::JSON, std::size_t>>;
 
   /**
    * @brief Explicitly deleted copy constructor.
@@ -167,7 +165,7 @@ class Game {
    * @param[in] package
    *   The package to be broadcasted.
    */
-  void BroadcastPackage(const std::shared_ptr<Package>& package) noexcept;
+  void BroadcastPackage(const std::shared_ptr<system::Package>& package) noexcept;
 
   /**
    * This method returns the amount of players in this game.
@@ -261,7 +259,7 @@ class Game {
    * This callable object is used as a callback to the asynchronous reading of
    * all clients in this game.
    */
-  system_abstractions::IncommingPackageDelegate delegate_;
+  system::IncommingPackageDelegate delegate_;
 
   /**
    * This is the factory which is used to create new player in this game.

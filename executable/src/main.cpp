@@ -21,7 +21,7 @@
 
 #include <fusion_server/server.hpp>
 #include <fusion_server/json.hpp>
-#include <fusion_server/system_abstractions.hpp>
+#include <fusion_server/system/package.hpp>
 #include <fusion_server/logger_manager.hpp>
 
 using namespace fusion_server;

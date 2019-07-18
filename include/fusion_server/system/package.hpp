@@ -1,8 +1,8 @@
 /**
- * @file system_abstractions.hpp
+ * @file package.hpp
  *
  * This module is a part of Fusion Server project.
- * It declares the common abstractions of the server.
+ * It declares the package type and other related types.
  *
  * Copyright 2019 Kamil Rusin
  */
@@ -11,11 +11,10 @@
 #pragma once
 
 #include <functional>
-#include <memory>
 #include <string>
-#include <utility>
 
 #include <fusion_server/json.hpp>
+
 
 namespace fusion_server {
 
@@ -24,7 +23,7 @@ namespace fusion_server {
  */
 class WebSocketSession;
 
-namespace system_abstractions {
+namespace system {
 
 /**
  * This is the package type used in both WebSocket and HTTP sessions.
@@ -41,8 +40,8 @@ using Package = const std::string;
  * @param[in] session
  *   The session connected to the client.
  */
-using IncommingPackageDelegate = std::function< void(const json::JSON&  package, WebSocketSession* session) >;
+using IncommingPackageDelegate = std::function<void(const json::JSON& package, WebSocketSession* session)>;
 
-}  // namespace system_abstractions
+}  // namespace system
 
 }  // namespace fusion_server

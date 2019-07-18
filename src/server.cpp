@@ -77,7 +77,7 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
   return ioc_;
 }
 
-system_abstractions::IncommingPackageDelegate&
+system::IncommingPackageDelegate&
 Server::Register(WebSocketSession* session) noexcept {
   if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
     logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
@@ -142,11 +142,10 @@ void Server::Shutdown() noexcept {
 Server::Server() noexcept {
   logger_ = LoggerManager::Get();
   has_stopped_ = false;
-
   unjoined_delegate_ = [this](const json::JSON& package, WebSocketSession* src) {
     logger_->debug("Received a new package from {}.", src->GetRemoteEndpoint());
     auto response = MakeResponse(src, package);
-    src->Write(std::make_shared<Package>(response.dump()));
+    src->Write(std::make_shared<system::Package>(response.dump()));
   };
 }
 

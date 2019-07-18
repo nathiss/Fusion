@@ -22,10 +22,8 @@
 #include <boost/asio.hpp>
 #include <boost/beast.hpp>
 
-#include <fusion_server/system_abstractions.hpp>
 #include <fusion_server/logger_manager.hpp>
-
-using fusion_server::system_abstractions::Package;
+#include <fusion_server/system/package.hpp>
 
 namespace fusion_server {
 
@@ -130,7 +128,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    * @note
    *   This method is thread-safe.
    */
-  void Write(const std::shared_ptr<Package>& package) noexcept;
+  void Write(const std::shared_ptr<system::Package>& package) noexcept;
 
   /**
    * This method upgrades the connection to the WebSocket Protocol and performs
@@ -163,7 +161,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
    *   This method is thread safe. It is intended to be called only once.
    *   If it is called more than once the behaviour is undefined.
    */
-  void Close(const std::shared_ptr<Package>& package) noexcept;
+  void Close(const std::shared_ptr<system::Package>& package) noexcept;
 
   /**
    * This method returns a value that indicates whether or not the socket is
@@ -223,7 +221,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This delegate is called each time when a new package arrives.
    */
-  system_abstractions::IncommingPackageDelegate delegate_;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+  system::IncommingPackageDelegate delegate_;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
  private:
 
@@ -251,7 +249,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This queue holds all outgoing packages, which have not yet been sent.
    */
-  std::deque<std::shared_ptr<Package>> outgoing_queue_;
+  std::deque<std::shared_ptr<system::Package>> outgoing_queue_;
 
   /**
    * This is the mutex for outgoing queue.
