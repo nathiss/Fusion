@@ -77,7 +77,7 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
   return ioc_;
 }
 
-system::IncommingPackageDelegate&
+system::IncomingPackageDelegate&
 Server::Register(WebSocketSession* session) noexcept {
   if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
     logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());

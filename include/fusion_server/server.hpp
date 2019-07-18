@@ -100,7 +100,7 @@ class Server {
    *   The delegate to be called each time when a new package arrives is
    *   returned.
    */
-  system::IncommingPackageDelegate& Register(WebSocketSession* new_session) noexcept;
+  system::IncomingPackageDelegate& Register(WebSocketSession* new_session) noexcept;
 
   /**
    * This method unregisters the given session. After that method is executed,
@@ -172,7 +172,7 @@ class Server {
    * This function object is called by WebSocket sessions from a clients, who
    * are not yet in any game, each time when a new package arrives.
    */
-  system::IncommingPackageDelegate unjoined_delegate_;
+  system::IncomingPackageDelegate unjoined_delegate_;
 
   /**
    * The context for providing core I/O functionality.

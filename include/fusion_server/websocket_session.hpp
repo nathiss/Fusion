@@ -221,7 +221,7 @@ class WebSocketSession : public std::enable_shared_from_this<WebSocketSession> {
   /**
    * This delegate is called each time when a new package arrives.
    */
-  system::IncommingPackageDelegate delegate_;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
+  system::IncomingPackageDelegate delegate_;  // NOLINT(cppcoreguidelines-non-private-member-variables-in-classes)
 
  private:
 

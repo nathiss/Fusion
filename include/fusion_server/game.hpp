@@ -65,7 +65,7 @@ class Game {
    * This is the return type of the Join method.
    */
   using join_result_t =
-  std::optional<std::tuple<system::IncommingPackageDelegate&, json::JSON, std::size_t>>;
+  std::optional<std::tuple<system::IncomingPackageDelegate&, json::JSON, std::size_t>>;
 
   /**
    * @brief Explicitly deleted copy constructor.
@@ -259,7 +259,7 @@ class Game {
    * This callable object is used as a callback to the asynchronous reading of
    * all clients in this game.
    */
-  system::IncommingPackageDelegate delegate_;
+  system::IncomingPackageDelegate delegate_;
 
   /**
    * This is the factory which is used to create new player in this game.

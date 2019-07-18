@@ -40,7 +40,7 @@ using Package = const std::string;
  * @param[in] session
  *   The session connected to the client.
  */
-using IncommingPackageDelegate = std::function<void(const json::JSON& package, WebSocketSession* session)>;
+using IncomingPackageDelegate = std::function<void(const json::JSON& package, WebSocketSession* session)>;
 
 }  // namespace system
 
