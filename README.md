@@ -1,6 +1,7 @@
 # Fusion
 
 [![Build Status](https://travis-ci.org/nathiss/Fusion.svg?branch=master)](https://travis-ci.org/nathiss/Fusion)
+[![Documentation Status](https://readthedocs.org/projects/fusionio/badge/?version=latest)](https://fusionio.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 This is the source code of the server for the **Fusion** game.
