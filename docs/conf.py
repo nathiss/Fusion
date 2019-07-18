@@ -33,9 +33,9 @@ breathe_projects = {}
 
 if read_the_docs_build:
   input_dir = '..'
-  exclude_dir = '../third-party'
+  exclude_dir = '../third_party'
   output_dir = 'build'
-  configureDoxyfile(input_dir, exclude_dir,output_dir)
+  configureDoxyfile(input_dir, exclude_dir, output_dir)
   subprocess.call('doxygen', shell=True)
   breathe_projects['Fusion'] = output_dir + '/xml'
 
