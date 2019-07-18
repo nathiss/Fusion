@@ -18,7 +18,6 @@ set(Headers
   ${HeadersBase}/http_session.hpp
   ${HeadersBase}/listener.hpp
   ${HeadersBase}/server.hpp
-  ${HeadersBase}/system_abstractions.hpp
   ${HeadersBase}/websocket_session.hpp
   ${HeadersBase}/json.hpp
   ${HeadersBase}/logger_manager.hpp
@@ -26,6 +25,7 @@ set(Headers
   ${HeadersBase}/ui/player_factory.hpp
   ${HeadersBase}/ui/map.hpp
   ${HeadersBase}/ui/abstract.hpp
+  ${HeadersBase}/system/package.hpp
 )
 
 set(SourcesBase "src")
