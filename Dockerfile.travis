@@ -14,12 +14,13 @@ RUN pacman -Syy --noconfirm \
                           boost-libs \
                           make
 
-RUN mkdir -p /app/src
+RUN mkdir -p /app/src \
+ && mkdir -p /app/log \
+ && mkdir -p /app/build
+
 COPY . /app/src
 
-RUN mkdir -p /app/build
 WORKDIR /app/build
-
 RUN cmake /app/src \
  && cmake --build . --config Release --target FusionServerTests -j 10
 
