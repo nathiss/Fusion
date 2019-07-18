@@ -116,11 +116,9 @@ std::pair<bool, JSON>  Verify(const std::string& raw_package) noexcept {
   }
 
   if (json["type"] == "join") {
-    if (!(json.contains("id") &&
-          json.contains("nick") &&
+    if (!(json.contains("nick") &&
           json.contains("game") &&
-          json.size() ==  3 + 1 &&
-          json["id"].type() == decltype(json)::value_t::number_unsigned &&
+          json.size() ==  2 + 1 &&
           json["nick"].type() == decltype(json)::value_t::string &&
           json["game"].type() == decltype(json)::value_t::string)) {
       return std::make_pair(false, MakeNotValidJoin());

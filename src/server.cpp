@@ -159,9 +159,9 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
     }, false, json::JSON::value_t::object);
   };
 
-  const auto make_game_full = [](std::size_t id){
+  const auto make_game_full = [] {
     return json::JSON({
-      {"id", id},
+                        {"type", "join-result"},
       {"result", "full"},
     }, false, json::JSON::value_t::object);
   };
@@ -177,7 +177,7 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
     auto join_result = it->second->Join(src, request["nick"]);
     games_mtx_.unlock();
     if (!join_result) {  // The game is full.
-      return make_game_full(request["id"]);
+      return make_game_full();
     }
     // If we're here it means the join was successful.
     src->delegate_ = std::get<0>(join_result.value());
@@ -191,9 +191,9 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
       sessions_correlation_[src] = std::make_optional<std::string>(std::move(game_name));
     }
 
-    auto response = [&request, &join_result] {
+    auto response = [&join_result] {
       return json::JSON({
-        {"id", request["id"]},
+        {"type", "join-result"},
         {"result", "joined"},
         {"my_id", std::get<2>(join_result.value())},
         {"players", std::get<1>(join_result.value())["players"]},

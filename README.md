@@ -87,12 +87,6 @@ This section describes the protocol used in the communication between the server
 and its clients.
 
 
-### Common part
-Each package **CAN** have the `id` field. This is a random number to identify
-this package in the session. The other side of the connection can send a package
-with the same `id` to indicate, that it's a response to the previous one.
-
-
 ### Client -> Server
 
 This section describes packages send by a client.
@@ -105,7 +99,6 @@ the server will close the connection immediately.
 
 ```json
 {
-  "id": 0,
   "type": "join",
   "game": "<the game's name>",
   "nick": "<player's nick>"
@@ -132,7 +125,7 @@ for.
 
 ```json
 {
-  "id": 0,
+  "type": "join-result",
   "result": "joined|full",
   "my_id": 1337,
   "players": [
@@ -186,7 +179,7 @@ can have any value.
 
 
 
-### (THIS SECTION IS OUTDATED) Server -> Client
+### ----(THIS SECTION IS OUTDATED)---- Server -> Client
 
 This section describes the packages send by the server.
 
@@ -220,15 +213,6 @@ rays did not change, the array will be empty, but will not be omitted.
       "role": "<new_role>",
       "color": [255, 255, 255],
       "left": true
-    }
-  ],
-  "rays": [
-    {
-      "ray_id": 1,
-      "source": [0.0, 0.0],
-      "destination": [0.0, 0.0],
-      "new": true,
-      "remove": true
     }
   ]
 }
