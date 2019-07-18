@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(This FusionServerTests)
+set(This FusionServerTest)
 
 unset(Headers)
 
@@ -15,6 +15,10 @@ add_executable(${This} ${Sources} ${Headers})
 target_link_libraries(${This} PUBLIC
   PRIVATE gtest_main
   PRIVATE FusionServerLib
+)
+
+set_target_properties(${This} PROPERTIES
+  FOLDER test
 )
 
 add_test(

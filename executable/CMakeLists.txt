@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(This FusionServerExecutable)
+set(This FusionServerExe)
 
 project(${This} VERSION 0.1 LANGUAGES C CXX)
 
@@ -22,6 +22,10 @@ add_executable(${This} ${Sources} ${Headers})
 
 target_link_libraries(${This}
   PRIVATE FusionServerLib
+)
+
+set_target_properties(${This} PROPERTIES
+  FOLDER bin
 )
 
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")
