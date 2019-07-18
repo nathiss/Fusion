@@ -21,8 +21,7 @@ RUN mkdir -p /app/src \
 COPY . /app/src
 
 WORKDIR /app/build
-RUN cmake /app/src \
- && cmake -DFUSION_DOCS=OFF --build . --config Release \
-    --target FusionServerTests -j 10
+RUN cmake -DFUSION_DOCS=OFF /app/src \
+ && cmake --build . --config Release --target FusionServerTests -j 10
 
 CMD ["/app/build/test/FusionServerTests"]
