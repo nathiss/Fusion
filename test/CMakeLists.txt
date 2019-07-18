@@ -1,24 +1,24 @@
-cmake_minimum_required(VERSION 3.13)
-
 set(This FusionServerTest)
+project(${This} LANGUAGES CXX)
 
 unset(Headers)
 
+set(SourcesBase "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(Sources
-  src/http_session_test.cpp
-  src/listener_test.cpp
-  src/logger_manager_test.cpp
+  ${SourcesBase}/http_session_test.cpp
+  ${SourcesBase}/listener_test.cpp
+  ${SourcesBase}/logger_manager_test.cpp
 )
 
 add_executable(${This} ${Sources} ${Headers})
 
-target_link_libraries(${This} PUBLIC
-  PRIVATE gtest_main
-  PRIVATE FusionServerLib
-)
-
 set_target_properties(${This} PROPERTIES
   FOLDER test
+)
+
+target_link_libraries(${This} PUBLIC
+  PRIVATE gtest_main
+  PRIVATE FusionServer
 )
 
 add_test(

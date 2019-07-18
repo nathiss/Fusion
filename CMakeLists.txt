@@ -1,18 +1,26 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.0)
 
-set(This FusionServerLib)
+set(This FusionServer)
+project(${This} LANGUAGES CXX)
 
-project(${This} VERSION 0.1 LANGUAGES C CXX)
+find_package(Boost 1.67 COMPONENTS REQUIRED)
+find_package(Threads REQUIRED)
+
+option(FUSION_DOCS "Generate the docs target" ON)
+option(FUSION_TEST "Generate the test target" ON)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
-set(HeadersBase "include/fusion_server")
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
+set(FusionServerRootDir ${PROJECT_SOURCE_DIR})
+set(CMAKE_MODULE_PATH "${FusionServerRootDir}/cmake" ${CMAKE_MODULE_PATH})
+
+set(HeadersBase "${FusionServerRootDir}/include/fusion_server")
 set(Headers
   ${HeadersBase}/game.hpp
   ${HeadersBase}/http_session.hpp
@@ -28,7 +36,7 @@ set(Headers
   ${HeadersBase}/system/package.hpp
 )
 
-set(SourcesBase "src")
+set(SourcesBase "${FusionServerRootDir}/src")
 
 set(Sources
   ${SourcesBase}/game.cpp
@@ -42,28 +50,19 @@ set(Sources
 )
 
 add_subdirectory(third_party/spdlog)
-
-set(JSON_Install OFF CACHE INTERNAL "")  # do not install nlohmann::json
-set(JSON_BuildTests OFF CACHE INTERNAL "")
 add_subdirectory(third_party/nlohmann_json)
 
-if (TARGET FusionServerExecutable)
-  add_subdirectory(executable)
-elseif(TARGET FusionServerTests)
-  add_subdirectory(third_party/googletest)
-  add_subdirectory(test)
-  enable_testing()
-else()
-  add_subdirectory(executable)
+if (FUSION_TEST)
   add_subdirectory(third_party/googletest)
   add_subdirectory(test)
   enable_testing()
 endif()
 
-find_package(Boost 1.67 COMPONENTS REQUIRED)
+if (FUSION_DOCS)
+  add_subdirectory(docs)
+endif()
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
+add_subdirectory(executable)
 
 add_library(${This} STATIC ${Sources} ${Headers})
 

@@ -1,8 +1,5 @@
-cmake_minimum_required(VERSION 3.13)
-
 set(This FusionServerExe)
-
-project(${This} VERSION 0.1 LANGUAGES C CXX)
+project(${This} LANGUAGES CXX)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
@@ -11,21 +8,19 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
-# To remove the propagated `Headers` from parent directory.
 unset(Headers)
 
+set(SourcesBase "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(Sources
-  src/main.cpp
+  ${SourcesBase}/main.cpp
 )
 
 add_executable(${This} ${Sources} ${Headers})
-
-target_link_libraries(${This}
-  PRIVATE FusionServerLib
-)
 
 set_target_properties(${This} PROPERTIES
   FOLDER bin
 )
 
-file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/logs")
+target_link_libraries(${This}
+  PRIVATE FusionServer
+)
