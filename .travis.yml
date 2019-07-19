@@ -11,26 +11,17 @@ git:
 matrix:
   include:
     - os: linux
-      addons:
-        apt:
-          sources:
-            - ppa:mhier/libboost-latest
-          packages:
-            - libboost1.67-dev
       env:
         - MATRIX_EVAL="CC=clang && CXX=clang++"
     - os: linux
-      addons:
-        apt:
-          sources:
-            - ppa:mhier/libboost-latest
-          packages:
-            - libboost1.67-dev
       env:
         - MATRIX_EVAL="CC=gcc && CXX=g++"
 
 
 before_script:
+  - sudo add-apt-repository ppa:mhier/libboost-latest
+  - sudo apt-get update -y
+  - sudo apt-get install -y libboost1.67-dev
   - eval "${MATRIX_EVAL}"
   - mkdir build
   - cd build
