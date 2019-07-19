@@ -29,6 +29,6 @@ before_script:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake -DFUSION_DOCS=OFF ..
   - cmake --build . --target FusionServerTest --config Release -j 10
   - ./test/FusionServerTest
