@@ -9,7 +9,7 @@
 
 #include <gtest/gtest.h>
 
-#include <fusion_server/http_session.hpp>
+#include <fusion_server/logger_manager.hpp>
 #include <fusion_server/json.hpp>
 
 using namespace fusion_server;
