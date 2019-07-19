@@ -1,3 +1,13 @@
+/**
+ * @file abstract_test.cpp
+ *
+ * This module is a part of Fusion Server project.
+ * It contains the implementation of the unit tests for the Point and Color
+ * classes.
+ *
+ * Copyright 2019 Kamil Rusin
+ */
+
 #include <gtest/gtest.h>
 
 #include <fusion_server/ui/abstract.hpp>
