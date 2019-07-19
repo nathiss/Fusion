@@ -30,6 +30,40 @@ class PlayerFactory;
 class Player {
  public:
   /**
+   * @brief The default constructor.
+   */
+  Player() noexcept = default;
+
+  /**
+   * @brief Constructs a player.
+   *
+   * @param id
+   *   The player's id.
+   *
+   * @param team_id
+   *   The id of the player's team.
+   *
+   * @param nick
+   *   The player's nick.
+   *
+   * @param health
+   *   The amount of starting health points.
+   *
+   * @param position
+   *   The spawn position of the player.
+   *
+   * @param angle
+   *   The starting angle of player's avatar.
+   *
+   * @param color
+   *   The color of player's avatar.
+   */
+  Player(std::size_t id, std::size_t team_id, std::string nick, double health,
+    Point position, double angle, Color color) noexcept : id_{id},
+    team_id_{team_id}, nick_{std::move(nick)}, health_{health},
+    position_{position}, angle_{angle}, color_{color} {}
+
+  /**
    * @brief Serializes this object.
    * This method serializes this object into a JSON object.
    *
@@ -119,7 +153,7 @@ class Player {
   /**
    * This is the current position of this player on the map.
    */
-  ui::Point position_;
+  Point position_;
 
   /**
    * This is current angle of the front of this player.
@@ -129,7 +163,7 @@ class Player {
   /**
    * This is the color of this player.
    */
-  ui::Color color_;
+  Color color_;
 
   /**
    * This is the declaration of friendship of this class and PlayerFactory.
