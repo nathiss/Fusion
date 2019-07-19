@@ -9,6 +9,7 @@ set(Sources
   ${SourcesBase}/listener_test.cpp
   ${SourcesBase}/logger_manager_test.cpp
   ${SourcesBase}/abstract_test.cpp
+  ${SourcesBase}/player_test.cpp
 )
 
 add_executable(${This} ${Sources} ${Headers})
