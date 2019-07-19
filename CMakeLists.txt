@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 set(This FusionServer)
 project(${This} LANGUAGES CXX)
 
-find_package(Boost 1.67 COMPONENTS REQUIRED)
+find_package(Boost 1.67 COMPONENTS system REQUIRED)
 find_package(Threads REQUIRED)
 
 option(FUSION_DOCS "Generate the docs target" ON)
