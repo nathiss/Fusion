@@ -3,16 +3,39 @@ dist: bionic
 sudo: true
 os: linux
 
+notifications:
+  email: false
+
 git:
   depth: 1
 
 compiler:
   - clang
+  - gcc
+
+matrix:
+  include:
+    - env: COMPILER=g++
+    compiler: gcc
+    addons:
+      apt:
+        update: true
+        sources:
+          - ppa:mhier/libboost-latest
+        packages:
+          - libboost1.67-dev
+    - env: COMPILER=clang++
+    compiler: clang
+    addons:
+      apt:
+        update: true
+        sources:
+          - ppa:mhier/libboost-latest
+        packages:
+          - libboost1.67-dev
 
 before_script:
-  - sudo add-apt-repository -y ppa:mhier/libboost-latest
-  - sudo apt-get update -y
-  - sudo apt-get install -y libboost1.67-dev
+  - export CXX=${COMPILER}
   - mkdir build
   - cd build
   - cmake -DFUSION_DOCS=OFF ..
@@ -20,6 +43,3 @@ before_script:
 script:
   - cmake --build . --target FusionServerTest --config Release -j 10
   - ./test/FusionServerTest
-
-after_failure:
-  - cat ./.build/config.log
