@@ -34,7 +34,15 @@ bool PlayerFactory::Configure(const json::JSON& config) noexcept {
     configuration_.angle_default_ = config["angle"];
   }
 
-  // TODO(nathiss): configure color & position
+  if (config.contains("position")) {
+    auto result = configuration_.position_default_.Deserialize(config["position"]);
+    if (!result) return false;
+  }
+
+  if (config.contains("color")) {
+    auto result = configuration_.color_default_.Deserialize(config["color"]);
+    if (!result) return false;
+  }
 
   return true;
 }
