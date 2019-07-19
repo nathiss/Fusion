@@ -1,7 +1,6 @@
 language: cpp
 dist: bionic
 sudo: true
-os: linux
 
 notifications:
   email: false
@@ -9,33 +8,30 @@ notifications:
 git:
   depth: 1
 
-compiler:
-  - clang
-  - gcc
-
 matrix:
   include:
-    - env: COMPILER=g++
-    compiler: gcc
-    addons:
-      apt:
-        update: true
-        sources:
-          - ppa:mhier/libboost-latest
-        packages:
-          - libboost1.67-dev
-    - env: COMPILER=clang++
-    compiler: clang
-    addons:
-      apt:
-        update: true
-        sources:
-          - ppa:mhier/libboost-latest
-        packages:
-          - libboost1.67-dev
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ppa:mhier/libboost-latest
+          packages:
+            - libboost1.67-dev
+      env:
+        - MATRIX_EVAL="CC=clang && CXX=clang++"
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ppa:mhier/libboost-latest
+          packages:
+            - libboost1.67-dev
+      env:
+        - MATRIX_EVAL="CC=gcc && CXX=g++"
+
 
 before_script:
-  - export CXX=${COMPILER}
+  - eval "${MATRIX_EVAL}"
   - mkdir build
   - cd build
   - cmake -DFUSION_DOCS=OFF ..
