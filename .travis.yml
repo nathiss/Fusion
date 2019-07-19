@@ -18,17 +18,17 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - clang++-8
-            - boost1.67
+            - libboost1.67-dev
             - cmake
             - cmake-data
 
 
 before_script:
   - if [[ "${TRAVIS_ON_NAME}" == "linux" ]]; then export CXX=${COMPILER}; fi
-
-script:
   - mkdir build
   - cd build
   - cmake -DFUSION_DOCS=OFF ..
+
+script:
   - cmake --build . --target FusionServerTest --config Release -j 10
   - ./test/FusionServerTest
