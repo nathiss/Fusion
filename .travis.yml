@@ -6,25 +6,23 @@ os: linux
 git:
   depth: 1
 
-matrix:
-  include:
-    - env: COMPILER=clang++-8 BUILD=Release STANDARD=17
-      compiler: clang
-      addons:
-        apt:
-          update: true
-          sources:
-            - sourceline: 'ppa:mhier/libboost-latest'
-            - ubuntu-toolchain-r-test
-          packages:
-            - clang++-8
-            - libboost1.67-dev
-            - cmake
-            - cmake-data
+cache:
+  apt: true
 
+addons:
+  apt:
+    sources:
+      - boost-latest
+      - ubuntu-toolchain-r-test
+    packages:
+      - clang-8
+      - liboost1.67-all-dev
+      - cmake
+
+compiler:
+  - clang
 
 before_script:
-  - if [[ "${TRAVIS_ON_NAME}" == "linux" ]]; then export CXX=${COMPILER}; fi
   - mkdir build
   - cd build
   - cmake -DFUSION_DOCS=OFF ..
@@ -32,3 +30,6 @@ before_script:
 script:
   - cmake --build . --target FusionServerTest --config Release -j 10
   - ./test/FusionServerTest
+
+after_failure:
+  - cat ./.build/config.log
