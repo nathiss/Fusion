@@ -35,7 +35,7 @@ TEST(PointTest, SerializeDefaultPoint) {
   auto json = point.Serialize();
 
   // Assert
-  ASSERT_TRUE(json.type() == decltype(json)::value_t::array);
+  ASSERT_EQ(decltype(json)::value_t::array, json.type());
   ASSERT_EQ(2, json.size());
   EXPECT_EQ(0, json[0]);
   EXPECT_EQ(0, json[1]);
@@ -63,7 +63,7 @@ TEST(PointTest, SerializeCustomPoint) {
   auto json = point.Serialize();
 
   // Assert
-  ASSERT_TRUE(json.type() == decltype(json)::value_t::array);
+  ASSERT_EQ(decltype(json)::value_t::array, json.type());
   ASSERT_EQ(2, json.size());
   EXPECT_EQ(1337, json[0]);
   EXPECT_EQ(9001, json[1]);
@@ -106,7 +106,7 @@ TEST(PointTest, SerializeDefaultColor) {
   auto json = color.Serialize();
 
   // Assert
-  ASSERT_TRUE(json.type() == decltype(json)::value_t::array);
+  ASSERT_EQ(decltype(json)::value_t::array, json.type());
   ASSERT_EQ(3, json.size());
   EXPECT_EQ(0, json[0]);
   EXPECT_EQ(0, json[1]);
@@ -136,7 +136,7 @@ TEST(PointTest, SerializeCustomColor) {
   auto json = color.Serialize();
 
   // Assert
-  ASSERT_TRUE(json.type() == decltype(json)::value_t::array);
+  ASSERT_EQ(decltype(json)::value_t::array, json.type());
   ASSERT_EQ(3, json.size());
   EXPECT_EQ(255, json[0]);
   EXPECT_EQ(0, json[1]);
