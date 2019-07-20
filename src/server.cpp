@@ -79,7 +79,7 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 
 system::IncomingPackageDelegate&
 Server::Register(WebSocketSession* session) noexcept {
-  if (std::lock_guard l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
+  if (std::scoped_lock l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
     logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
     return unjoined_delegate_;
   }
@@ -102,20 +102,20 @@ void Server::Unregister(WebSocketSession* session) noexcept {
     return;
   }
 
-  // TODO(nathiss): change lock scope of this mutex.
-  std::lock_guard l{sessions_correlation_mtx_};
+  std::unique_lock l{sessions_correlation_mtx_};
   if (auto it = sessions_correlation_.find(session); it != sessions_correlation_.end()) {
     auto game_name = it->second;
     sessions_correlation_.erase(it);
+    l.unlock();
 
     // TODO(nathiss): refactor this.
     if (!game_name) {
       logger_->debug("Unregistering session {}.", session->GetRemoteEndpoint());
-      std::lock_guard l{unidentified_sessions_mtx_};
+      std::scoped_lock l{unidentified_sessions_mtx_};
       unidentified_sessions_.erase(session);
     } else {
       logger_->debug("Removing session {} from game {}.", session->GetRemoteEndpoint(), game_name.value());
-      std::lock_guard l{games_mtx_};
+      std::scoped_lock l{games_mtx_};
       auto& game = games_[game_name.value()];
       game->Leave(session);
       if (game->GetPlayersCount() == 0) {
@@ -181,14 +181,13 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
     // If we're here it means the join was successful.
     src->delegate_ = std::get<0>(join_result.value());
 
-    {
-      std::lock_guard l{unidentified_sessions_mtx_};
+      std::unique_lock usm{unidentified_sessions_mtx_};
       unidentified_sessions_.erase(src);
-    }
-    {
-      std::lock_guard l{sessions_correlation_mtx_};
+      usm.unlock();
+
+      std::unique_lock scm{sessions_correlation_mtx_};
       sessions_correlation_[src] = std::make_optional<std::string>(std::move(game_name));
-    }
+      scm.unlock();
 
     auto response = [&join_result] {
       return json::JSON({

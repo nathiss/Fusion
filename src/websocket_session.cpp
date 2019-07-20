@@ -46,7 +46,7 @@ LoggerManager::Logger WebSocketSession::GetLogger() const noexcept {
 }
 
 void WebSocketSession::Write(const std::shared_ptr<system::Package>& package) noexcept {
-  std::lock_guard l{outgoing_queue_mtx_};
+  std::unique_lock uqm{outgoing_queue_mtx_};
 
   if (in_closing_procedure_) {
     logger_->warn("Trying to write to {} while in closing procedure.", GetRemoteEndpoint());
@@ -82,7 +82,7 @@ void WebSocketSession::Write(const std::shared_ptr<system::Package>& package) no
 
 void WebSocketSession::Close() noexcept {
   if (!in_closing_procedure_) {
-    std::lock_guard l{outgoing_queue_mtx_};
+    std::unique_lock uqm{outgoing_queue_mtx_};
     in_closing_procedure_ = true;
     if (outgoing_queue_.size() > 1) {
       // This means there are queued additional packages. We return and allow
@@ -119,7 +119,7 @@ void WebSocketSession::Close() noexcept {
 void WebSocketSession::Close(const std::shared_ptr<system::Package>& package) noexcept {
   // We lock the mutex first, to ensure that no additional package will be
   // queued, after the closing procedure has started.
-  std::lock_guard l{outgoing_queue_mtx_};
+  std::unique_lock uqm{outgoing_queue_mtx_};
   in_closing_procedure_ = true;
 
   if (outgoing_queue_.size() > 1) {
@@ -166,7 +166,7 @@ void WebSocketSession::HandleHandshake(const boost::system::error_code& ec) noex
 
   logger_->debug("Handshake to {} completed.", GetRemoteEndpoint());
 
-  if (std::lock_guard l{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
+  if (std::unique_lock oqm{outgoing_queue_mtx_}; !outgoing_queue_.empty()) {
     logger_->debug("Sending a message queued before handshake completion.");
     websocket_.async_write(
       boost::asio::buffer(*outgoing_queue_.front()),
@@ -259,7 +259,7 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
     return;
   }
 
-  std::lock_guard l{outgoing_queue_mtx_};
+  std::unique_lock oqm{outgoing_queue_mtx_};
   outgoing_queue_.pop_front();
 
   if (in_closing_procedure_) {
@@ -273,7 +273,7 @@ void WebSocketSession::HandleWrite(const boost::system::error_code& ec,
       websocket_.write(boost::asio::buffer(*outgoing_queue_.front()), ec);
 
       if (ec) {
-        logger_->error("An error occured during writing closing package to {}. [Boost: {}]",
+        logger_->error("An error occurred during writing closing package to {}. [Boost: {}]",
           GetRemoteEndpoint(), ec.message());
       }
     }
