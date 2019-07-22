@@ -253,7 +253,7 @@ class Game {
    * This mutex is used to synchronise all operations done on the map
    * of WebSocket sessions and their players' team identifiers.
    */
-  mutable std::mutex players_cache_mtx_;
+  mutable std::shared_mutex players_cache_mtx_;
 
   /**
    * This callable object is used as a callback to the asynchronous reading of
