@@ -13,10 +13,10 @@
 
 #include <atomic>
 #include <memory>
-#include <mutex>
 #include <optional>
 #include <set>
 #include <map>
+#include <shared_mutex>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -228,7 +228,7 @@ class Game {
    * This mutex is used to synchronise all oprations done on the collection
    * containing the first team.
    */
-  mutable std::mutex first_team_mtx_;
+  mutable std::shared_mutex first_team_mtx_;
 
   /**
    * This set contains the pairs of WebSocket sessions and their roles in the
@@ -240,7 +240,7 @@ class Game {
    * This mutex is used to synchronise all operations done on the collection
    * containing the second team.
    */
-  mutable std::mutex second_team_mtx_;
+  mutable std::shared_mutex second_team_mtx_;
 
   /**
    * @brief Players' team cache.

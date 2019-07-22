@@ -7,6 +7,7 @@
  * Copyright 2019 Kamil Rusin
  */
 
+#include <mutex>
 #include <string_view>
 #include <tuple>
 #include <utility>
@@ -79,16 +80,18 @@ boost::asio::io_context& Server::GetIOContext() noexcept {
 
 system::IncomingPackageDelegate&
 Server::Register(WebSocketSession* session) noexcept {
-  if (std::scoped_lock l{sessions_correlation_mtx_}; sessions_correlation_.count(session) != 0) {
+  std::unique_lock scm{sessions_correlation_mtx_};
+  if (sessions_correlation_.count(session) != 0) {
     logger_->warn("Second registration of a session {}.", session->GetRemoteEndpoint());
     return unjoined_delegate_;
   }
 
   sessions_correlation_[session] = {};
+  scm.unlock();
 
-  unidentified_sessions_mtx_.lock();
+  std::unique_lock usm{unidentified_sessions_mtx_};
   unidentified_sessions_.insert(session);
-  unidentified_sessions_mtx_.unlock();
+  usm.unlock();
 
   logger_->debug("New WebSocket session registered {}.", session->GetRemoteEndpoint());
 
@@ -102,20 +105,20 @@ void Server::Unregister(WebSocketSession* session) noexcept {
     return;
   }
 
-  std::unique_lock l{sessions_correlation_mtx_};
+  std::unique_lock scm{sessions_correlation_mtx_};
   if (auto it = sessions_correlation_.find(session); it != sessions_correlation_.end()) {
     auto game_name = it->second;
     sessions_correlation_.erase(it);
-    l.unlock();
+    scm.unlock();
 
     // TODO(nathiss): refactor this.
     if (!game_name) {
       logger_->debug("Unregistering session {}.", session->GetRemoteEndpoint());
-      std::scoped_lock l{unidentified_sessions_mtx_};
+      std::unique_lock usm{unidentified_sessions_mtx_};
       unidentified_sessions_.erase(session);
     } else {
       logger_->debug("Removing session {} from game {}.", session->GetRemoteEndpoint(), game_name.value());
-      std::scoped_lock l{games_mtx_};
+      std::unique_lock gm{games_mtx_};
       auto& game = games_[game_name.value()];
       game->Leave(session);
       if (game->GetPlayersCount() == 0) {
@@ -160,21 +163,21 @@ json::JSON Server::MakeResponse(WebSocketSession* src, const json::JSON& request
 
   const auto make_game_full = [] {
     return json::JSON({
-                        {"type", "join-result"},
+      {"type", "join-result"},
       {"result", "full"},
     }, false, json::JSON::value_t::object);
   };
 
   if (request["type"] == "join") {
     std::string game_name = request["game"];
-    games_mtx_.lock();
+    std::unique_lock gm{games_mtx_};
     auto it = games_.find(game_name);
     if (it == games_.end()) {
       it = games_.emplace(game_name, std::make_shared<Game>()).first;
       it->second->SetLogger(LoggerManager::Get("game"));
     }
     auto join_result = it->second->Join(src, request["nick"]);
-    games_mtx_.unlock();
+    gm.unlock();
     if (!join_result) {  // The game is full.
       return make_game_full();
     }

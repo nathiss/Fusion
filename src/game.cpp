@@ -7,6 +7,8 @@
  * Copyright 2019 Kamil Rusin
  */
 
+#include <mutex>
+
 #include <fusion_server/game.hpp>
 #include <fusion_server/json.hpp>
 #include <fusion_server/server.hpp>
@@ -40,24 +42,24 @@ Game::Join(WebSocketSession* session,const std::string& nick, Team team) noexcep
   std::size_t player_id;
   switch (team) {
     case Team::kFirst: {
-        std::unique_lock l{first_team_mtx_};
+        std::unique_lock ftm{first_team_mtx_};
         if (first_team_.size() >= kMaxPlayersPerTeam) {
           return {};
         }
         auto [it, _] = first_team_.insert({session, player_factory_.Create(nick, team)});
         player_id = it->second->GetId();
-        l.unlock();
+        ftm.unlock();
       break;
     }
 
     case Team::kSecond: {
-        std::unique_lock l{second_team_mtx_};
+        std::unique_lock stm{second_team_mtx_};
         if (second_team_.size() >= kMaxPlayersPerTeam) {
           return {};
         }
         auto [it, _] = second_team_.insert({session, player_factory_.Create(nick, team)});
         player_id = it->second->GetId();
-        l.unlock();
+        stm.unlock();
       break;
     }
 
@@ -99,7 +101,7 @@ Game::Join(WebSocketSession* session,const std::string& nick, Team team) noexcep
 bool Game::Leave(WebSocketSession* session) noexcept {
   Team team_id{Team::kRandom};
 
-  if (std::scoped_lock l{players_cache_mtx_}; players_cache_.count(session) != 0) {
+  if (std::unique_lock pcm{players_cache_mtx_}; players_cache_.count(session) != 0) {
     team_id = players_cache_[session];
     players_cache_.erase(session);
   } else {
@@ -107,7 +109,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
   }
 
   if (team_id == Team::kFirst || team_id == Team::kRandom) {
-    std::scoped_lock l{first_team_mtx_};
+    std::unique_lock ftm{first_team_mtx_};
     for (const auto& pair : first_team_) {
       if (session == pair.first) {
         first_team_.erase(pair);
@@ -117,7 +119,7 @@ bool Game::Leave(WebSocketSession* session) noexcept {
   }
 
   if (team_id == Team::kSecond || team_id == Team::kRandom) {
-    std::scoped_lock l{second_team_mtx_};
+    std::unique_lock stm{second_team_mtx_};
     for (const auto& pair : second_team_) {
       if (session == pair.first) {
         second_team_.erase(pair);
@@ -130,13 +132,13 @@ bool Game::Leave(WebSocketSession* session) noexcept {
 }
 
 void Game::BroadcastPackage(const std::shared_ptr<system::Package>& package) noexcept {
-  std::unique_lock ftm{first_team_mtx_};
+  std::shared_lock ftm{first_team_mtx_};
   for (auto& pair : first_team_) {
     pair.first->Write(package);
   }
   ftm.unlock();
 
-  std::unique_lock stm{second_team_mtx_};
+  std::shared_lock stm{second_team_mtx_};
   for (const auto& pair : second_team_) {
     pair.first->Write(package);
   }
@@ -146,11 +148,11 @@ void Game::BroadcastPackage(const std::shared_ptr<system::Package>& package) noe
 std::size_t Game::GetPlayersCount() const noexcept {
   std::size_t ret{0};
 
-  std::unique_lock ftm{first_team_mtx_};
+  std::shared_lock ftm{first_team_mtx_};
   ret += first_team_.size();
   ftm.unlock();
 
-  std::unique_lock stm{second_team_mtx_};
+  std::shared_lock stm{second_team_mtx_};
   ret += second_team_.size();
   stm.unlock();
 
@@ -158,7 +160,7 @@ std::size_t Game::GetPlayersCount() const noexcept {
 }
 
 bool Game::IsInGame(WebSocketSession *session) const noexcept {
-  std::unique_lock pcm{players_cache_mtx_};
+  std::shared_lock pcm{players_cache_mtx_};
   return players_cache_.count(session) != 0;
 }
 
@@ -169,13 +171,13 @@ json::JSON Game::GetCurrentState() const noexcept {
     }, false, json::JSON::value_t::object);
   }();
 
-  std::unique_lock ftm{first_team_mtx_};
+  std::shared_lock ftm{first_team_mtx_};
   for (auto& [_, player_ptr] : first_team_) {
     state["players"].push_back(player_ptr->Serialize());
   }
   ftm.unlock();
 
-  std::unique_lock stm{second_team_mtx_};
+  std::shared_lock stm{second_team_mtx_};
   for (auto& [_, player_ptr] : second_team_) {
     state["players"].push_back(player_ptr->Serialize());
   }

@@ -12,8 +12,8 @@
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>
 #include <set>
+#include <shared_mutex>
 #include <string>
 
 #include <boost/asio.hpp>
@@ -188,7 +188,7 @@ class Server {
    * This mutex is used to synchronise the access to the set of the unidentified
    * sessions.
    */
-  std::mutex unidentified_sessions_mtx_;
+  std::shared_mutex unidentified_sessions_mtx_;
 
   /**
    * This map associates all games in the server with their names.
@@ -204,7 +204,7 @@ class Server {
    * This mutex is used to synchronise the access to the set of the games
    * collection.
    */
-  std::mutex games_mtx_;
+  std::shared_mutex games_mtx_;
 
   /**
    * This map associates all sessions in the server and games to which they have
@@ -217,7 +217,7 @@ class Server {
    * This mutex is used to synchronise the access to the map of the sessions
    * and their games.
    */
-  std::mutex sessions_correlation_mtx_;
+  std::shared_mutex sessions_correlation_mtx_;
 
   /**
    * This object contains configuration for the server.
