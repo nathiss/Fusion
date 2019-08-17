@@ -21,11 +21,11 @@ RUN mkdir -p /app/src \
 COPY . /app/src
 
 WORKDIR /app/build
-RUN cmake /app/src \
- && cmake --build . --config Release --target FusionServerExecutable -j 10
+RUN cmake -DFUSION_DOCS=OFF -DFUSION_TEST=OFF /app/src \
+ && cmake --build . --config Release --target FusionServerExe -j 10
 
 RUN mv /app/src/docker-config.json /config.json \
- && mv /app/build/executable/FusionServerExecutable /Server
+ && mv /app/build/executable/FusionServerExe /Server
 
 EXPOSE 80/tcp
 VOLUME /app/log
